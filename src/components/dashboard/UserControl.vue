@@ -122,7 +122,7 @@
 </style>
 <script>
 export default {
-  name: "user",
+  name: "userControl",
   data() {
     return {
       dialogVisible: false,
