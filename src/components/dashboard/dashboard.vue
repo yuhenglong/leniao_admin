@@ -7,46 +7,39 @@
           <h1 class="title_logo">乐鸟</h1>
         </el-header>
 
-        <el-dropdown @command="changeCom">
+        <el-dropdown @command="changeCom" class='btn'>
           <span class="el-dropdown-link">
             {{ menusTitle }}
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <template v-for="(role,index) in menusArr" >
-              <el-dropdown-item :key="index">{{ index }}{{role.name}}</el-dropdown-item>
+            <template v-for="(role,index) in menusArr">
+              <el-dropdown-item :key="index" :command="index">{{role.name}}</el-dropdown-item>
             </template>
           </el-dropdown-menu>
         </el-dropdown>
+        <!-- 阿亮后面的 -->
 
+        <el-menu :router="true" :unique-opened="true">
+          <template v-for="(itemb,index) in firMenus">
+            <div :key="index">
+            <el-submenu index='index'>
+                <template slot="title">
+                  {{ itemb.name }}
+                </template>
+              <el-menu-item-group v-for='(itemc,index) in itemb.children' :key="index">
+                <el-menu-item :index='itemc.url'>{{itemc.name}}</el-menu-item>
+     
+              </el-menu-item-group>
+            </el-submenu>
 
-        <!-- <template v-for="menusFa in menusArr">
-        <div :key="menusFa.roleSort">-->
+            </div>
 
-        <!-- <el-menu :router="true" :unique-opened="true"> -->
-          <!-- <template v-for="menu in dtmenus.menus"> -->
-          <!-- <template v-for="menu in menusArr[zdcommand].menus">
-            <el-submenu :index="menu.url" :key="menu.menuId">
-              <template slot="title">
-                <i :class="menu.icon"></i>
-                <template solt="title">{{ menu.name }}</template>
-              </template> -->
-              <!-- <el-menu-item-group>
-                    <template v-for="child in menu.children">
-                      <el-menu-item
-                        :index="child.childLink"
-                        :key="child.childId"
-                      >{{ child.childName }}</el-menu-item>
-                    </template>
-              </el-menu-item-group>-->
-            <!-- </el-submenu> -->
-          <!-- </template> -->
-        <!-- </el-menu> -->
-        <!-- </div>
-        </template>-->
+          </template>
+        </el-menu>
       </el-aside>
 
-      <el-container>
+      <el-container class='admin'>
         <el-header style="text-align: right; font-size: 12px">
           <el-dropdown>
             <i class="el-icon-setting icon" style="margin-right: 15px"></i>
@@ -80,28 +73,55 @@
   </div>
 </template>
 <script>
-
 export default {
   data() {
     return {
       zdcommand: 0,
       menusArr: [],
-      menusTitle: "" // 标题
+      newMenusArr: [], // 转成树形结构
+      menusTitle: "", // 标题
+      firMenus:[]
     };
   },
   methods: {
+    tree(index) {
+      // console.log(this.newMenusArr[0]);
+      
+      let tree = this.newMenusArr[index].menus.filter(
+        father => {
+          let children = this.newMenusArr[index].menus.filter(
+            child => {
+              return (
+                father.menuId === child.parentId
+              );
+            }
+          )
+          father.children = children;
+          if (children.length === 0) {
+            father.isChildren = false;
+          } else {
+            father.isChildren = true;
+          }
+          return father.parentId == 0;
+        }
+      );
+      this.firMenus = tree;
+      console.log(tree);
+    },
     loadingData() {
       // 封装后的请求
       this.axios
         .get("/menu/allMenu/15666666666")
         .then(res => {
-          // console.log(res.data.result.roles);
           // 将menus存储在vuex中
           if (res.data.status == 1) {
             this.$store.commit("setMenusData", res.data.result.roles);
             this.menusArr = this.$store.state.MenusData;
-            console.log(this.menusArr)
+            this.newMenusArr = this.menusArr;
             this.menusTitle = this.menusArr[0].name;
+
+            // 转树形结构函数
+            this.tree(this.zdcommand);
           }
         })
         .catch(error => {
@@ -114,8 +134,11 @@ export default {
         location.reload();
       });
     },
-    changeCom(command){
-      return this.zdcommand = command;
+    changeCom(command) {
+      this.zdcommand = command;
+      console.log(this.firMenus);
+      this.menusTitle = this.newMenusArr[this.zdcommand].name;
+      this.tree(this.zdcommand);
     }
   },
   created() {
@@ -128,6 +151,20 @@ export default {
   width: 100%;
   height: 100%;
 }
+div.btn{
+  width:200px;
+  height:50px;
+  text-align:center;
+  font-size:16px;
+  line-height:50px;
+}
+ul .el-dropdown-menu__item{
+  width:196px;
+  height:40px;
+  padding:0;
+  text-align:center;
+}
+
 .dashboard .admin,
 .dashboard .icon {
   color: #fff;

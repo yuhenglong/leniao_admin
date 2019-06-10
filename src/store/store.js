@@ -4,6 +4,9 @@ import _ from 'lodash';
 // 引入vuex
 Vue.use(Vuex);
 
+// 处理后端返回的对象
+
+
 const state = {
     // token
     token:null,

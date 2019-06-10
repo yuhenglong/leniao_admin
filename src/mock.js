@@ -8,7 +8,8 @@ const signIn = () => ({
 
 // 返回menus的列表
 const queryUserAuthority = () => ({
-  menuData: [{
+  menuData: [
+    {
     menuId: '0',
     link: 'leniao',
     icon: 'el-icon-menu',
