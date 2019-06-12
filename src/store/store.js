@@ -13,7 +13,11 @@ const state = {
     // 菜单列表
     MenusData: [],
     // 个人信息列表
-    personList:[]
+    personList:[],
+    // 订单数据
+    orderData:null,
+    // 工序管理
+    processManageData:null
 }
 
 const mutations = {
@@ -25,7 +29,8 @@ const mutations = {
     },
     getPersonList(state,newPersonList){
         state.personList = newPersonList
-    }
+    },
+ 
 }
 
 const actions = {
@@ -41,10 +46,18 @@ const actions = {
     }
 }
 
+// 测试
+const getters = {
+    vipUsers:state => state.MenusData.filter( v =>{
+        return v.roleSort == 1;
+    })
+}
+
 const store = new Vuex.Store({
     state,
     mutations,
-    actions
+    actions,
+    getters
 })
 
 export default store;

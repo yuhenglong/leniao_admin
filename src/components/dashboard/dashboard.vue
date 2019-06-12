@@ -18,12 +18,11 @@
             </template>
           </el-dropdown-menu>
         </el-dropdown>
-        <!-- 阿亮后面的 -->
 
         <el-menu :router="true" :unique-opened="true">
           <template v-for="(itemb,index) in firMenus">
-            <div :key="index">
-            <el-submenu index='index'>
+        
+            <el-submenu :index="index+'0'" :key="index">
                 <template slot="title">
                   {{ itemb.name }}
                 </template>
@@ -32,8 +31,6 @@
      
               </el-menu-item-group>
             </el-submenu>
-
-            </div>
 
           </template>
         </el-menu>
@@ -73,6 +70,8 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+
 export default {
   data() {
     return {
@@ -85,8 +84,6 @@ export default {
   },
   methods: {
     tree(index) {
-      // console.log(this.newMenusArr[0]);
-      
       let tree = this.newMenusArr[index].menus.filter(
         father => {
           let children = this.newMenusArr[index].menus.filter(
@@ -106,7 +103,7 @@ export default {
         }
       );
       this.firMenus = tree;
-      console.log(tree);
+  
     },
     loadingData() {
       // 封装后的请求
@@ -117,6 +114,7 @@ export default {
           if (res.data.status == 1) {
             this.$store.commit("setMenusData", res.data.result.roles);
             this.menusArr = this.$store.state.MenusData;
+     
             this.newMenusArr = this.menusArr;
             this.menusTitle = this.menusArr[0].name;
 
@@ -136,7 +134,7 @@ export default {
     },
     changeCom(command) {
       this.zdcommand = command;
-      console.log(this.firMenus);
+  
       this.menusTitle = this.newMenusArr[this.zdcommand].name;
       this.tree(this.zdcommand);
     }

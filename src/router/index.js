@@ -9,6 +9,7 @@ import leniao from '@/components/dashboard/leniao'
 import UserControl from '@/components/dashboard/UserControl'
 const roleManagement = () => import('@/components/dashboard/roleManagement')
 const userManagement = () => import('@/components/dashboard/userManagement')
+const processManage = () => import('@/components/dashboard/processManage')
 const onlineUser = () => import('@/components/dashboard/onlineUser')
 const regularService = () => import('@/components/dashboard/regularService')
 const dataMonitoring = () => import('@/components/dashboard/dataMonitoring')
@@ -62,6 +63,9 @@ const router = new Router({
         },{
           path: '/dashboard/userManagement',
           component: userManagement
+        },{
+          path: '/dashboard/processManage',
+          component: processManage
         }, {
           path: '/dashboard/roleManagement',
           component: roleManagement
