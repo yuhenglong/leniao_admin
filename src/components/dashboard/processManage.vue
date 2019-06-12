@@ -160,9 +160,9 @@ export default {
       let params = { eId:row.eid }
       // let par = qs.stringfy(params)
       // console.log(params)
-      this.axios.post("/api//procedure/del",JSON.stringify(params)).then(res => {
+      this.axios.post("/api//procedure/del",qs.stringify(params)).then(res => {
         console.log(params)
-        if (res.status == 1) {
+        if (res.data.status == 1) {
           this.$message({
             type: "success",
             message: "删除成功!"
