@@ -113,11 +113,10 @@ export default {
           // 将menus存储在vuex中
           if (res.data.status == 1) {
             this.$store.commit("setMenusData", res.data.result.roles);
+            this.$store.commit('setCompanyId',res.data.result.defaultShowCompany)
             this.menusArr = this.$store.state.MenusData;
-     
             this.newMenusArr = this.menusArr;
             this.menusTitle = this.menusArr[0].name;
-
             // 转树形结构函数
             this.tree(this.zdcommand);
           }
@@ -134,7 +133,6 @@ export default {
     },
     changeCom(command) {
       this.zdcommand = command;
-  
       this.menusTitle = this.newMenusArr[this.zdcommand].name;
       this.tree(this.zdcommand);
     }

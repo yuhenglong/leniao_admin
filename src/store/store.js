@@ -17,7 +17,9 @@ const state = {
     // 订单数据
     orderData:null,
     // 工序管理
-    processManageData:null
+    processManageData:null,
+    // 公司的ID
+    companyId:null
 }
 
 const mutations = {
@@ -30,7 +32,9 @@ const mutations = {
     getPersonList(state,newPersonList){
         state.personList = newPersonList
     },
- 
+    setCompanyId(state,newCompanyId){
+        state.companyId = newCompanyId
+    }
 }
 
 const actions = {
@@ -43,6 +47,10 @@ const actions = {
     // 用户数据信息列表
     getPersonList({ commit,state }){
         commit('setPersonList',state)
+    },
+    // 设置用户的companyId
+    setCompanyId({commit,state }){
+        commit('setCompanyId',state)
     }
 }
 
