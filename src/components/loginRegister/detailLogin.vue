@@ -17,7 +17,7 @@
         <el-input type="password" v-model="ruleForm2.password" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="login('ruleForm2')">提交</el-button>
+        <el-button type="primary" @click="login('ruleForm2')">登录</el-button>
         <el-button @click="resetForm('ruleForm2')">重置</el-button>
       </el-form-item>
       <el-form-item>
@@ -55,11 +55,10 @@ export default {
         callback();
       }
     };
-
     return {
       ruleForm2: {
-        phoneNumber: "15916310431",
-        password: "123456"
+        phoneNumber: "",
+        password: ""
       },
       rules2: {
         phoneNumber: [{ validator: validatePhoneNumber, trigger: "blur" }],
@@ -73,14 +72,12 @@ export default {
   methods: {
     login: function(formName) {
       this.$refs[formName].validate(valid => {
+        // 请求后端并跳转页面
         if (valid) {
           // 真实请求接口
-          const params = {username: "18888888888", password: "123456",grant_type:"password"}
-          // 这是罗关的接口
-          // this.axios.post('/order/selectPage',{ size:'7' }).then(res=>{
+          const params = {username: this.ruleForm2.phoneNumber, password: this.ruleForm2.password,grant_type:"password"}
           this.axios.post('/oauth/token',qs.stringify(params),{
             headers: {
-              // 这个是后端让我一开始写的token，一开始就默认有了，他们不懂，所以直接带着过去
                 "Authorization":"Basic VGVzdFN5c3RlbTpjZThlMzgyYS04YzI1LTRmYmQtOWUzMy1hMGQ3M2UxMTEyMjI=",
                 "Content-Type": "application/x-www-form-urlencoded" 
               }

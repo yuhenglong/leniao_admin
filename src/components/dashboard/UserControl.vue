@@ -27,7 +27,7 @@
         <el-button size="medium" type="primary" icon="el-icon-plus" @click="dialogVisible = true">新增</el-button>
         <el-button size="medium" icon="el-icon-upload2">导入</el-button>
         <el-button size="medium" icon="el-icon-download">导出</el-button>
-        <el-button size="medium" icon="el-icon-delete" :disabled="selectedRows.length==0">删除</el-button>
+        <el-button size="medium" icon="el-icon-delete">删除</el-button>
       </div>
       <el-table :data="pager.records" style="width: 100%" stripe highlight-current-row v-loading="" @selection-change="onSelectionChange">
         <el-table-column type="selection" width="55" align="center">

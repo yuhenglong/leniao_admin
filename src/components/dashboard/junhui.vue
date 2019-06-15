@@ -2,9 +2,9 @@
   <div class="processManage">
     <template>
       <el-col style="padding-bottom:0px;width:100%;">
-        <el-form :inline="true" :model="filters" @submit.native.prevent class='fl'>
+        <el-form :inline="true" :model="filters" @submit.native.prevent class="fl">
           <el-form-item>
-            <el-input placeholder="请输入名称" v-model.trim="filters.name"></el-input>
+            <el-input placeholder="请输入名字" v-model="filters.name"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" v-on:click="inquire">查询</el-button>
@@ -15,29 +15,29 @@
         </el-form>
 
         <!-- 下拉列表选项 -->
-            <el-dropdown trigger="click" class='fr'>
-              <span class="el-dropdown-link">
-                <i class='el-icon-s-grid'></i>
-                列表筛选
-                <i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-checkbox-group v-model="checkList" @change="changeArr">
-                  <div class='lab_div' v-for='(item,index) in newObjArrSub' :key='index'>
-                    <el-checkbox :label="item.label"></el-checkbox>
-                  </div>
-              </el-checkbox-group>
-              </el-dropdown-menu>
-            </el-dropdown>
+        <el-dropdown trigger="click" class="fr">
+          <span class="el-dropdown-link">
+            <i class="el-icon-s-grid"></i>
+            列表筛选
+            <i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-checkbox-group v-model="checkList" @change="changeArr">
+              <div v-for="(item,index) in tableFields" :key="index" class="lab_div">
+                <el-checkbox :label="item.label"></el-checkbox>
+              </div>
+            </el-checkbox-group>
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-col>
     </template>
 
     <el-table style="width: 100%" :data="pager.records">
       <el-table-column type="selection" width="60"></el-table-column>
       <el-table-column type="index" width="60" label="序号"></el-table-column>
-      <template v-for='(item,index) in newObjArr'>
-        <el-table-column :prop="item.prop" :label="item.label" width="160" :key='index'></el-table-column>
-      </template>
+
+      <el-table-column :key="index" v-for="(item, index) in tableFieldsActive" :label="item.label" :prop="item.prop"></el-table-column>
+
       <el-table-column align="right" width="550" label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="openEdit(scope.row)">编辑</el-button>
@@ -105,21 +105,17 @@ import qs from "qs";
 export default {
   data() {
     return {
+      tableFields: [
+        { label: "公司编号", prop: "companyId" },
+        { label: "工序名称", prop: "name" },
+        { label: "所需技能", prop: "skill" }
+      ],
+      tableFieldsActive:[],
+      checkList:[],
       search: "",
       filters: {
         name: ""
       },
-      checkList: ["公司编号",'工序名称','所需技能'],
-      newObjArr:[
-        {label:"公司编号",prop:'companyId'},
-        {label:"工序名称",prop:'name'},
-        {label:"所需技能",prop:'skill'}
-        ],
-      newObjArrSub:[
-        {label:"公司编号",prop:'companyId'},
-        {label:"工序名称",prop:'name'},
-        {label:"所需技能",prop:'skill'}
-        ],
       page: 1,
       ym_val: null,
       users: [],
@@ -158,23 +154,13 @@ export default {
           console.log(err);
         });
     },
-    changeArr(val){
-      console.log(val)
-      const arr = this.newObjArrSub.filter( item =>{
-        return val.indexOf(item.label) > -1 ;
-      })
-      this.newObjArr = arr;
-    },
     addUsers() {
       console.log("新增数据");
     },
     // 打开编辑弹窗
     openEdit(row) {
-      console.log(row)
       this.dialogCompile = true;
       this.editEid = row.eid;
-      this.editForm.name = row.name;
-      this.editForm.skill = row.skill;
     },
     handleEdit() {
       // 编辑工序
@@ -195,10 +181,6 @@ export default {
             that.pager = res.data.result;
           });
           this.dialogCompile = false;
-          this.$message({
-            type: "success",
-            message: "编辑成功!"
-          });
         });
       this.editForm.name = "";
       this.editForm.skill = "";
@@ -233,7 +215,7 @@ export default {
         size: this.pager.size
       };
       let that = this;
-      this.axios.post("/api/procedure/findList",qs.stringify(action)).then(res => {
+      this.axios.post("/api/procedure/findList", action).then(res => {
         that.pager = res.data.result;
       });
     },
@@ -255,6 +237,7 @@ export default {
         });
     },
     handleCommit() {
+      // this.sizeForm
       let that = this;
       this.axios
         .post("/api/procedure/add", qs.stringify(this.sizeForm))
@@ -273,19 +256,31 @@ export default {
     filterTag(value, row) {
       return row.tag === value;
     },
-    inquire(){
-      const action = { name:this.filters.name }
-      this.axios.post('/api/procedure/findList',qs.stringify(action)).then(res => {
-        console.log(res)
+    changeArr(val) {
+      const result = this.tableFields.filter(item=>{
+        return val.indexOf(item.label) > -1
+      })
+      this.tableFieldsActive = result;
+    },
+    inquire() {
+      var that = this;
+      this.axios
+        .post("/api/procedure/findList", qs.stringify(that.fliters.name))
+        .then(res => {
           this.$store.state.processManageData = res.data.result;
           this.pager = this.$store.state.processManageData;
-      }).catch(err => {
-        console.log(err)
-      })
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   created() {
-    this.getUsers();
+    //this.getUsers();
+    this.tableFieldsActive = Object.assign([],this.tableFields)
+    this.checkList = this.tableFields.map(item=>{
+      return item.label
+    })
   },
   computed: {}
 };
@@ -306,19 +301,19 @@ export default {
   margin-bottom: 20px;
 }
 
-.processManage .fl{
-  float:left;
+.processManage .fl {
+  float: left;
 }
-.processManage .fr{
-  float:right;
+.processManage .fr {
+  float: right;
 }
-.processManage .el-form--inline{
-  width:800px;
-  clear:both;
+.processManage .el-form--inline {
+  width: 800px;
+  clear: both;
 }
-.lab_div{
-  width:150px;
-  text-align:center;
-  margin:10px 0;
+.lab_div {
+  width: 150px;
+  text-align: center;
+  margin: 10px 0;
 }
 </style>

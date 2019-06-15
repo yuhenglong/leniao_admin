@@ -7,7 +7,7 @@
           <h1 class="title_logo">乐鸟</h1>
         </el-header>
 
-        <el-dropdown @command="changeCom" class='btn'>
+        <el-dropdown @command="changeCom" class="btn">
           <span class="el-dropdown-link">
             {{ menusTitle }}
             <i class="el-icon-arrow-down el-icon--right"></i>
@@ -21,23 +21,26 @@
 
         <el-menu :router="true" :unique-opened="true">
           <template v-for="(itemb,index) in firMenus">
-        
             <el-submenu :index="index+'0'" :key="index">
-                <template slot="title">
-                  {{ itemb.name }}
-                </template>
-              <el-menu-item-group v-for='(itemc,index) in itemb.children' :key="index">
-                <el-menu-item :index='itemc.url'>{{itemc.name}}</el-menu-item>
-     
+              <template slot="title">{{ itemb.name }}</template>
+              <el-menu-item-group v-for="(itemc,index) in itemb.children" :key="index">
+                <el-menu-item :index="itemc.url">{{itemc.name}}</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
-
           </template>
         </el-menu>
       </el-aside>
 
-      <el-container class='admin'>
+      <el-container class="admin">
         <el-header style="text-align: right; font-size: 12px">
+            <div style="width:400px;display:inline-block; margin-right:15px;">
+              <el-select v-model="select" slot="prepend" placeholder="请选择">
+                <el-option label="餐厅名" value="1"></el-option>
+                <el-option label="订单号" value="2"></el-option>
+                <el-option label="用户电话" value="3"></el-option>
+              </el-select>
+            </div>
+          
           <el-dropdown>
             <i class="el-icon-setting icon" style="margin-right: 15px"></i>
             <el-dropdown-menu slot="dropdown">
@@ -70,7 +73,7 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   data() {
@@ -79,41 +82,39 @@ export default {
       menusArr: [],
       newMenusArr: [], // 转成树形结构
       menusTitle: "", // 标题
-      firMenus:[]
+      firMenus: [],
+      inputCom: "",
+      select: ""
     };
   },
   methods: {
     tree(index) {
-      let tree = this.newMenusArr[index].menus.filter(
-        father => {
-          let children = this.newMenusArr[index].menus.filter(
-            child => {
-              return (
-                father.menuId === child.parentId
-              );
-            }
-          )
-          father.children = children;
-          if (children.length === 0) {
-            father.isChildren = false;
-          } else {
-            father.isChildren = true;
-          }
-          return father.parentId == 0;
+      let tree = this.newMenusArr[index].menus.filter(father => {
+        let children = this.newMenusArr[index].menus.filter(child => {
+          return father.menuId === child.parentId;
+        });
+        father.children = children;
+        if (children.length === 0) {
+          father.isChildren = false;
+        } else {
+          father.isChildren = true;
         }
-      );
+        return father.parentId == 0;
+      });
       this.firMenus = tree;
-  
     },
     loadingData() {
       // 封装后的请求
       this.axios
-        .get("/menu/allMenu/15666666666")
+        .get("/menu/allMenu/15888888888")
         .then(res => {
           // 将menus存储在vuex中
           if (res.data.status == 1) {
             this.$store.commit("setMenusData", res.data.result.roles);
-            this.$store.commit('setCompanyId',res.data.result.defaultShowCompany)
+            this.$store.commit(
+              "setCompanyId",
+              res.data.result.defaultShowCompany
+            );
             this.menusArr = this.$store.state.MenusData;
             this.newMenusArr = this.menusArr;
             this.menusTitle = this.menusArr[0].name;
@@ -147,18 +148,18 @@ export default {
   width: 100%;
   height: 100%;
 }
-div.btn{
-  width:200px;
-  height:50px;
-  text-align:center;
-  font-size:16px;
-  line-height:50px;
+div.btn {
+  width: 200px;
+  height: 50px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 50px;
 }
-ul .el-dropdown-menu__item{
-  width:196px;
-  height:40px;
-  padding:0;
-  text-align:center;
+ul .el-dropdown-menu__item {
+  width: 196px;
+  height: 40px;
+  padding: 0;
+  text-align: center;
 }
 
 .dashboard .admin,
@@ -206,6 +207,12 @@ ul .el-dropdown-menu__item{
 }
 .el-icon-arrow-down {
   font-size: 12px;
+}
+.dashboard .el-select .el-input {
+  width: 130px;
+}
+.dashboard .input-with-select .el-input-group__prepend {
+  background-color: #fff;
 }
 </style>
 

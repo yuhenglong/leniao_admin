@@ -47,17 +47,17 @@
     </el-table>
 
     <!-- 新增弹窗表格 -->
-    <el-dialog title="新增工序" :visible.sync="dialogFormVisible">
+    <el-dialog title="新增产品" :visible.sync="dialogFormVisible">
       <!-- Form -->
       <el-form ref="form" :model="sizeForm" label-width="100px" size="mini">
-        <el-form-item label="工序名称:">
+        <el-form-item label="产品名称:">
           <el-input v-model="sizeForm.name" class="addInput"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="公司编号:">
-          <el-input v-model="sizeForm.companyId" class='addInput'></el-input>
-        </el-form-item>-->
-        <el-form-item label="工序所需技能:">
-          <el-input v-model="sizeForm.skill" class="addInput"></el-input>
+        <el-form-item label="材料用料:">
+          <el-input v-model="sizeForm.material" class="addInput"></el-input>
+        </el-form-item>
+         <el-form-item label="产品尺寸:">
+          <el-input v-model="sizeForm.size" class="addInput"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -66,14 +66,17 @@
       </div>
     </el-dialog>
     <!-- 编辑弹窗 -->
-    <el-dialog title="编辑工序" :visible.sync="dialogCompile">
+    <el-dialog title="编辑产品" :visible.sync="dialogCompile">
       <!-- Form -->
       <el-form ref="form" :model="editForm" label-width="100px" size="mini">
-        <el-form-item label="工序名称:">
+        <el-form-item label="产品名称:">
           <el-input v-model="editForm.name" class="addInput"></el-input>
         </el-form-item>
-        <el-form-item label="工序所需技能:">
-          <el-input v-model="editForm.skill" class="addInput"></el-input>
+        <el-form-item label="材料用料:">
+          <el-input v-model="editForm.material" class="addInput"></el-input>
+        </el-form-item>
+        <el-form-item label="产品尺寸:">
+          <el-input v-model="editForm.size" class="addInput"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -84,7 +87,6 @@
 
     <!-- 分页功能 -->
     <div class="block">
-      <!-- <span class="demonstration">完整功能</span> -->
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -109,30 +111,36 @@ export default {
       filters: {
         name: ""
       },
-      checkList: ["公司编号",'工序名称','所需技能'],
+      checkList: ["产品编号",'产品名称','公司编号','材料用料','产品尺寸'],
       newObjArr:[
+        {label:"产品编号",prop:'tId'},
+        {label:"产品名称",prop:'name'},
         {label:"公司编号",prop:'companyId'},
-        {label:"工序名称",prop:'name'},
-        {label:"所需技能",prop:'skill'}
+        {label:"材料用料",prop:'material'},
+        {label:"产品尺寸",prop:'size'}
         ],
       newObjArrSub:[
+        {label:"产品编号",prop:'tId'},
+        {label:"产品名称",prop:'name'},
         {label:"公司编号",prop:'companyId'},
-        {label:"工序名称",prop:'name'},
-        {label:"所需技能",prop:'skill'}
+        {label:"材料用料",prop:'material'},
+        {label:"产品尺寸",prop:'size'}
         ],
       page: 1,
-      ym_val: null,
+      ym_val: 1,
       users: [],
       dialogFormVisible: false,
       dialogCompile: false,
       sizeForm: {
         name: "",
-        companyId: this.$store.state.companyId,
-        skill: ""
+        companyId:this.$store.state.token,
+        material: "",
+        size:''
       },
       editForm: {
         name: "",
-        skill: ""
+        material: "",
+        size:''
       },
       pager: {
         current: 1,
@@ -149,10 +157,11 @@ export default {
     // 加载列表
     getUsers() {
       this.axios
-        .post("/api/procedure/findList")
+        .post("/api/product/findList")
         .then(res => {
-          this.$store.state.processManageData = res.data.result;
-          this.pager = this.$store.state.processManageData;
+          console.log(res)
+          this.$store.state.productManageData = res.data.result;
+          this.pager = this.$store.state.productManageData;
         })
         .catch(err => {
           console.log(err);
@@ -174,24 +183,26 @@ export default {
       this.dialogCompile = true;
       this.editEid = row.eid;
       this.editForm.name = row.name;
-      this.editForm.skill = row.skill;
+      this.editForm.material = row.material;
+      this.editForm.size = row.size;
     },
     handleEdit() {
-      // 编辑工序
+      // 编辑产品
       let params = {
-        eId: this.editEid,
+        id: this.tId,
         name: this.editForm.name,
-        skill: this.editForm.skill
+        material: this.editForm.material,
+        size: this.editForm.size
       };
       this.axios
-        .post("/api/procedure/update", qs.stringify(params))
+        .post("/api/product/update", qs.stringify(params))
         .then(res => {
           const action = {
             pageNum: parseInt(this.ym_val),
             size: this.pager.size
           };
           let that = this;
-          this.axios.post("/api/procedure/findList", action).then(res => {
+          this.axios.post("/api/product/findList", action).then(res => {
             that.pager = res.data.result;
           });
           this.dialogCompile = false;
@@ -201,19 +212,20 @@ export default {
           });
         });
       this.editForm.name = "";
-      this.editForm.skill = "";
+      this.editForm.material = "";
+      this.editForm.size = "";
     },
     handleDelete(index, row) {
       console.log(index, row);
       let that = this;
-      let params = { eId: row.eid };
-      this.axios.post("/api/procedure/del", qs.stringify(params)).then(res => {
+      let params = { tId: row.tId };
+      this.axios.post("/api/product/del", qs.stringify(params)).then(res => {
         if (res.data.status == 1) {
           this.$message({
             type: "success",
             message: "删除成功!"
           });
-          this.handleCurrentChange(that.ym_val);
+          this.handleCurrentChange();
         } else {
           this.$message({
             type: "info",
@@ -233,7 +245,7 @@ export default {
         size: this.pager.size
       };
       let that = this;
-      this.axios.post("/api/procedure/findList",qs.stringify(action)).then(res => {
+      this.axios.post("/api/product/findList",qs.stringify(action)).then(res => {
         that.pager = res.data.result;
       });
     },
@@ -256,8 +268,9 @@ export default {
     },
     handleCommit() {
       let that = this;
+      console.log(this.sizeForm)
       this.axios
-        .post("/api/procedure/add", qs.stringify(this.sizeForm))
+        .post("/api/product/add", qs.stringify(this.sizeForm))
         .then(res => {
           console.log(res);
           this.handleCurrentChange(that.ym_val);
@@ -275,7 +288,7 @@ export default {
     },
     inquire(){
       const action = { name:this.filters.name }
-      this.axios.post('/api/procedure/findList',qs.stringify(action)).then(res => {
+      this.axios.post('/api/product/findList',qs.stringify(action)).then(res => {
         console.log(res)
           this.$store.state.processManageData = res.data.result;
           this.pager = this.$store.state.processManageData;

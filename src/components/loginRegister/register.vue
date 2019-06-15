@@ -77,7 +77,7 @@ export default {
 
     return {
       ruleForm: {
-        phonenumber: "15916310431",
+        phonenumber: "",
         password: "",
         code: "",
         checkPass: ""
@@ -121,7 +121,8 @@ export default {
       });
     },
     getCode(phoneNum) {
-      let url = "/user/code/" + this.ruleForm.phoneNumber;
+      let url = "/user/code/" + this.ruleForm.phonenumber;
+      console.log(url)
       this.axios
         .get(url, this.ruleForm)
         .then(res => {

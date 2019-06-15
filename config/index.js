@@ -14,15 +14,15 @@ module.exports = {
     // 跨域请求
     proxyTable: {
       '/oauth': {
-        target:'http://192.168.0.111:8081',
+        target:'http://192.168.0.110:8081',
         changeOrigin: true
        },
        '/user': {
-        target:'http://192.168.0.111:80',
+        target:'http://192.168.0.110:80',
         changeOrigin: true
        },
        '/menu': {
-        target:'http://192.168.0.111:83',
+        target:'http://192.168.0.110:83',
         changeOrigin: true
        },
        '/api': {
@@ -59,7 +59,7 @@ module.exports = {
     cssSourceMap: true
   },
 
-  build: {
+  build:{
     // Template for index.html
     index: path.resolve(__dirname, '../dist/index.html'),
 

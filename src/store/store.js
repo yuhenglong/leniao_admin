@@ -18,6 +18,8 @@ const state = {
     orderData:null,
     // 工序管理
     processManageData:null,
+    // 产品管理
+    productManageData:null,
     // 公司的ID
     companyId:null
 }
@@ -51,6 +53,9 @@ const actions = {
     // 设置用户的companyId
     setCompanyId({commit,state }){
         commit('setCompanyId',state)
+    },
+    setToken({ commit,state}){
+        commit('setToken',state)
     }
 }
 
