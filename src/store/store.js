@@ -6,7 +6,6 @@ Vue.use(Vuex);
 
 // 处理后端返回的对象
 
-
 const state = {
     // token
     token:null,
@@ -20,13 +19,16 @@ const state = {
     processManageData:null,
     // 产品管理
     productManageData:null,
+    // 角色管理
+    roleManageData:null,
     // 公司的ID
     companyId:null
 }
 
 const mutations = {
     setToken(state,newToken){
-        state.token = newToken
+        state.token = newToken;
+        console.log('已设置token')
     },
     setMenusData(state,MenusData){
         state.MenusData = MenusData
@@ -36,13 +38,15 @@ const mutations = {
     },
     setCompanyId(state,newCompanyId){
         state.companyId = newCompanyId
+    },
+    setRoleManage(state,newRoleData){
+        state.roleManageData = newRoleData;
     }
 }
 
 const actions = {
     // 登出
-    signOut({ commit,state }){
-        commit('setToken','')
+    signOut({ commit}){
         commit('setMenusData',[])
         localStorage.removeItem('token')
     },
@@ -54,23 +58,18 @@ const actions = {
     setCompanyId({commit,state }){
         commit('setCompanyId',state)
     },
-    setToken({ commit,state}){
+    signIn({commit,state}){
         commit('setToken',state)
+    },
+    setRoleList({ commit,state }){
+        commit('setRoleManage',state)
     }
-}
-
-// 测试
-const getters = {
-    vipUsers:state => state.MenusData.filter( v =>{
-        return v.roleSort == 1;
-    })
 }
 
 const store = new Vuex.Store({
     state,
     mutations,
-    actions,
-    getters
+    actions
 })
 
 export default store;

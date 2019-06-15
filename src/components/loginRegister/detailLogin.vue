@@ -87,7 +87,8 @@ export default {
               // 将token储存到本地存储
               localStorage.setItem('token',res.data.access_token)
               // 将token存储到vuex
-              this.$store.commit('setToken',res.data.access_token);
+              // this.$store.commit('setToken',res.data.access_token);
+              this.$store.dispatch('signIn',res.data.access_token);
               // 跳转页面到首页
               this.$router.push('/dashboard')
             }

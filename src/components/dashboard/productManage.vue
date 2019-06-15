@@ -59,6 +59,9 @@
          <el-form-item label="产品尺寸:">
           <el-input v-model="sizeForm.size" class="addInput"></el-input>
         </el-form-item>
+        <el-form-item label="产品尺寸:">
+          <el-input v-model="sizeForm.size" class="addInput"></el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -133,7 +136,7 @@ export default {
       dialogCompile: false,
       sizeForm: {
         name: "",
-        companyId:this.$store.state.token,
+        companyId:'',
         material: "",
         size:''
       },
@@ -266,9 +269,10 @@ export default {
           });
         });
     },
+    // 点击新增
     handleCommit() {
       let that = this;
-      console.log(this.sizeForm)
+      this.sizeForm.companyId = this.comId;
       this.axios
         .post("/api/product/add", qs.stringify(this.sizeForm))
         .then(res => {
@@ -300,7 +304,11 @@ export default {
   created() {
     this.getUsers();
   },
-  computed: {}
+  computed: {
+    comId(){
+      return this.$store.state.companyId;
+    }
+  }
 };
 </script>
 

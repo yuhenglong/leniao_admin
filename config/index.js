@@ -14,7 +14,7 @@ module.exports = {
     // 跨域请求
     proxyTable: {
       '/oauth': {
-        target:'http://192.168.0.110:8081',
+        target:'http://192.168.0.110:8082',
         changeOrigin: true
        },
        '/user': {
@@ -23,6 +23,10 @@ module.exports = {
        },
        '/menu': {
         target:'http://192.168.0.110:83',
+        changeOrigin: true
+       },
+       '/role': {
+        target:'http://192.168.0.120:80',
         changeOrigin: true
        },
        '/api': {
@@ -37,7 +41,7 @@ module.exports = {
     // Various Dev Server settings
     // host: '192.168.0.111', // can be overwritten by process.env.HOST
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 8081, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 8082, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,
