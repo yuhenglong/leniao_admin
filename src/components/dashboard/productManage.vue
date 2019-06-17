@@ -40,6 +40,7 @@
       </template>
       <el-table-column align="right" width="550" label="操作">
         <template slot-scope="scope">
+          <el-button size="mini" @click="query(scope.row)">查询</el-button>
           <el-button size="mini" @click="openEdit(scope.row)">编辑</el-button>
           <el-button size="mini" type="danger" @click="open(scope.$index, scope.row)">删除</el-button>
         </template>
@@ -81,9 +82,27 @@
         <el-form-item label="产品尺寸:">
           <el-input v-model="editForm.size" class="addInput"></el-input>
         </el-form-item>
+        <div ></div>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogCompile = false">取 消</el-button>
+        <el-button type="primary" @click="handleEdit">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- 查询弹窗 -->
+    <el-dialog title="查询详情" :visible.sync="dialogQuire">
+      <!-- table -->
+      <el-table
+      :data="tableData"
+      style="width: 100%">
+      <el-table-column
+        prop="templateName"
+        label="模板"
+        width="180">
+      </el-table-column>
+    </el-table>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogQuire = false">取 消</el-button>
         <el-button type="primary" @click="handleEdit">确 定</el-button>
       </div>
     </el-dialog>
@@ -134,6 +153,7 @@ export default {
       users: [],
       dialogFormVisible: false,
       dialogCompile: false,
+      dialogQuire:false,
       sizeForm: {
         name: "",
         companyId:'',
@@ -142,8 +162,10 @@ export default {
       },
       editForm: {
         name: "",
+        companyId:'',
         material: "",
-        size:''
+        size:'',
+        productTemplates:[]
       },
       pager: {
         current: 1,
@@ -153,14 +175,15 @@ export default {
         searchCount: true,
         records: []
       },
-      editEid: null
+      editEid: null,
+      tableData:[]
     };
   },
   methods: {
     // 加载列表
     getUsers() {
       this.axios
-        .post("/api/product/findList")
+        .post("/api/product/selectPage")
         .then(res => {
           console.log(res)
           this.$store.state.productManageData = res.data.result;
@@ -176,6 +199,14 @@ export default {
         return val.indexOf(item.label) > -1 ;
       })
       this.newObjArr = arr;
+    },
+    query(row){
+      this.dialogQuire = true;
+      console.log(row);
+      this.axios.post('/api/productTemplate/findTemplateByproductId',row.id).then(res =>{
+        console.log(res)
+        this.tableData = res.data.result;
+      })
     },
     addUsers() {
       console.log("新增数据");
@@ -221,7 +252,7 @@ export default {
     handleDelete(index, row) {
       console.log(index, row);
       let that = this;
-      let params = { tId: row.tId };
+      let params = { tId: row.id };
       this.axios.post("/api/product/del", qs.stringify(params)).then(res => {
         if (res.data.status == 1) {
           this.$message({
@@ -240,15 +271,15 @@ export default {
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-      this.ym_val = `${val}`;
+    handleCurrentChange() {
+      // this.ym_val = `${val}`;
+      console.log('这是当前页',this.ym_val)
       const action = {
         pageNum: parseInt(this.ym_val),
         size: this.pager.size
       };
       let that = this;
-      this.axios.post("/api/product/findList",qs.stringify(action)).then(res => {
+      this.axios.post("/api/product/selectPage",qs.stringify(action)).then(res => {
         that.pager = res.data.result;
       });
     },

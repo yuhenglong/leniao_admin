@@ -140,7 +140,7 @@ export default {
       dialogCompile: false,
       sizeForm: {
         name: "",
-        companyId: this.$store.state.companyId,
+        companyId: '',
         skill: ""
       },
       editForm: {
@@ -201,10 +201,10 @@ export default {
   methods: {
     // 加载列表
     getUsers() {
-      this.params.companyId = this.comId;
-      console.log(this.params)
+      console.log('超级大水货',this.companyId)
       this.axios
-        .post("/role/findAll",qs.stringify(this.params))
+        .post("/role/findAll")
+        // .post("/role/findAll",qs.stringify(this.companyId))
         .then(res => {
           console.log('这是角色管理',res)
           // this.$store.state.processManageData = res.data.result;
@@ -355,8 +355,8 @@ export default {
     this.getUsers();
   },
   computed: {
-    comId(){
-      return this.$store.state.companyId;
+    companyId(){
+      return this.$store.getters.UpdateCompanyId;
     }
   }
 };

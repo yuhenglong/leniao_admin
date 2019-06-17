@@ -96,18 +96,6 @@ export default {
             console.log(err);
           })
 
-          // 原生的axios
-          // this.axios.post('/data/index',this.ruleForm2)
-          // .then(res =>{
-          //   if(res.data){
-          //     // 将token储存到本地存储
-          //     localStorage.setItem('token',res.data.token)
-          //     // 将token存储到vuex
-          //     this.$store.commit('setToken',res.data.token);
-          //     // 跳转页面到首页
-          //     this.$router.push('/dashboard')
-          //   }
-          // })
         } else {
           console.log("大水货");
         }
