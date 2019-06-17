@@ -67,9 +67,6 @@
         <el-form-item label="工序名称:">
           <el-input v-model="sizeForm.name" class="addInput"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="公司编号:">
-          <el-input v-model="sizeForm.companyId" class='addInput'></el-input>
-        </el-form-item>-->
         <el-form-item label="工序所需技能:">
           <el-input v-model="sizeForm.skill" class="addInput"></el-input>
         </el-form-item>
@@ -201,14 +198,15 @@ export default {
   methods: {
     // 加载列表
     getUsers() {
-      console.log('超级大水货',this.companyId)
+      const params = {
+        'companyId':this.companyId
+      }
       this.axios
-        .post("/role/findAll")
-        // .post("/role/findAll",qs.stringify(this.companyId))
+        .post("/role/findAll",qs.stringify(params))
         .then(res => {
           console.log('这是角色管理',res)
-          // this.$store.state.processManageData = res.data.result;
-          // this.pager = this.$store.state.processManageData;
+          this.$store.state.processManageData = res.data.result;
+          this.pager = this.$store.state.processManageData;
         })
         .catch(err => {
           console.log(err);
@@ -356,7 +354,7 @@ export default {
   },
   computed: {
     companyId(){
-      return this.$store.getters.UpdateCompanyId;
+      return localStorage.getItem('companyId');
     }
   }
 };
@@ -377,7 +375,6 @@ export default {
   float: right;
 }
 .userManagement .el-form--inline {
-  // width: 800px;
   clear: both;
 }
 .lab_div {

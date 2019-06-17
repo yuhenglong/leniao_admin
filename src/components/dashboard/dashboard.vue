@@ -111,8 +111,9 @@ export default {
           // 将menus存储在vuex中
           if (res.data.status == 1) {
             this.$store.commit("setMenusData", res.data.result.roles);
-            console.log('这是ID',res.data.result.defaultShowCompany)
             this.$store.commit("setCompanyId",res.data.result.defaultShowCompany);
+            // 存储companyId到localStorage里面避免刷新页面不见了数据
+            localStorage.setItem('companyId',res.data.result.defaultShowCompany)
             this.menusArr = this.$store.state.MenusData;
             this.newMenusArr = this.menusArr;
             this.menusTitle = this.menusArr[0].name;

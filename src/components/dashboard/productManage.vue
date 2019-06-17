@@ -13,7 +13,6 @@
             <el-button type="primary" v-on:click="dialogFormVisible = true">新增</el-button>
           </el-form-item>
         </el-form>
-
         <!-- 下拉列表选项 -->
             <el-dropdown trigger="click" class='fr'>
               <span class="el-dropdown-link">
@@ -92,15 +91,18 @@
     <!-- 查询弹窗 -->
     <el-dialog title="查询详情" :visible.sync="dialogQuire">
       <!-- table -->
-      <el-table
-      :data="tableData"
-      style="width: 100%">
-      <el-table-column
-        prop="templateName"
-        label="模板"
-        width="180">
-      </el-table-column>
-    </el-table>
+      <el-row :gutter="20">
+        <el-col :span="3">
+          <div class="grid-content bg-purple btn">
+            <el-button type="text" v-for="(item,index) in tableData" :key='index' @click='changeIndex(index)'>{{ item.templateName }}</el-button>
+          </div>
+        </el-col>
+        <el-col :span="17">
+          <div class="grid-content bg-purple">
+            <query-details v-bind:listDetails="tableData" v-bind:index="index"></query-details>
+          </div>
+        </el-col>
+      </el-row>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogQuire = false">取 消</el-button>
         <el-button type="primary" @click="handleEdit">确 定</el-button>
@@ -125,14 +127,19 @@
 <script>
 import { mapState } from "vuex";
 import qs from "qs";
+import queryDetails from '@/components/dashboard/queryDetails.vue'
 
 export default {
+  components:{
+    'query-details':queryDetails
+  },
   data() {
     return {
       search: "",
       filters: {
         name: ""
       },
+      index:0,
       checkList: ["产品编号",'产品名称','公司编号','材料用料','产品尺寸'],
       newObjArr:[
         {label:"产品编号",prop:'tId'},
@@ -185,13 +192,15 @@ export default {
       this.axios
         .post("/api/product/selectPage")
         .then(res => {
-          console.log(res)
           this.$store.state.productManageData = res.data.result;
           this.pager = this.$store.state.productManageData;
         })
         .catch(err => {
           console.log(err);
         });
+    },
+    changeIndex(index){
+      this.index = index;
     },
     changeArr(val){
       console.log(val)
@@ -202,7 +211,6 @@ export default {
     },
     query(row){
       this.dialogQuire = true;
-      console.log(row);
       this.axios.post('/api/productTemplate/findTemplateByproductId',row.id).then(res =>{
         console.log(res)
         this.tableData = res.data.result;
@@ -271,8 +279,8 @@ export default {
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
-    handleCurrentChange() {
-      // this.ym_val = `${val}`;
+    handleCurrentChange(val) {
+      this.ym_val = `${val}`;
       console.log('这是当前页',this.ym_val)
       const action = {
         pageNum: parseInt(this.ym_val),
@@ -343,7 +351,7 @@ export default {
 };
 </script>
 
-<style lang="" scoped>
+<style lang="scss" scoped>
 .el-dropdown-link {
   cursor: pointer;
   color: #409eff;
@@ -373,4 +381,35 @@ export default {
   text-align:center;
   margin:10px 0;
 }
+.el-row {
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    .btn{
+      .el-button:first-child{
+        margin-left:10px;
+      }
+    }
+  }
+  .el-col {
+    border-radius: 4px;
+  }
+  .bg-purple-dark {
+    background: #99a9bf;
+  }
+  .bg-purple {
+    background: #d3dce6;
+  }
+  .bg-purple-light {
+    background: #e5e9f2;
+  }
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
+  .row-bg {
+    padding: 5px 0;
+    background-color: #f9fafc;
+  }
 </style>

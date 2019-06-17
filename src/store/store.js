@@ -27,7 +27,6 @@ const state = {
 
 const getters = {
     UpdateCompanyId:(state) =>{
-        console.log(state.companyId)
         return {
             companyId:state.companyId
         }
@@ -46,10 +45,7 @@ const mutations = {
         state.personList = newPersonList
     },
     setCompanyId(state,newCompanyId){
-        console.log('这是mutations')
         state.companyId = newCompanyId
-        console.log('这是state',newCompanyId)
-        console.log('这是state',state.companyId)
     },
     setRoleManage(state,newRoleData){
         state.roleManageData = newRoleData;
@@ -68,7 +64,6 @@ const actions = {
     },
     // 设置用户的companyId
     setCompanyId({commit,state }){
-        console.log('这是actions')
         commit('setCompanyId',state)
     },
     signIn({commit,state}){
