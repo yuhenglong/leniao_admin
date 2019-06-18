@@ -65,6 +65,7 @@
             </el-dropdown-menu>
           </el-dropdown>
         </el-header>
+
         <el-main>
           <router-view></router-view>
         </el-main>
@@ -73,9 +74,11 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
-
+// import tagsView from '@/components/dashboard/TagsView.vue'
 export default {
+  components:{
+    // tagsView
+  },
   data() {
     return {
       zdcommand: 0,
@@ -106,7 +109,7 @@ export default {
     loadingData() {
       // 封装后的请求
       this.axios
-        .get("/menu/allMenu/15888888888")
+        .get("/menu/allMenu")
         .then(res => {
           // 将menus存储在vuex中
           if (res.data.status == 1) {

@@ -20,8 +20,8 @@ axios.interceptors.request.use(config => {
     // 加载
     startLoading()
     if (localStorage.token)
-        config.headers.Authorization_two = localStorage.token
-        // console.log('这是请求头',config.headers.Authorization_two)
+        config.headers.access_token = localStorage.token
+        console.log('这是请求头',config.headers.access_token)
     return config
 }, error => {
     return Promise.reject(error)

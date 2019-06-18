@@ -267,7 +267,7 @@ export default {
             type: "success",
             message: "删除成功!"
           });
-          this.handleCurrentChange();
+          this.handleCurrentChange(this.ym_val);
         } else {
           this.$message({
             type: "info",
@@ -277,10 +277,11 @@ export default {
       });
     },
     handleSizeChange(val) {
+      console.log(val)
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      this.ym_val = `${val}`;
+      this.ym_val = val;
       console.log('这是当前页',this.ym_val)
       const action = {
         pageNum: parseInt(this.ym_val),

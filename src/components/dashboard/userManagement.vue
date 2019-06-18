@@ -25,6 +25,8 @@
         <el-button type="primary" @click="resetForm()">重置</el-button>
       </div>
     </div>
+   <!-- 弹窗组件 -->
+    <lnDialog></lnDialog>
 
     <template>
       <el-col style="padding-bottom:0px;text-align:right;" >
@@ -106,13 +108,18 @@
         :total="pager.total"
       ></el-pagination>
     </div>
+ 
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import qs from "qs";
+import lnDialog from '@/components/dialog/lnDialog'
 export default {
+  components:{
+    lnDialog
+  },
   data() {
     return {
       search: "",
@@ -343,6 +350,7 @@ export default {
         });
     },
     onSubmit() {
+
       console.log("submit!");
     },
     resetForm() {
