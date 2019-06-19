@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+// import 
 import _ from 'lodash';
 // 引入vuex
 Vue.use(Vuex);
@@ -30,7 +31,8 @@ const getters = {
         return {
             companyId:state.companyId
         }
-    }
+    },
+    visitedviews:state => state.tagsview.visitedviews
 }
 
 const mutations = {

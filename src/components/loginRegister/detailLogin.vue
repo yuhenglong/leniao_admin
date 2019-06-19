@@ -74,8 +74,33 @@ export default {
       this.$refs[formName].validate(valid => {
         // 请求后端并跳转页面
         if (valid) {
-          // 真实请求接口
-          const params = {username: this.ruleForm2.phoneNumber, password: this.ruleForm2.password,grant_type:"password"}
+
+    // 真实请求接口
+          // let body = {username: this.ruleForm2.phoneNumber, password: this.ruleForm2.password,grant_type:"password"}
+          // fetch('/oauth/token',{
+          //   method:'POST',
+          //   headers: {
+          //       "Authorization":"Basic VGVzdFN5c3RlbTpjZThlMzgyYS04YzI1LTRmYmQtOWUzMy1hMGQ3M2UxMTEyMjI=",
+          //       "Content-Type": "application/x-www-form-urlencoded" 
+          //     },
+          //   body:qs.stringify(body)
+          //   }).then(res=>{
+          //   console.log('这是请求成功的回调',res)
+          //     if(res.data){
+          //     // 将token储存到本地存储
+          //     localStorage.setItem('token',res.data.access_token)
+          //     // 将token存储到vuex
+          //     // this.$store.commit('setToken',res.data.access_token);
+          //     this.$store.dispatch('signIn',res.data.access_token);
+          //     // 跳转页面到首页
+          //     this.$router.push('/dashboard')
+          //   }
+          // }).catch(err => {
+          //   console.log(err);
+          // })
+
+// 备份
+     const params = {username: this.ruleForm2.phoneNumber, password: this.ruleForm2.password,grant_type:"password"}
           this.axios.post('/oauth/token',qs.stringify(params),{
             headers: {
                 "Authorization":"Basic VGVzdFN5c3RlbTpjZThlMzgyYS04YzI1LTRmYmQtOWUzMy1hMGQ3M2UxMTEyMjI=",
@@ -95,11 +120,8 @@ export default {
           }).catch(err => {
             console.log(err);
           })
-
-        } else {
-          console.log("大水货");
         }
-      });
+      })
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

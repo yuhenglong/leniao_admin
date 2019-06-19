@@ -109,7 +109,9 @@ export default {
     loadingData() {
       // 封装后的请求
       this.axios
-        .get("/menu/allMenu")
+        .get("/menu/allMenu",{
+          headers:{Authorization: 'Bearer ' + localStorage.token}
+        })
         .then(res => {
           // 将menus存储在vuex中
           if (res.data.status == 1) {

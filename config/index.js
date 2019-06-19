@@ -16,10 +16,10 @@ module.exports = {
         target:'http://192.168.0.113:8081',
         changeOrigin: true
        },
-      //  '/': {
-      //   target:'http://192.168.0.113:3002',
-      //   changeOrigin: true
-      //  },
+       '/company': {
+        target:'http://192.168.0.113:80',
+        changeOrigin: true
+       },
        '/user': {
         target:'http://192.168.0.110:80',
         changeOrigin: true
