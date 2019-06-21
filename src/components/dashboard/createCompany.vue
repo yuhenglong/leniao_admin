@@ -90,7 +90,6 @@ export default {
         idCard: "",
         taxNum: "",
         industry: "",
-        // dialogImageUrl: "",
         detAdress:''
       },
       dialogImageUrl: "",

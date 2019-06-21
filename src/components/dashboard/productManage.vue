@@ -200,9 +200,11 @@ export default {
         });
     },
     changeIndex(index){
+      // 改变序号
       this.index = index;
     },
     changeArr(val){
+      // 改变数组
       console.log(val)
       const arr = this.newObjArrSub.filter( item =>{
         return val.indexOf(item.label) > -1 ;
@@ -330,6 +332,7 @@ export default {
     filterTag(value, row) {
       return row.tag === value;
     },
+    // 重新加载页面
     inquire(){
       const action = { name:this.filters.name }
       this.axios.post('/api/product/findList',qs.stringify(action)).then(res => {

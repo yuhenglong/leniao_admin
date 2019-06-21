@@ -133,6 +133,7 @@ export default {
     signOut() {
       this.$store.dispatch("signOut").then(() => {
         // localStorage.removeItem(this.store.state.token)
+        // 重新加载
         location.reload();
       });
     },

@@ -6,7 +6,7 @@ import forget from '@/components/loginRegister/forget'
 import setpass from '@/components/loginRegister/setpass'
 import dashboard from '@/components/dashboard/dashboard'
 import leniao from '@/components/dashboard/leniao'
-import UserControl from '@/components/dashboard/UserControl'
+import userControl from '@/components/dashboard/userControl'
 const roleManagement = () => import('@/components/dashboard/roleManagement')
 const userManagement = () => import('@/components/dashboard/userManagement')
 const processManage = () => import('@/components/dashboard/processManage')
@@ -61,8 +61,8 @@ const router = new Router({
           path: '/dashboard/leniao',
           component: leniao
         }, {
-          path: '/dashboard/UserControl',
-          component: UserControl
+          path: '/dashboard/userControl',
+          component: userControl
         },{
           path: '/dashboard/userManagement',
           component: userManagement

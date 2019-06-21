@@ -121,6 +121,7 @@ export default {
         {label:"所需技能",prop:'skill'}
         ],
       page: 1,
+      // 当前页面
       ym_val: null,
       users: [],
       dialogFormVisible: false,
@@ -158,6 +159,7 @@ export default {
           console.log(err);
         });
     },
+    // 改变数组
     changeArr(val){
       console.log(val)
       const arr = this.newObjArrSub.filter( item =>{
@@ -165,6 +167,7 @@ export default {
       })
       this.newObjArr = arr;
     },
+    // 暂未用到
     addUsers() {
       console.log("新增数据");
     },
@@ -227,7 +230,8 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
-      this.ym_val = `${val}`;
+      this.ym_val = val;
+      // this.ym_val = `${val}`;
       const action = {
         pageNum: parseInt(this.ym_val),
         size: this.pager.size

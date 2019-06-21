@@ -138,8 +138,10 @@ export default {
         { label: "所需技能", prop: "skill" }
       ],
       page: 1,
+      // 当前页面
       ym_val: null,
       users: [],
+      // 弹窗
       dialogFormVisible: false,
       dialogCompile: false,
       sizeForm: {
@@ -219,6 +221,7 @@ export default {
           console.log(err);
         });
     },
+    // 改变数组
     changeArr(val) {
       console.log(val);
       const arr = this.newObjArrSub.filter(item => {
@@ -264,6 +267,7 @@ export default {
       this.editForm.name = "";
       this.editForm.skill = "";
     },
+    // 删除行
     handleDelete(index, row) {
       console.log(index, row);
       let that = this;
@@ -288,7 +292,7 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
-      this.ym_val = `${val}`;
+      this.ym_val = val;
       const action = {
         pageNum: parseInt(this.ym_val),
         size: this.pager.size
@@ -317,6 +321,7 @@ export default {
           });
         });
     },
+    // 新增
     handleCommit() {
       let that = this;
       this.axios
