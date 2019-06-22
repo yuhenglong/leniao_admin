@@ -24,7 +24,7 @@
             <el-submenu :index="index+'0'" :key="index">
               <template slot="title">{{ itemb.name }}</template>
               <el-menu-item-group v-for="(itemc,index) in itemb.children" :key="index">
-                <el-menu-item :index="itemc.url">{{itemc.name}}</el-menu-item>
+                <el-menu-item :index="itemc.url" @click="changeRouter(itemc.url,itemc.name)">{{itemc.name}}</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
           </template>
@@ -67,6 +67,9 @@
         </el-header>
 
         <el-main>
+          <!-- 标签页 -->
+          <tags-view></tags-view>
+
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -74,10 +77,10 @@
   </div>
 </template>
 <script>
-// import tagsView from '@/components/dashboard/TagsView.vue'
+import tagsView from '@/components/dashboard/TagsView.vue'
 export default {
   components:{
-    // tagsView
+    tagsView
   },
   data() {
     return {
@@ -88,7 +91,7 @@ export default {
       firMenus: [],
       inputCom: "",
       select: ""
-    };
+    }
   },
   methods: {
     tree(index) {
@@ -141,7 +144,41 @@ export default {
       this.zdcommand = command;
       this.menusTitle = this.newMenusArr[this.zdcommand].name;
       this.tree(this.zdcommand);
-    }
+    },
+    changeRouter(url,name){
+      console.log('这是点击的标签名',name)
+      console.log('这是点击的标签名',url)
+      console.log(this.$route.path)
+    },
+    // 标签页
+    handleTabsEdit(targetName, action) {
+        if (action === 'add') {
+          let newTabName = ++this.tabIndex + '';
+          this.editableTabs.push({
+            title: 'New Tab',
+            name: newTabName,
+            content: 'New Tab content'
+          });
+          this.editableTabsValue = newTabName;
+        }
+        if (action === 'remove') {
+          let tabs = this.editableTabs;
+          let activeName = this.editableTabsValue;
+          if (activeName === targetName) {
+            tabs.forEach((tab, index) => {
+              if (tab.name === targetName) {
+                let nextTab = tabs[index + 1] || tabs[index - 1];
+                if (nextTab) {
+                  activeName = nextTab.name;
+                }
+              }
+            });
+          }
+          
+          this.editableTabsValue = activeName;
+          this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+        }
+      }
   },
   created() {
     this.loadingData();

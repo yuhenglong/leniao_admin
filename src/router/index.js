@@ -19,7 +19,8 @@ const formBuilding = () => import('@/components/dashboard/formBuilding')
 const systemInterface = () => import('@/components/dashboard/systemInterface')
 const codeGeneration = () => import('@/components/dashboard/codeGeneration')
 const createCompany = () => import('@/components/dashboard/createCompany')
-const selfCreateCompany = () => import('@/components/dashboard/selfCreateCompany')
+const selfCreatedCompany = () => import('@/components/dashboard/selfCreatedCompany')
+const divisionManagement = () => import('@/components/dashboard/divisionManagement')
 
 // 引入 vuex中store
 import store from '@/store/store'
@@ -97,8 +98,11 @@ const router = new Router({
           path: '/dashboard/createCompany',
           component: createCompany
         },{
-          path: '/dashboard/selfCreateCompany',
-          component: selfCreateCompany
+          path: '/dashboard/selfCreatedCompany',
+          component: selfCreatedCompany
+        },{
+          path: '/dashboard/divisionManagement',
+          component: divisionManagement
         }, {
           path: '/dashboard/codeGeneration',
           component: codeGeneration

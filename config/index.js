@@ -28,6 +28,10 @@ module.exports = {
         target:'http://192.168.0.113:83',
         changeOrigin: true
        },
+       '/dept': {
+        target:'http://192.168.0.120:80',
+        changeOrigin: true
+       },
        '/role': {
         target:'http://192.168.0.120:80',
         changeOrigin: true

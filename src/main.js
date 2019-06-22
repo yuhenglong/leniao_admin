@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+// 引入JQuery
+import $ from 'jquery'
 
 // 引入进亮封装的axios
 import axios from './axios/axios'

@@ -126,7 +126,7 @@
 </style>
 <script>
 export default {
-  name: "userControl",
+  name: "selfCreatedCompany",
   data() {
     return {
       input:'',
