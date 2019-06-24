@@ -4,23 +4,13 @@
       <div slot="header">
         <el-row :gutter="10">
           <el-col :span="3">
-            <el-select v-model="industry" placeholder="请选择行业">
-              <el-option :label="'养鱼'" :value="1"></el-option>
-              <el-option :label="'养虾'" :value="2"></el-option>
-              <el-option :label="'养龟'" :value="3"></el-option>
-              <el-option :label="'养猪'" :value="4"></el-option>
-              <el-option :label="'养蟑螂'" :value="5"></el-option>
-              <el-option :label="'养蜈蚣'" :value="6"></el-option>
-            </el-select>
+            <el-input v-model="inputName" placeholder="请输入部门名称"></el-input>
           </el-col>
-          <el-col :span="3">
-            <el-select v-model="ComName" placeholder="公司名称">
-              <el-option :label="'鱼'" :value="1"></el-option>
-              <el-option :label="'虾'" :value="2"></el-option>
-              <el-option :label="'龟'" :value="3"></el-option>
-              <el-option :label="'猪'" :value="4"></el-option>
-              <el-option :label="'蟑螂'" :value="5"></el-option>
-              <el-option :label="'蜈蚣'" :value="6"></el-option>
+          <el-col :span="3" class="plaHol">
+            <el-select v-model="ComName" placeholder="所有">
+              <el-option :label="'所有'" :value="-1"></el-option>
+              <el-option :label="'正常'" :value="0"></el-option>
+              <el-option :label="'失败'" :value="1"></el-option>
             </el-select>
           </el-col>
           <el-col :span="6">
@@ -46,17 +36,20 @@
         row-key="id"
         border
         default-expand-all
+        :default-sort="{prop: 'sort', order: 'descending'}"
         :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
       >
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="name" label="公司名称" sortable width="180"></el-table-column>
-        <el-table-column prop="delFlag" label="排序" sortable width="180"></el-table-column>
-        <el-table-column prop="delFlag" label="状态" sortable width="180"></el-table-column>
+        <el-table-column prop="sort" label="排序" sortable width="180"></el-table-column>
+        <el-table-column prop="delFlag" label="状态" width="180"></el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
-        <el-table-column prop="address" label="操作">
-          <el-button size="mini" @click="edit(scope.row)">编辑</el-button>
-          <el-button size="mini" type="danger" @click="addItem(scope.$index, scope.row)">新增</el-button>
-          <el-button size="mini" type="danger" @click="delItem(scope.$index, scope.row)">删除</el-button>
+        <el-table-column fixed="right" label="操作" width="300">
+          <template slot-scope="scope">
+            <el-button @click="handEdit(scope.row)" type="warning" size="small">编辑</el-button>
+            <el-button @click="handAdd(scope.row)" type="success" size="small">新增</el-button>
+            <el-button @click="handleDelete(scope.row)" type="danger" size="small">删除</el-button>
+          </template>
         </el-table-column>
       </el-table>
       <el-pagination
@@ -67,58 +60,34 @@
       ></el-pagination>
     </el-card>
 
-    <el-dialog title="新增用户" :visible.sync="dialogVisible">
+    <el-dialog title="新增部门" :visible.sync="dialogVisible">
       <el-form :label-position="'right'" label-width="80px">
-        <el-form-item label="用户名">
-          <el-input placeholder="请输入用户名"></el-input>
-        </el-form-item>
-        <el-form-item label="密码">
-          <el-input type="password" placeholder="请输入密码"></el-input>
-        </el-form-item>
-        <el-form-item label="确认密码">
-          <el-input type="password" placeholder="再次确认密码"></el-input>
-        </el-form-item>
-        <el-form-item label="手机号码">
-          <el-input placeholder="请输入手机号码" v-model="test" class="input-with-select">
-            <el-select v-model="test1" slot="prepend" placeholder="国际码" style="width:90px;">
-              <el-option label="+86" value="86"></el-option>
-              <el-option label="+80" value="80"></el-option>
-              <el-option label="+88" value="88"></el-option>
-              <el-option label="+202" value="202"></el-option>
-            </el-select>
-          </el-input>
-        </el-form-item>
-        <el-form-item label="电子邮件">
-          <el-input placeholder="请输入电子邮件"></el-input>
-        </el-form-item>
-        <el-form-item label="性别">
-          <el-select v-model="test1" placeholder="请选择性别" style="width:100%">
-            <el-option label="男" value="true"></el-option>
-            <el-option label="女" value="false"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="出生日期">
-          <el-date-picker
-            v-model="test"
-            align="right"
-            type="date"
-            placeholder="选择日期"
-            style="width: 100%;"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="头像">
-          <el-upload
-            :data="{bucketName:bucketName}"
-            :on-remove="onRemoveFile"
-            list-type="picture-card"
-          >
-            <i class="el-icon-plus"></i>
-          </el-upload>
+        <el-form-item label="部门名字">
+          <!-- <el-input placeholder="请输入新增名字" v-model="DepartmentName"></el-input> -->
+          <el-input v-model="DepartmentName" placeholder="请输入内容"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary">确 定</el-button>
+        <el-button type="primary" @click="addSubmit">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="编辑" :visible.sync="dialogEdit">
+      <el-form :label-position="'right'" label-width="80px">
+        <!-- <el-form-item label="上级部门">
+          <el-input v-model=""></el-input>
+        </el-form-item>-->
+        <el-form-item label="名称">
+          <el-input v-model="editName"></el-input>
+        </el-form-item>
+        <el-form-item label="排序">
+          <el-input v-model="editIndex"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editConfirm">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -134,40 +103,54 @@ export default {
   name: "selfCreatedCompany",
   data() {
     return {
+      inputName: "",
       input: "",
-      industry:'',
+      industry: "",
       dialogVisible: false,
+      dialogEdit: false,
+      editName: "",
+      editIndex: "",
+      LnCompanyDept: "",
+      companyId: "",
       state: null,
-      ComName:'',
-      delFlage:'',
+      ComName: "",
+      delFlage: "",
       dateRange: null,
       test: null,
       test1: null,
       selectedRows: [],
       bucketName: "public",
       pager: { current: 1, size: 10, total: 0, records: [] },
-      tableData: []
-    }
+      tableData: [],
+      DepartmentName: "",
+      Department: {
+        companyId: "",
+        name: "",
+        createUser: "",
+        topId: ""
+      }
+    };
   },
   created() {
     this.getList();
   },
-  filters:{
-    actState:function(value){
-        return 22;
+  filters: {
+    actState: function(value) {
+      return 22;
     }
   },
   methods: {
-    ceshi(val){
-      console.log(val)
+    ceshi(val) {
+      console.log(val);
     },
-    getList(){
+    getList() {
       let obj = {
         // companyId:localStorage.getItem('companyId')
         // 这是王景的写死的公司ID
-        companyId:'302364aauyhf401ats7c1113f55b2e49'
-      }
-      this.axios.post('/dept/selectDept',qs.stringify(obj)).then(res =>{
+        companyId: "302364aauyhf401ats7c1113f55b2e49",
+        delFlag: 0
+      };
+      this.axios.post("/dept/selectDept", qs.stringify(obj)).then(res => {
         if(res.data.status ==1){
           let subData = res.data.result;
           for(let i = 0;i<subData.length;i++){
@@ -189,13 +172,46 @@ export default {
               }
               return father.topId == 0;
             });
-            console.log('这是树',tree)
             this.tableData = tree;
         }
-      })
+      });
+    },
+    addSubmit() {
+      this.Department.name = this.DepartmentName;
+      console.log(this.Department);
+      this.axios
+        .post("/dept/insertDept", qs.stringify(this.Department))
+        .then(res => {
+          console.log(res);
+          this.getList();
+          this.DepartmentName = "";
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      this.dialogVisible = false;
     },
     edit() {
       this.dialogVisible = true;
+    },
+    handEdit(row) {
+      this.dialogEdit = true;
+      this.editName = row.name;
+      this.editIndex = row.sort;
+      this.LnCompanyDept = row.deptId;
+      this.companyId = row.companyId;
+    },
+    editConfirm() {
+      const obj = {
+        name: this.editName,
+        sort: this.editIndex,
+        deptId: this.LnCompanyDept,
+        companyId: this.companyId
+      };
+      this.axios.post("/dept/updateDept", obj).then(res => {
+        this.getList();
+      });
+      this.dialogEdit = false;
     },
     onSelectionChange(rows) {
       this.selectedRows = rows.map(item => item.userId);
@@ -207,7 +223,25 @@ export default {
         type: "warning"
       });
     },
-    onRemoveFile(file) {}
+    onRemoveFile(file) {},
+    handAdd(row) {
+      this.Department = {
+        companyId: row.companyId,
+        createUser: row.createUser,
+        topId: row.deptId
+      };
+      this.dialogVisible = true;
+    },
+    handleDelete(row) {
+      console.log(row);
+      const params = {
+        deptId: row.deptId
+      };
+      this.axios.post("dept/deleteDept", qs.stringify(params)).then(res => {
+        console.log(res);
+      });
+      this.getList();
+    }
   }
 };
 </script>
@@ -215,5 +249,22 @@ export default {
 .btn_input {
   width: 250px;
   margin-right: 10px;
+}
+.plaHol {
+  input::-webkit-input-placeholder {
+    color: red;
+  }
+  input::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: red;
+  }
+  input:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: red;
+  }
+  input:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: red;
+  }
 }
 </style>

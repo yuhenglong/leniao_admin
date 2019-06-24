@@ -146,39 +146,16 @@ export default {
       this.tree(this.zdcommand);
     },
     changeRouter(url,name){
-      console.log('这是点击的标签名',name)
-      console.log('这是点击的标签名',url)
-      console.log(this.$route.path)
-    },
-    // 标签页
-    handleTabsEdit(targetName, action) {
-        if (action === 'add') {
-          let newTabName = ++this.tabIndex + '';
-          this.editableTabs.push({
-            title: 'New Tab',
-            name: newTabName,
-            content: 'New Tab content'
-          });
-          this.editableTabsValue = newTabName;
+      const obj ={
+            name: name,
+            path: url,
+            title: name
         }
-        if (action === 'remove') {
-          let tabs = this.editableTabs;
-          let activeName = this.editableTabsValue;
-          if (activeName === targetName) {
-            tabs.forEach((tab, index) => {
-              if (tab.name === targetName) {
-                let nextTab = tabs[index + 1] || tabs[index - 1];
-                if (nextTab) {
-                  activeName = nextTab.name;
-                }
-              }
-            });
-          }
-          
-          this.editableTabsValue = activeName;
-          this.editableTabs = tabs.filter(tab => tab.name !== targetName);
-        }
-      }
+        this.$store.dispatch('addVisitedViews',obj)
+    }
+  },
+  mountd(){
+    this.add
   },
   created() {
     this.loadingData();

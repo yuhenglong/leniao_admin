@@ -34,9 +34,9 @@ export default {
           //只有在关闭当前打开的标签页才会有影响
           let lastView = views.slice(-1)[0]; //选取路由数组中的最后一位
           if (lastView) {
-            this.$router.push(lastView);
+            this.$router.push(lastView.path);
           } else {
-            this.$router.push("/");
+            this.$router.push("/dashboard");
           }
         }
       });
@@ -59,7 +59,9 @@ export default {
 .tags-view-wrap {
   width: 100%;
   height: 50px;
-  background-color: green;
-  color: #fff;
+  color: #333;
+}
+.active{
+  color:red;
 }
 </style>
