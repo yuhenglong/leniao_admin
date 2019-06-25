@@ -90,6 +90,7 @@
         <el-button type="primary" @click="editConfirm">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- <lnDialog></lnDialog> -->
   </div>
 </template>
 <style>
@@ -99,8 +100,12 @@
 </style>
 <script>
 import qs from "qs";
+// import lnDialog from '@/components/dashboard/lnDialog'
 export default {
   name: "selfCreatedCompany",
+  components:{
+    // lnDialog
+  },
   data() {
     return {
       inputName: "",

@@ -180,7 +180,9 @@ ul .el-dropdown-menu__item {
   padding: 0;
   text-align: center;
 }
-
+.el-main{
+  cursor: default;
+}
 .dashboard .admin,
 .dashboard .icon {
   color: #fff;
