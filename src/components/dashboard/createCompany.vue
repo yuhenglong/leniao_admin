@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-06-25 10:51:41
+ * @LastEditTime: 2019-06-27 11:15:55
+ * @Author: guobinggui
+ * @Description: 文件说明: 創建公司
+ -->
 <template>
   <div class="createCompany">
     <el-form ref="ruleForm" :model="companyForm" label-width="100px">
@@ -243,12 +249,7 @@ export default {
             }
           };
           this.axios
-            .post("/company/register", JSON.stringify(params),{
-            headers: {
-                "Authorization":"Basic VGVzdFN5c3RlbTpjZThlMzgyYS04YzI1LTRmYmQtOWUzMy1hMGQ3M2UxMTEyMjI=",
-                "Content-Type": "application/x-www-form-urlencoded" 
-              }
-            })
+            .post("/company/register", JSON.stringify(params))
             .then(res => {
               console.log(res);
             })

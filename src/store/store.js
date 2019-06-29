@@ -25,7 +25,8 @@ const state = {
     // 公司的ID
     companyId: null,
     // tab 
-    visitedviews: []
+    visitedviews: [],
+    firData:[]
 }
 
 const getters = {
@@ -44,6 +45,11 @@ const mutations = {
     },
     setMenusData(state, MenusData) {
         state.MenusData = MenusData
+        console.log('这是数组的VUEX',state.MenusData)
+    },
+    setFirData(state, data) {
+        state.firData = data;
+        console.log('这是firData的VUEX',data)
     },
     getPersonList(state, newPersonList) {
         state.personList = newPersonList
@@ -60,7 +66,7 @@ const mutations = {
         state.visitedviews.push({
             name: view.name,
             path: view.path,
-            title: view.title
+            title: view.title || '首页'
         })
     },
     DEL_VISITED_VIEWS: (state, view) => {//关闭页签--删除路由数据的方法
@@ -79,6 +85,14 @@ const actions = {
     signOut({ commit }) {
         commit('setMenusData', [])
         localStorage.removeItem('token')
+    },
+    // 切换menu
+    setMenusData({ commit },data){
+        commit('setMenusData', data)
+    },
+    setFirData({ commit },data){
+        commit('setFirData', data)
+        console.log('setFirData的数据',data)
     },
     // 用户数据信息列表
     getPersonList({ commit, state }) {

@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+// 引入echarts
+import echarts from 'echarts'
 // 引入JQuery
 import $ from 'jquery'
 
-// 引入进亮封装的axios
+// 引入封装的axios
 import axios from './axios/axios'
 // 引入原生axios
 // import axios from 'axios'
@@ -19,6 +21,9 @@ import '../static/reset.css'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(ElementUI)
+
+// 注册echarts
+Vue.prototype.$echarts = echarts
 
 // 引入mocking
 // require('./mock.js')

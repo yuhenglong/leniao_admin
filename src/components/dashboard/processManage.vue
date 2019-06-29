@@ -2,7 +2,7 @@
   <div class="processManage">
     <template>
       <el-col style="padding-bottom:0px;width:100%;">
-        <el-form :inline="true" :model="filters" @submit.native.prevent class='fl'>
+        <el-form :inline="true" :model="filters" @submit.native.prevent class="fl">
           <el-form-item>
             <el-input placeholder="请输入名称" v-model.trim="filters.name"></el-input>
           </el-form-item>
@@ -15,28 +15,28 @@
         </el-form>
 
         <!-- 下拉列表选项 -->
-            <el-dropdown trigger="click" class='fr'>
-              <span class="el-dropdown-link">
-                <i class='el-icon-s-grid'></i>
-                列表筛选
-                <i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-checkbox-group v-model="checkList" @change="changeArr">
-                  <div class='lab_div' v-for='(item,index) in newObjArrSub' :key='index'>
-                    <el-checkbox :label="item.label"></el-checkbox>
-                  </div>
-              </el-checkbox-group>
-              </el-dropdown-menu>
-            </el-dropdown>
+        <el-dropdown trigger="click" class="fr">
+          <span class="el-dropdown-link">
+            <i class="el-icon-s-grid"></i>
+            列表筛选
+            <i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-checkbox-group v-model="checkList" @change="changeArr">
+              <div class="lab_div" v-for="(item,index) in newObjArrSub" :key="index">
+                <el-checkbox :label="item.label"></el-checkbox>
+              </div>
+            </el-checkbox-group>
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-col>
     </template>
 
     <el-table style="width: 100%" :data="pager.records">
       <el-table-column type="selection" width="60"></el-table-column>
       <el-table-column type="index" width="60" label="序号"></el-table-column>
-      <template v-for='(item,index) in newObjArr'>
-        <el-table-column :prop="item.prop" :label="item.label" width="160" :key='index'></el-table-column>
+      <template v-for="(item,index) in newObjArr">
+        <el-table-column :prop="item.prop" :label="item.label" width="160" :key="index"></el-table-column>
       </template>
       <el-table-column align="right" width="550" label="操作">
         <template slot-scope="scope">
@@ -84,7 +84,6 @@
 
     <!-- 分页功能 -->
     <div class="block">
-      <!-- <span class="demonstration">完整功能</span> -->
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -109,17 +108,17 @@ export default {
       filters: {
         name: ""
       },
-      checkList: ["公司编号",'工序名称','所需技能'],
-      newObjArr:[
-        {label:"公司编号",prop:'companyId'},
-        {label:"工序名称",prop:'name'},
-        {label:"所需技能",prop:'skill'}
-        ],
-      newObjArrSub:[
-        {label:"公司编号",prop:'companyId'},
-        {label:"工序名称",prop:'name'},
-        {label:"所需技能",prop:'skill'}
-        ],
+      checkList: ["公司编号", "工序名称", "所需技能"],
+      newObjArr: [
+        { label: "公司编号", prop: "companyId" },
+        { label: "工序名称", prop: "name" },
+        { label: "所需技能", prop: "skill" }
+      ],
+      newObjArrSub: [
+        { label: "公司编号", prop: "companyId" },
+        { label: "工序名称", prop: "name" },
+        { label: "所需技能", prop: "skill" }
+      ],
       page: 1,
       // 当前页面
       ym_val: null,
@@ -149,22 +148,20 @@ export default {
   methods: {
     // 加载列表
     getUsers() {
+      // 原先的请求
       this.axios
         .post("/api/procedure/findList")
         .then(res => {
           this.$store.state.processManageData = res.data.result;
           this.pager = this.$store.state.processManageData;
         })
-        .catch(err => {
-          console.log(err);
-        });
     },
     // 改变数组
-    changeArr(val){
-      console.log(val)
-      const arr = this.newObjArrSub.filter( item =>{
-        return val.indexOf(item.label) > -1 ;
-      })
+    changeArr(val) {
+      console.log(val);
+      const arr = this.newObjArrSub.filter(item => {
+        return val.indexOf(item.label) > -1;
+      });
       this.newObjArr = arr;
     },
     // 暂未用到
@@ -173,7 +170,7 @@ export default {
     },
     // 打开编辑弹窗
     openEdit(row) {
-      console.log(row)
+      console.log(row);
       this.dialogCompile = true;
       this.editEid = row.eid;
       this.editForm.name = row.name;
@@ -237,9 +234,11 @@ export default {
         size: this.pager.size
       };
       let that = this;
-      this.axios.post("/api/procedure/findList",qs.stringify(action)).then(res => {
-        that.pager = res.data.result;
-      });
+      this.axios
+        .post("/api/procedure/findList", qs.stringify(action))
+        .then(res => {
+          that.pager = res.data.result;
+        });
     },
     open(index, row) {
       this.$confirm("是否继续删除该工序?", "提示", {
@@ -277,15 +276,18 @@ export default {
     filterTag(value, row) {
       return row.tag === value;
     },
-    inquire(){
-      const action = { name:this.filters.name }
-      this.axios.post('/api/procedure/findList',qs.stringify(action)).then(res => {
-        console.log(res)
+    inquire() {
+      const action = { name: this.filters.name };
+      this.axios
+        .post("/api/procedure/findList", qs.stringify(action))
+        .then(res => {
+          console.log(res);
           this.$store.state.processManageData = res.data.result;
           this.pager = this.$store.state.processManageData;
-      }).catch(err => {
-        console.log(err)
-      })
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   created() {
@@ -310,19 +312,19 @@ export default {
   margin-bottom: 20px;
 }
 
-.processManage .fl{
-  float:left;
+.processManage .fl {
+  float: left;
 }
-.processManage .fr{
-  float:right;
+.processManage .fr {
+  float: right;
 }
-.processManage .el-form--inline{
-  width:800px;
-  clear:both;
+.processManage .el-form--inline {
+  width: 800px;
+  clear: both;
 }
-.lab_div{
-  width:150px;
-  text-align:center;
-  margin:10px 0;
+.lab_div {
+  width: 150px;
+  text-align: center;
+  margin: 10px 0;
 }
 </style>

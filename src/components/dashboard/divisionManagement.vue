@@ -48,7 +48,8 @@
           <template slot-scope="scope">
             <el-button @click="handEdit(scope.row)" type="warning" size="small">编辑</el-button>
             <el-button @click="handAdd(scope.row)" type="success" size="small">新增</el-button>
-            <el-button @click="handleDelete(scope.row)" type="danger" size="small">删除</el-button>
+            <el-button @click="isDialog(scope.row)" type="danger" size="small">删除</el-button>
+            <!-- <el-button @click="handleDelete(scope.row)" type="danger" size="small">删除</el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -75,9 +76,6 @@
 
     <el-dialog title="编辑" :visible.sync="dialogEdit">
       <el-form :label-position="'right'" label-width="80px">
-        <!-- <el-form-item label="上级部门">
-          <el-input v-model=""></el-input>
-        </el-form-item>-->
         <el-form-item label="名称">
           <el-input v-model="editName"></el-input>
         </el-form-item>
@@ -86,11 +84,11 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="dialogEdit = false">取 消</el-button>
         <el-button type="primary" @click="editConfirm">确 定</el-button>
       </div>
     </el-dialog>
-    <!-- <lnDialog></lnDialog> -->
+    <lnDialog v-bind:showDialog="isShow" @click="isDialog" @closeDialog="isDialog" @delete="handleDelete"></lnDialog>
   </div>
 </template>
 <style>
@@ -100,14 +98,15 @@
 </style>
 <script>
 import qs from "qs";
-// import lnDialog from '@/components/dashboard/lnDialog'
+import lnDialog from '@/components/dialog/lnDialog'
 export default {
   name: "selfCreatedCompany",
   components:{
-    // lnDialog
+    lnDialog
   },
   data() {
     return {
+      isShow:false,
       inputName: "",
       input: "",
       industry: "",
@@ -133,20 +132,19 @@ export default {
         name: "",
         createUser: "",
         topId: ""
-      }
+      },
+      delRow:''
     };
   },
   created() {
     this.getList();
   },
-  filters: {
-    actState: function(value) {
-      return 22;
-    }
-  },
+
   methods: {
-    ceshi(val) {
-      console.log(val);
+    isDialog(row){
+      this.isShow = !this.isShow;
+      this.delRow = row;
+      console.log('这是isshow的值',this.isShow)
     },
     getList() {
       let obj = {
@@ -237,11 +235,11 @@ export default {
       };
       this.dialogVisible = true;
     },
-    handleDelete(row) {
-      console.log(row);
+    handleDelete() {
       const params = {
-        deptId: row.deptId
+        deptId: this.delRow.deptId
       };
+      console.log('这是删除的当前行',params)
       this.axios.post("dept/deleteDept", qs.stringify(params)).then(res => {
         console.log(res);
       });

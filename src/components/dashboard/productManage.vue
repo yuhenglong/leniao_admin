@@ -2,9 +2,17 @@
   <div class="processManage">
     <template>
       <el-col style="padding-bottom:0px;width:100%;">
-        <el-form :inline="true" :model="filters" @submit.native.prevent class='fl'>
+        <el-form :inline="true" :model="filters" @submit.native.prevent class="fl">
           <el-form-item>
-            <el-input placeholder="请输入名称" v-model.trim="filters.name"></el-input>
+            <el-select v-model="value" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+            <!-- <el-input placeholder="请输入名称" v-model.trim="filters.name"></el-input> -->
           </el-form-item>
           <el-form-item>
             <el-button type="primary" v-on:click="inquire">查询</el-button>
@@ -14,28 +22,28 @@
           </el-form-item>
         </el-form>
         <!-- 下拉列表选项 -->
-            <el-dropdown trigger="click" class='fr'>
-              <span class="el-dropdown-link">
-                <i class='el-icon-s-grid'></i>
-                列表筛选
-                <i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-checkbox-group v-model="checkList" @change="changeArr">
-                  <div class='lab_div' v-for='(item,index) in newObjArrSub' :key='index'>
-                    <el-checkbox :label="item.label"></el-checkbox>
-                  </div>
-              </el-checkbox-group>
-              </el-dropdown-menu>
-            </el-dropdown>
+        <el-dropdown trigger="click" class="fr">
+          <span class="el-dropdown-link">
+            <i class="el-icon-s-grid"></i>
+            列表筛选
+            <i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-checkbox-group v-model="checkList" @change="changeArr">
+              <div class="lab_div" v-for="(item,index) in newObjArrSub" :key="index">
+                <el-checkbox :label="item.label"></el-checkbox>
+              </div>
+            </el-checkbox-group>
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-col>
     </template>
 
     <el-table style="width: 100%" :data="pager.records">
       <el-table-column type="selection" width="60"></el-table-column>
       <el-table-column type="index" width="60" label="序号"></el-table-column>
-      <template v-for='(item,index) in newObjArr'>
-        <el-table-column :prop="item.prop" :label="item.label" width="160" :key='index'></el-table-column>
+      <template v-for="(item,index) in newObjArr">
+        <el-table-column :prop="item.prop" :label="item.label" width="160" :key="index"></el-table-column>
       </template>
       <el-table-column align="right" width="550" label="操作">
         <template slot-scope="scope">
@@ -56,7 +64,7 @@
         <el-form-item label="材料用料:">
           <el-input v-model="sizeForm.material" class="addInput"></el-input>
         </el-form-item>
-         <el-form-item label="产品尺寸:">
+        <el-form-item label="产品尺寸:">
           <el-input v-model="sizeForm.size" class="addInput"></el-input>
         </el-form-item>
         <el-form-item label="产品尺寸:">
@@ -81,7 +89,7 @@
         <el-form-item label="产品尺寸:">
           <el-input v-model="editForm.size" class="addInput"></el-input>
         </el-form-item>
-        <div ></div>
+        <div></div>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogCompile = false">取 消</el-button>
@@ -94,7 +102,12 @@
       <el-row :gutter="20">
         <el-col :span="3">
           <div class="grid-content bg-purple btn">
-            <el-button type="text" v-for="(item,index) in tableData" :key='index' @click='changeIndex(index)'>{{ item.templateName }}</el-button>
+            <el-button
+              type="text"
+              v-for="(item,index) in tableData"
+              :key="index"
+              @click="changeIndex(index)"
+            >{{ item.templateName }}</el-button>
           </div>
         </el-col>
         <el-col :span="17">
@@ -127,11 +140,11 @@
 <script>
 import { mapState } from "vuex";
 import qs from "qs";
-import queryDetails from '@/components/dashboard/queryDetails.vue'
+import queryDetails from "@/components/dashboard/queryDetails.vue";
 
 export default {
-  components:{
-    'query-details':queryDetails
+  components: {
+    "query-details": queryDetails
   },
   data() {
     return {
@@ -139,40 +152,40 @@ export default {
       filters: {
         name: ""
       },
-      index:0,
-      checkList: ["产品编号",'产品名称','公司编号','材料用料','产品尺寸'],
-      newObjArr:[
-        {label:"产品编号",prop:'tId'},
-        {label:"产品名称",prop:'name'},
-        {label:"公司编号",prop:'companyId'},
-        {label:"材料用料",prop:'material'},
-        {label:"产品尺寸",prop:'size'}
-        ],
-      newObjArrSub:[
-        {label:"产品编号",prop:'tId'},
-        {label:"产品名称",prop:'name'},
-        {label:"公司编号",prop:'companyId'},
-        {label:"材料用料",prop:'material'},
-        {label:"产品尺寸",prop:'size'}
-        ],
+      index: 0,
+      checkList: ["产品编号", "产品名称", "公司编号", "材料用料", "产品尺寸"],
+      newObjArr: [
+        { label: "产品编号", prop: "tId" },
+        { label: "产品名称", prop: "name" },
+        { label: "公司编号", prop: "companyId" },
+        { label: "材料用料", prop: "material" },
+        { label: "产品尺寸", prop: "size" }
+      ],
+      newObjArrSub: [
+        { label: "产品编号", prop: "tId" },
+        { label: "产品名称", prop: "name" },
+        { label: "公司编号", prop: "companyId" },
+        { label: "材料用料", prop: "material" },
+        { label: "产品尺寸", prop: "size" }
+      ],
       page: 1,
       ym_val: 1,
       users: [],
       dialogFormVisible: false,
       dialogCompile: false,
-      dialogQuire:false,
+      dialogQuire: false,
       sizeForm: {
         name: "",
-        companyId:'',
+        companyId: "",
         material: "",
-        size:''
+        size: ""
       },
       editForm: {
         name: "",
-        companyId:'',
+        companyId: "",
         material: "",
-        size:'',
-        productTemplates:[]
+        size: "",
+        productTemplates: []
       },
       pager: {
         current: 1,
@@ -183,7 +196,7 @@ export default {
         records: []
       },
       editEid: null,
-      tableData:[]
+      tableData: []
     };
   },
   methods: {
@@ -192,6 +205,7 @@ export default {
       this.axios
         .post("/api/product/selectPage")
         .then(res => {
+          console.log("这是产品请求", res);
           this.$store.state.productManageData = res.data.result;
           this.pager = this.$store.state.productManageData;
         })
@@ -199,31 +213,33 @@ export default {
           console.log(err);
         });
     },
-    changeIndex(index){
+    changeIndex(index) {
       // 改变序号
       this.index = index;
     },
-    changeArr(val){
+    changeArr(val) {
       // 改变数组
-      console.log(val)
-      const arr = this.newObjArrSub.filter( item =>{
-        return val.indexOf(item.label) > -1 ;
-      })
+      console.log(val);
+      const arr = this.newObjArrSub.filter(item => {
+        return val.indexOf(item.label) > -1;
+      });
       this.newObjArr = arr;
     },
-    query(row){
+    query(row) {
       this.dialogQuire = true;
-      this.axios.post('/api/productTemplate/findTemplateByproductId',row.id).then(res =>{
-        console.log(res)
-        this.tableData = res.data.result;
-      })
+      this.axios
+        .post("/api/productTemplate/findTemplateByproductId", row.id)
+        .then(res => {
+          console.log(res);
+          this.tableData = res.data.result;
+        });
     },
     addUsers() {
       console.log("新增数据");
     },
     // 打开编辑弹窗
     openEdit(row) {
-      console.log(row)
+      console.log(row);
       this.dialogCompile = true;
       this.editEid = row.eid;
       this.editForm.name = row.name;
@@ -238,23 +254,21 @@ export default {
         material: this.editForm.material,
         size: this.editForm.size
       };
-      this.axios
-        .post("/api/product/update", qs.stringify(params))
-        .then(res => {
-          const action = {
-            pageNum: parseInt(this.ym_val),
-            size: this.pager.size
-          };
-          let that = this;
-          this.axios.post("/api/product/findList", action).then(res => {
-            that.pager = res.data.result;
-          });
-          this.dialogCompile = false;
-          this.$message({
-            type: "success",
-            message: "编辑成功!"
-          });
+      this.axios.post("/api/product/update", qs.stringify(params)).then(res => {
+        const action = {
+          pageNum: parseInt(this.ym_val),
+          size: this.pager.size
+        };
+        let that = this;
+        this.axios.post("/api/product/findList", action).then(res => {
+          that.pager = res.data.result;
         });
+        this.dialogCompile = false;
+        this.$message({
+          type: "success",
+          message: "编辑成功!"
+        });
+      });
       this.editForm.name = "";
       this.editForm.material = "";
       this.editForm.size = "";
@@ -278,21 +292,26 @@ export default {
         }
       });
     },
+    insertProductType(){
+      
+    },
     handleSizeChange(val) {
-      console.log(val)
+      console.log(val);
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
       this.ym_val = val;
-      console.log('这是当前页',this.ym_val)
+      console.log("这是当前页", this.ym_val);
       const action = {
         pageNum: parseInt(this.ym_val),
         size: this.pager.size
       };
       let that = this;
-      this.axios.post("/api/product/selectPage",qs.stringify(action)).then(res => {
-        that.pager = res.data.result;
-      });
+      this.axios
+        .post("/api/product/selectPage", qs.stringify(action))
+        .then(res => {
+          that.pager = res.data.result;
+        });
     },
     open(index, row) {
       this.$confirm("是否继续删除该工序?", "提示", {
@@ -333,22 +352,25 @@ export default {
       return row.tag === value;
     },
     // 重新加载页面
-    inquire(){
-      const action = { name:this.filters.name }
-      this.axios.post('/api/product/findList',qs.stringify(action)).then(res => {
-        console.log(res)
+    inquire() {
+      const action = { name: this.filters.name };
+      this.axios
+        .post("/api/product/findList", qs.stringify(action))
+        .then(res => {
+          console.log(res);
           this.$store.state.processManageData = res.data.result;
           this.pager = this.$store.state.processManageData;
-      }).catch(err => {
-        console.log(err)
-      })
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   created() {
     this.getUsers();
   },
   computed: {
-    comId(){
+    comId() {
       return this.$store.state.companyId;
     }
   }
@@ -370,50 +392,50 @@ export default {
   margin-bottom: 20px;
 }
 
-.processManage .fl{
-  float:left;
+.processManage .fl {
+  float: left;
 }
-.processManage .fr{
-  float:right;
+.processManage .fr {
+  float: right;
 }
-.processManage .el-form--inline{
-  width:800px;
-  clear:both;
+.processManage .el-form--inline {
+  width: 800px;
+  clear: both;
 }
-.lab_div{
-  width:150px;
-  text-align:center;
-  margin:10px 0;
+.lab_div {
+  width: 150px;
+  text-align: center;
+  margin: 10px 0;
 }
 .el-row {
-    margin-bottom: 20px;
-    &:last-child {
-      margin-bottom: 0;
+  margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+  .btn {
+    .el-button:first-child {
+      margin-left: 10px;
     }
-    .btn{
-      .el-button:first-child{
-        margin-left:10px;
-      }
-    }
   }
-  .el-col {
-    border-radius: 4px;
-  }
-  .bg-purple-dark {
-    background: #99a9bf;
-  }
-  .bg-purple {
-    background: #d3dce6;
-  }
-  .bg-purple-light {
-    background: #e5e9f2;
-  }
-  .grid-content {
-    border-radius: 4px;
-    min-height: 36px;
-  }
-  .row-bg {
-    padding: 5px 0;
-    background-color: #f9fafc;
-  }
+}
+.el-col {
+  border-radius: 4px;
+}
+.bg-purple-dark {
+  background: #99a9bf;
+}
+.bg-purple {
+  background: #d3dce6;
+}
+.bg-purple-light {
+  background: #e5e9f2;
+}
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+}
+.row-bg {
+  padding: 5px 0;
+  background-color: #f9fafc;
+}
 </style>

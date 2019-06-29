@@ -1,13 +1,20 @@
+<!--
+ * @Date: 2019-05-24 17:37:27
+ * @LastEditTime: 2019-06-29 16:46:00
+ * @Author: yuhenglong
+ * @Description: 文件说明: 首页
+ -->
+
 <template>
   <div class="dashboard">
     <el-container style="height: 500px; border: 1px solid #eee">
-      <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+      <el-aside width="200px" style="background-color:#4a86e8">
         <el-header class="logo">
           <img src="@/assets/logo.png" class="logo_img">
           <h1 class="title_logo">乐鸟</h1>
         </el-header>
-
-        <el-dropdown @command="changeCom" class="btn">
+        <!-- 这是切换数组的文字 -->
+        <!-- <el-dropdown @command="changeCom" class="btn">
           <span class="el-dropdown-link">
             {{ menusTitle }}
             <i class="el-icon-arrow-down el-icon--right"></i>
@@ -17,14 +24,17 @@
               <el-dropdown-item :key="index" :command="index">{{role.name}}</el-dropdown-item>
             </template>
           </el-dropdown-menu>
-        </el-dropdown>
+        </el-dropdown>-->
 
         <el-menu :router="true" :unique-opened="true">
           <template v-for="(itemb,index) in firMenus">
             <el-submenu :index="index+'0'" :key="index">
               <template slot="title">{{ itemb.name }}</template>
               <el-menu-item-group v-for="(itemc,index) in itemb.children" :key="index">
-                <el-menu-item :index="itemc.url" @click="changeRouter(itemc.url,itemc.name)">{{itemc.name}}</el-menu-item>
+                <el-menu-item
+                  :index="itemc.url"
+                  @click="changeRouter(itemc.url,itemc.name)"
+                >{{itemc.name}}</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
           </template>
@@ -33,14 +43,18 @@
 
       <el-container class="admin">
         <el-header style="text-align: right; font-size: 12px">
-            <div style="width:400px;display:inline-block; margin-right:15px;">
-              <el-select v-model="select" slot="prepend" placeholder="请选择">
-                <el-option label="餐厅名" value="1"></el-option>
-                <el-option label="订单号" value="2"></el-option>
-                <el-option label="用户电话" value="3"></el-option>
-              </el-select>
-            </div>
-          
+          <div style="width:400px;display:inline-block; margin-right:15px;" class="defaultSelect">
+            <el-select
+              v-model="select"
+              slot="prepend"
+              :placeholder="firstSelect"
+              @change="changeSelect($event)"
+            >
+              <template v-for="(item,index) in selectList">
+                <el-option :label="item.companyName" :value="item.companyId" :key="index"></el-option>
+              </template>
+            </el-select>
+          </div>
           <el-dropdown>
             <i class="el-icon-setting icon" style="margin-right: 15px"></i>
             <el-dropdown-menu slot="dropdown">
@@ -77,9 +91,10 @@
   </div>
 </template>
 <script>
-import tagsView from '@/components/dashboard/TagsView.vue'
+import tagsView from "@/components/dashboard/TagsView.vue";
+import qs from "qs";
 export default {
-  components:{
+  components: {
     tagsView
   },
   data() {
@@ -87,16 +102,32 @@ export default {
       zdcommand: 0,
       menusArr: [],
       newMenusArr: [], // 转成树形结构
-      menusTitle: "", // 标题
-      firMenus: [],
+      // menusTitle: "", // 标题
       inputCom: "",
-      select: ""
-    }
+      select: "",
+      selectList: "",
+      firstSelect: "",
+      defaultValue: "",
+      firMenus: []
+    };
   },
   methods: {
-    tree(index) {
-      let tree = this.newMenusArr[index].menus.filter(father => {
-        let children = this.newMenusArr[index].menus.filter(child => {
+    changeSelect($event) {
+      let that = this;
+      if ($event) {
+        that.defaultValue = $event;
+      }
+      console.log("切换公司名", that.defaultValue);
+      const url = "/comapi/company/switch/" + that.defaultValue;
+      this.axios.get(url).then(res => {
+        console.log("这是切换接口后的数据", res);
+        // 暂时注释
+        this.loadingData();
+      });
+    },
+    tree() {
+      let tree = this.newMenusArr.filter(father => {
+        let children = this.newMenusArr.filter(child => {
           return father.menuId === child.parentId;
         });
         father.children = children;
@@ -107,32 +138,41 @@ export default {
         }
         return father.parentId == 0;
       });
+      console.log(tree);
       this.firMenus = tree;
+      // this.$store.dispatch("setFirData", tree);
     },
     loadingData() {
       // 封装后的请求
-      this.axios
-        .get("/menu/allMenu",{
-          headers:{Authorization: 'Bearer ' + localStorage.token}
-        })
-        .then(res => {
-          // 将menus存储在vuex中
-          if (res.data.status == 1) {
-            this.$store.commit("setMenusData", res.data.result.roles);
-            this.$store.commit("setCompanyId",res.data.result.defaultShowCompany);
-            // 存储companyId到localStorage里面避免刷新页面不见了数据
-            localStorage.setItem('companyId',res.data.result.defaultShowCompany)
-            this.menusArr = this.$store.state.MenusData;
-            this.newMenusArr = this.menusArr;
-            this.menusTitle = this.menusArr[0].name;
+      this.axios.get("/comapi/menu/myMenu").then(res => {
+        console.log("这是切换公司ID后的menu数据,函数3", res.data.result);
+        // 将menus存储在vuex中
+        if (res.data.status == 1) {
+          // 切换为actions的更改方式
+          // this.$store.dispatch("setMenusData", res.data.result);
+          // this.$store.commit(
+          //   "setCompanyId",
+          //   res.data.result.defaultShowCompany
+          // );
+          // 存储companyId到localStorage里面避免刷新页面不见了数据
+          // localStorage.setItem("companyId", res.data.result.defaultShowCompany);
+          // this.menusArr = this.$store.state.MenusData;
+          // this.newMenusArr = this.menusArr;
+          // this.menusTitle = this.menusArr[0].name;
+          if (res.data.result == null) {
+            this.firMenus = [];
+            console.log("menu为空");
+          } else {
+            this.newMenusArr = res.data.result;
             // 转树形结构函数
-            this.tree(this.zdcommand);
+            this.tree();
           }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+        }
+      });
     },
+    // 逻辑：先去获取公司的数据并渲染到选择器，同时设置value为公司ID，获取menu并渲染左侧；
+    // 当切换公司时，切换公司ID，并且发送请求到后端更改MENU，然后再刷新MENU
+
     signOut() {
       this.$store.dispatch("signOut").then(() => {
         // localStorage.removeItem(this.store.state.token)
@@ -145,20 +185,41 @@ export default {
       this.menusTitle = this.newMenusArr[this.zdcommand].name;
       this.tree(this.zdcommand);
     },
-    changeRouter(url,name){
-      const obj ={
-            name: name,
-            path: url,
-            title: name
+    changeRouter(url, name) {
+      const obj = {
+        name: name,
+        path: url,
+        title: name
+      };
+      this.$store.dispatch("addVisitedViews", obj);
+    },
+    getCompanyList() {
+      // fetch的跨域请求
+      let newToken = "Bearer " + localStorage.getItem("token");
+      fetch("/comapi/companyUser/myCompany", {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          Authorization: newToken
         }
-        this.$store.dispatch('addVisitedViews',obj)
+      })
+        .then(res => {
+          return res.json();
+        })
+        .then(json => {
+          if (json.status == 1) {
+            this.selectList = json.result;
+            this.firstSelect = this.selectList[0]["companyName"];
+            this.defaultValue = this.selectList[0]["companyId"];
+            // 暂时注释
+            this.changeSelect();
+          }
+        });
     }
   },
-  mountd(){
-    this.add
-  },
   created() {
-    this.loadingData();
+    // 暂时注释
+    this.getCompanyList();
   }
 };
 </script>
@@ -180,7 +241,7 @@ ul .el-dropdown-menu__item {
   padding: 0;
   text-align: center;
 }
-.el-main{
+.el-main {
   cursor: default;
 }
 .dashboard .admin,
@@ -195,13 +256,32 @@ ul .el-dropdown-menu__item {
   height: 100% !important;
 }
 .el-header {
-  background-color: #b3c0d1;
+  background-color: rgb(49, 180, 141);
   color: #333;
   line-height: 60px;
 }
 
 .el-aside {
   color: #333;
+}
+.dashboard .defaultSelect input::-webkit-input-placeholder {
+  color: red;
+  font-size: 30px;
+}
+.dashboard .defaultSelect input::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: red;
+  font-size: 30px;
+}
+.defaultSelect input:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: red;
+  font-size: 30px;
+}
+.defaultSelect input:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: red;
+  font-size: 30px;
 }
 .dashboard .logo_img {
   width: 32px;
