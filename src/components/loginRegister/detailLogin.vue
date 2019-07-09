@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-07-01 16:59:48
+ * @LastEditTime: 2019-07-04 10:12:47
+ * @Author: yuhenglong
+ * @Description: 文件说明: 登录页面
+ -->
 <template>
   <div class="detaillogin">
     <el-form
@@ -17,28 +23,29 @@
         <el-input type="password" v-model="ruleForm2.password" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="login('ruleForm2')">提交</el-button>
+        <el-button type="primary" @click="login('ruleForm2')">登录</el-button>
         <el-button @click="resetForm('ruleForm2')">重置</el-button>
       </el-form-item>
-      <el-form-item>  
+      <el-form-item>
         <div class="div_for">
           <router-link to="/forget">忘记密码？</router-link>
         </div>
-        <div class="div_reg">还没有账号?请前往
+        <div class="div_reg">
+          还没有账号?请前往
           <router-link to="/register">注册</router-link>
         </div>
         <div class="clear"></div>
-        </el-form-item>
+      </el-form-item>
     </el-form>
   </div>
 </template>
 <script>
-
+import qs from "qs";
 export default {
-  name: 'detailLogin',
+  name: "detailLogin",
   data() {
     var validatePhoneNumber = (rule, value, callback) => {
-      if (!(/^1[34578]\d{9}$/.test(value)) || value ==="") {
+      if (!/^1[34578]\d{9}$/.test(value) || value === "") {
         callback(new Error("请输入正确手机号"));
       } else {
         callback();
@@ -54,38 +61,88 @@ export default {
         callback();
       }
     };
-
     return {
       ruleForm2: {
-        phoneNumber: "15916310431",
-        password: "123456"
+        phoneNumber: "",
+        password: ""
       },
       rules2: {
         phoneNumber: [{ validator: validatePhoneNumber, trigger: "blur" }],
-        password: [{ validator: validatePass, trigger: "blur" },
-        { min:6,max:8,message:'请输入6-8位密码',trigger:'blur'}],
+        password: [
+          { validator: validatePass, trigger: "blur" },
+          { min: 6, max: 8, message: "请输入6-8位密码", trigger: "blur" }
+        ]
       }
     };
   },
   methods: {
     login: function(formName) {
-      this.$refs[formName].validate((valid) =>{
-        if(valid){
-          this.axios.post('/data/index',this.ruleForm2)
-          .then(res =>{
-            if(res.data){
-              // 将token储存到本地存储
-              localStorage.setItem('token',JSON.stringify(res.data.token))
-              // 将token存储到vuex
-              this.$store.commit('setToken',res.data.token);  
-              // 跳转页面到首页
-              this.$router.push('/dashboard')
+      this.$refs[formName].validate(valid => {
+        // 请求后端并跳转页面
+        if (valid) {
+          // 使用fetch请求数据来替换axios，避免axios的请求拦截
+          const params = {
+            username: this.ruleForm2.phoneNumber,
+            password: this.ruleForm2.password,
+            grant_type: "password"
+          };
+          fetch("/oauth/token", {
+            method: "POST",
+            body: qs.stringify(params),
+            mode: "cors",
+            headers: {
+              Authorization:
+              "Basic VGVzdFN5c3RlbTpjZThlMzgyYS04YzI1LTRmYmQtOWUzMy1hMGQ3M2UxMTEyMjI=",
+              "Content-Type": "application/x-www-form-urlencoded"
             }
+          }).then(res => {
+            return res.json();
+          }).then(json =>{
+            console.log('这是fetch的请求',json);
+            if (json) {
+                // 将token储存到本地存储
+                localStorage.setItem("token", json.access_token);
+                // 将token存储到vuex
+                // this.$store.commit('setToken',res.data.access_token);
+                this.$store.dispatch("signIn",json.access_token);
+                // 跳转页面到首页
+                this.$router.push("/dashboard");
+              }
+          }).catch(err => {
+            console.log("请求错误",err)
           })
-        }else{
-          console.log('大水货')
+
+          // 备份
+          // const params = {
+          //   username: this.ruleForm2.phoneNumber,
+          //   password: this.ruleForm2.password,
+          //   grant_type: "password"
+          // };
+          // this.axios
+          //   .post("/oauth/token", qs.stringify(params), {
+          //     headers: {
+          //       Authorization:
+          //         "Basic VGVzdFN5c3RlbTpjZThlMzgyYS04YzI1LTRmYmQtOWUzMy1hMGQ3M2UxMTEyMjI=",
+          //       "Content-Type": "application/x-www-form-urlencoded"
+          //     }
+          //   })
+          //   .then(res => {
+          //     console.log(res);
+          //     if (res.data) {
+          //       // 将token储存到本地存储
+          //       localStorage.setItem("token", res.data.access_token);
+          //       // 将token存储到vuex
+          //       // this.$store.commit('setToken',res.data.access_token);
+          //       this.$store.dispatch("signIn", res.data.access_token);
+          //       // 跳转页面到首页
+          //       this.$router.push("/dashboard");
+          //     }
+          //   })
+          //   .catch(err => {
+          //     console.log(err);
+          //   });
         }
-      })
+      });
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
@@ -94,7 +151,6 @@ export default {
 };
 </script>
 <style lang="" scoped>
-
 .detaillogin {
   width: 100%;
   height: 100%;
@@ -120,13 +176,15 @@ export default {
   font-weight: bold;
   padding: 20px 10px 20px 70px;
 }
-.detaillogin .div_reg, .detaillogin .div_for{
-  float:right;
+.detaillogin .div_reg,
+.detaillogin .div_for {
+  float: right;
 }
-.detaillogin .div_for{
-  float:left;
+.detaillogin .div_for {
+  float: left;
 }
-.detaillogin .div_reg a, .detaillogin .div_for a{
+.detaillogin .div_reg a,
+.detaillogin .div_for a {
   color: blue;
 }
 </style>

@@ -6,19 +6,83 @@ const path = require('path')
 
 module.exports = {
   dev: {
-
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    // proxyTable: {},
     // 跨域请求
-    // proxyTable: {
-    //   '/': {
-    //     target:'http://192.168.0.111:80',
-    //     changeOrigin: true
-    //    } 
-    // },
+    proxyTable: {
+      '/oauth': {
+        target:'http://192.168.0.113:8081',
+        changeOrigin: true
+       },
+       '/comUser': {
+        target:'http://192.168.0.113',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/comUser': ''
+        }
+       },
+      //  '/company': {
+      //   target:'http://192.168.0.113:80',
+      //   changeOrigin: true
+      //  },
+       '/comapi': {
+        target:'http://192.168.0.113:83',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/comapi': ''
+        }
+       },
+       '/file': {
+        target:'http://192.168.0.113:3002',
+        changeOrigin: true
+       },
+       '/skill': {
+        target:'http://192.168.0.120:80',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/skill': ''
+        }
+       },
+       '/user': {
+        target:'http://192.168.0.113:80',
+        changeOrigin: true
+       },
+       '/dept': {
+        target:'http://192.168.0.120:80',
+        changeOrigin: true
+       },
+       '/role': {
+        target:'http://192.168.0.120:80',
+        changeOrigin: true
+       },
+       '/post': {
+        target:'http://192.168.0.120:80',
+        changeOrigin: true
+       },
+       '/manage': {
+        target:'http://192.168.0.120:80',
+        changeOrigin: true
+       },
+       '/Applicant': {
+        target:'http://192.168.0.120:80',
+        changeOrigin: true
+       },
+       '/bind': {
+        target:'http://192.168.0.120:80',
+        changeOrigin: true
+       },
+       '/api': {
+        target:'http://192.168.0.116:83',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''//这里理解成用‘/api’代替target里面的地址，后面组件中我们掉接口时直接用api代替 比如我要调用'http://40.00.100.100:3002/user/add'，直接写‘/api/user/add’即可
+        }
+       }
+    },
     // Various Dev Server settings
+    // host: '192.168.0.111', // can be overwritten by process.env.HOST
     host: 'localhost', // can be overwritten by process.env.HOST
     port: 80, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
@@ -42,7 +106,7 @@ module.exports = {
     cssSourceMap: true
   },
 
-  build: {
+  build:{
     // Template for index.html
     index: path.resolve(__dirname, '../dist/index.html'),
 
