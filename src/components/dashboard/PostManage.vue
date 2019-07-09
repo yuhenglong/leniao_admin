@@ -1,6 +1,10 @@
 <!--
  * @Date: 2019-06-25 11:02:12
+<<<<<<< HEAD
  * @LastEditTime: 2019-07-05 19:07:48
+=======
+ * @LastEditTime: 2019-06-26 17:43:40
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
  * @Author: guobinggui
  * @Description: 文件说明: 部门管理
  -->
@@ -215,13 +219,21 @@ export default {
 			},
 			PostObj: {
         postCode: "",
+<<<<<<< HEAD
         companyId: localStorage.getItem('companyId'),   // 死数据，后面改成localStorage.getItem('companyId')
+=======
+        companyId: "302364aauyhf401ats7c1113f55b2e49",   // 死数据，后面改成localStorage.getItem('companyId')
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
         postName: "",
         postSort: "",
         remark: ""
 			},
 			EditPost: {
+<<<<<<< HEAD
 				companyId: localStorage.getItem('companyId'),     // 死数据，后面改成localStorage.getItem('companyId')
+=======
+				companyId: '302364aauyhf401ats7c1113f55b2e49',     // 死数据，后面改成localStorage.getItem('companyId')
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
 				postId: '',
 				postName: '',
 				postCode: '',
@@ -249,7 +261,11 @@ export default {
       let obj = {
         // companyId:localStorage.getItem('companyId')
         // 这是王景的写死的公司ID
+<<<<<<< HEAD
 				companyId: localStorage.getItem('companyId'),
+=======
+				companyId: "302364aauyhf401ats7c1113f55b2e49",
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
 				name: this.filter.postName,
 				status: this.filter.status,
 				postCode: this.filter.postCode
@@ -299,13 +315,20 @@ export default {
           console.log(res);
           this.getPostList();
           this.PostObj = "";
+<<<<<<< HEAD
           this.dialogVisible = false;3
           
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
         })
         .catch(err => {
           console.log(err);
         });
+<<<<<<< HEAD
       
+=======
+      this.dialogVisible = false;
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
 		},
 		
     edit() {

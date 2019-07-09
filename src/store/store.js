@@ -60,9 +60,12 @@ const mutations = {
     setRoleManage(state, newRoleData) {
         state.roleManageData = newRoleData;
     },
+<<<<<<< HEAD
     setDeptsData(state, newDeptsData) {
         state.deptsData = newDeptsData
     },
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
     ADD_VISITED_VIEWS: (state, view) => {//打开新页签--添加路由数据的方法      if(state.visitedviews.some(v=>v.path==view.path))return;
         // 数组在存放在vuex之前进行验证去重
         if(state.visitedviews.some(v => v.path === view.path)) return
@@ -80,9 +83,12 @@ const mutations = {
                 break
             }
         }
+<<<<<<< HEAD
     },
     setIndexHtml:(state) =>{
         state.visitedviews = []
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
     }
 }
 
@@ -116,6 +122,7 @@ const actions = {
     },
     addVisitedViews({ commit }, view) {//通过解构赋值得到commit方法
         commit('ADD_VISITED_VIEWS', view)//去触发ADD_VISITED_VIEWS，并传入参数
+<<<<<<< HEAD
     },
     delVisitedViews({ commit, state}, view ) {
     // delVisitedViews({ commit, state, view }) {
@@ -129,6 +136,17 @@ const actions = {
     // tab设置为空
     setIndexHtml({commit,state}){
         commit('setIndexHtml',state)
+=======
+    },
+    delVisitedViews({ commit, state}, view ) {
+    // delVisitedViews({ commit, state, view }) {
+        //删除数组存放的路由之后，需要再去刷新路由，这是一个异步的过程，需要有回掉函数，所以使用并返回promise对象，也可以让组件在调用的时候接着使用.then的方法
+        //commit('DEL_VISITED_VIEWS',view)
+        return new Promise((resolve) => {//resolve方法：未来成功后回掉的方法
+            commit('DEL_VISITED_VIEWS', view);
+            resolve([...state.visitedviews]);
+        })
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
     }
 }
 

@@ -2,6 +2,7 @@
  * @Date: 2019-05-24 17:37:27
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * @LastEditTime: 2019-07-01 14:14:04
 =======
 <<<<<<< HEAD
@@ -13,6 +14,9 @@
 =======
  * @LastEditTime: 2019-07-08 11:43:38
 >>>>>>> 合并代码
+=======
+ * @LastEditTime: 2019-06-29 16:46:00
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
  * @Author: yuhenglong
  * @Description: 文件说明: 首页
  -->
@@ -20,7 +24,11 @@
 <template>
   <div class="dashboard">
     <el-container style="height: 500px; border: 1px solid #eee">
+<<<<<<< HEAD
       <el-aside width="200px" style="background-color:#e6e6e6">
+=======
+      <el-aside width="200px" style="background-color:#4a86e8">
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
         <el-header class="logo">
           <img src="@/assets/logo.png" class="logo_img" />
           <h1 class="title_logo">乐鸟</h1>
@@ -85,10 +93,15 @@
                 <i class="el-icon-orange"></i>修改密码
               </el-dropdown-item>
               <el-dropdown-item command="signOut()">
+<<<<<<< HEAD
                 <div @click="signOut()" style="width:100%;height:40px;">
                   <i class="el-icon-refresh-left"></i>
                   <span>退出登录</span>
                 </div>
+=======
+                <i class="el-icon-refresh-left"></i>
+                <span @click="signOut()">退出登录</span>
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -97,9 +110,14 @@
         <el-main>
           <!-- 标签页 -->
           <tags-view></tags-view>
+<<<<<<< HEAD
           <div style="padding:5px 15px 15px">
             <router-view></router-view>
           </div>
+=======
+
+          <router-view></router-view>
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
         </el-main>
       </el-container>
     </el-container>
@@ -132,6 +150,7 @@ export default {
       if ($event) {
         that.defaultValue = $event;
       }
+<<<<<<< HEAD
       localStorage.setItem("companyId", that.defaultValue);
       const url = "/comapi/company/switch/" + that.defaultValue;
       this.axios.get(url).then(res => {
@@ -140,6 +159,15 @@ export default {
       });
       this.$router.replace("/dashboard/");
       this.$store.dispatch("setIndexHtml");
+=======
+      console.log("切换公司名", that.defaultValue);
+      const url = "/comapi/company/switch/" + that.defaultValue;
+      this.axios.get(url).then(res => {
+        console.log("这是切换接口后的数据", res);
+        // 暂时注释
+        this.loadingData();
+      });
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
     },
     tree() {
       let tree = this.newMenusArr.filter(father => {
@@ -154,12 +182,22 @@ export default {
         }
         return father.parentId == 0;
       });
+<<<<<<< HEAD
 
       this.firMenus = tree;
+=======
+      console.log(tree);
+      this.firMenus = tree;
+      // this.$store.dispatch("setFirData", tree);
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
     },
     loadingData() {
       // 封装后的请求
       this.axios.get("/comapi/menu/myMenu").then(res => {
+<<<<<<< HEAD
+=======
+        console.log("这是切换公司ID后的menu数据,函数3", res.data.result);
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
         // 将menus存储在vuex中
         if (res.data.status == 1) {
           // 切换为actions的更改方式
@@ -175,6 +213,10 @@ export default {
           // this.menusTitle = this.menusArr[0].name;
           if (res.data.result == null) {
             this.firMenus = [];
+<<<<<<< HEAD
+=======
+            console.log("menu为空");
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
           } else {
             this.newMenusArr = res.data.result;
             // 转树形结构函数
@@ -185,8 +227,15 @@ export default {
     },
     // 逻辑：先去获取公司的数据并渲染到选择器，同时设置value为公司ID，获取menu并渲染左侧；
     // 当切换公司时，切换公司ID，并且发送请求到后端更改MENU，然后再刷新MENU
+<<<<<<< HEAD
     signOut() {
       this.$store.dispatch("signOut").then(() => {
+=======
+
+    signOut() {
+      this.$store.dispatch("signOut").then(() => {
+        // localStorage.removeItem(this.store.state.token)
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
         // 重新加载
         location.reload();
       });
@@ -218,6 +267,7 @@ export default {
           return res.json();
         })
         .then(json => {
+<<<<<<< HEAD
           console.log("这是companyId", json);
           if (json.status == 1 && json.result != null) {
             this.selectList = json.result;
@@ -227,12 +277,23 @@ export default {
             localStorage.setItem("userId", this.selectList[0]["userId"]);
             this.changeSelect();
           } else {
+=======
+          if (json.status == 1) {
+            this.selectList = json.result;
+            this.firstSelect = this.selectList[0]["companyName"];
+            this.defaultValue = this.selectList[0]["companyId"];
+            // 暂时注释
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
             this.changeSelect();
           }
         });
     }
   },
   created() {
+<<<<<<< HEAD
+=======
+    // 暂时注释
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
     this.getCompanyList();
   }
 };
@@ -257,7 +318,10 @@ ul .el-dropdown-menu__item {
 }
 .el-main {
   cursor: default;
+<<<<<<< HEAD
   padding: 0;
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
 }
 .dashboard .admin,
 .dashboard .icon {

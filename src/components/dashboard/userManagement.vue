@@ -1,9 +1,12 @@
+<<<<<<< HEAD
 <!--
  * @Date: 2019-07-01 16:59:48
  * @LastEditTime: 2019-07-04 10:12:04
  * @Author: yuhenglong
  * @Description: 文件说明: 用户管理
  -->
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
 <template>
   <div class="userManagement">
     <div class="top">

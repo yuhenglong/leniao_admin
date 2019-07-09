@@ -40,8 +40,12 @@
           placeholder="请输入验证码"
           class="auth_code"
         ></el-input>
+<<<<<<< HEAD
         <span v-show="sendAuthCode" type="primary" @click="getCode('ruleForm')" class="get_code">获取验证码</span>
         <span v-show="!sendAuthCode" type="primary" @click="getCode('ruleForm')" class="get_code">{{ auth_time + "秒后重新获取"}}</span>
+=======
+        <el-button type="primary" @click="getCode('ruleForm')" class="get_code">获取验证码</el-button>
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
       </el-form-item>
       <el-form-item>
         <el-button class="el-button el-button--primary next" @click="submitForm('ruleForm')">下一步</el-button>
@@ -92,7 +96,11 @@ export default {
       sendAuthCode: true /*布尔值，通过v-show控制显示‘获取按钮’还是‘倒计时’ */,
       auth_time: 0, /*倒计时 计数器*/
       rules: {
+<<<<<<< HEAD
         phonenumber: [{ validator: validatePhoneNumber, trigger: "blur" }],
+=======
+        phoneNumber: [{ validator: validatePhoneNumber, trigger: "blur" }],
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
         checkPass: [{ validator: validatePass2, trigger: "blur" }],
         password: [
           { validator: validatePass, trigger: "blur" },
@@ -130,6 +138,7 @@ export default {
       });
     },
     getCode(phoneNum) {
+<<<<<<< HEAD
       this.sendAuthCode = false;
       this.auth_time = 60;
       let auth_timetimer = setInterval(() => {
@@ -141,6 +150,10 @@ export default {
       }, 1000);
       let url = "/user/code/" + this.ruleForm.phonenumber;
       console.log(url);
+=======
+      let url = "/user/code/" + this.ruleForm.phonenumber;
+      console.log(url)
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
       this.axios
         .get(url, this.ruleForm)
         .then(res => {
@@ -157,7 +170,7 @@ export default {
 };
 </script>
 <style lang="" scoped>
-.register {
+  .register {
   width: 100%;
   height: 100%;
   background: url(../../../static/images/bg.jpg) no-repeat center center;

@@ -1,9 +1,12 @@
+<<<<<<< HEAD
 <!--
  * @Date: 2019-07-01 16:59:48
  * @LastEditTime: 2019-07-08 14:18:22
  * @Author: yuhenglong
  * @Description: 文件说明: 表格列表组件
  -->
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
 <template>
   <div class="tableList">
     <template>

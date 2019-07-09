@@ -28,6 +28,7 @@ const menu = () => import('@/components/dashboard/menu')
 const postManage = () => import('@/components/dashboard/postManage')
 const bindCompany = () => import('@/components/dashboard/bindCompany')
 const updateUser = () => import('@/components/dashboard/updateUser')
+<<<<<<< HEAD
 const updateUserInfo = () => import('@/components/dashboard/updateUserInfo')
 const companyList = () => import('@/components/dashboard/companyList')
 const themeManage = () => import('@/components/dashboard/themeManage')
@@ -36,7 +37,11 @@ const detailPro = () => import('@/components/dashboard/detailPro')
 const findCompany = () => import('@/components/dashboard/findCompany')
 const createCom = () => import('@/components/dashboard/createCom')
 const skillManage = () => import('@/components/dashboard/skillManage')
+=======
 
+// 引入 vuex中store
+import store from '@/store/store'
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
 
 Vue.use(Router)
 
@@ -138,6 +143,7 @@ const router = new Router({
         {
           path: '/dashboard/equipmentMan',
           component: equipmentMan
+<<<<<<< HEAD
         }, {
           path: '/dashboard/updateUser',
           component: updateUser
@@ -165,6 +171,11 @@ const router = new Router({
         },{
           path: '/dashboard/skillManage',
           component: skillManage
+=======
+        }, {
+          path: '/dashboard/updateUser',
+          component: updateUser
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
         }]
     }
   ]

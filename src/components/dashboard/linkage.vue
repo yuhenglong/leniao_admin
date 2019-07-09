@@ -1,9 +1,12 @@
+<<<<<<< HEAD
 <!--
  * @Date: 2019-07-01 16:59:48
  * @LastEditTime: 2019-07-04 09:58:42
  * @Author: yuhenglong
  * @Description: 文件说明: 省市区三级联动
  -->
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
 <template>
   <div class="linkage">
     <el-select
@@ -131,11 +134,21 @@ export default {
       // 选区
       choseBlock:function(e) {
         this.E=e;
+<<<<<<< HEAD
+=======
+        // console.log(this.E)
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
       },
       emitToFather(){
         let shengfen = document.getElementById('shengfen');
         let address = shengfen.value + this.shi + this.qu + this.detailStreet;
         this.$emit('postAddress',address);
+<<<<<<< HEAD
+=======
+      },
+      changeSheng(val){
+        
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
       }
     },
     created:function(){

@@ -16,6 +16,7 @@ module.exports = {
         target:'http://192.168.0.113:8081',
         changeOrigin: true
        },
+<<<<<<< HEAD
        '/comUser': {
         target:'http://192.168.0.113',
         changeOrigin: true,
@@ -27,6 +28,12 @@ module.exports = {
       //   target:'http://192.168.0.113:80',
       //   changeOrigin: true
       //  },
+=======
+       '/company': {
+        target:'http://192.168.0.113:80',
+        changeOrigin: true
+       },
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
        '/comapi': {
         target:'http://192.168.0.113:83',
         changeOrigin: true,
@@ -34,6 +41,7 @@ module.exports = {
           '^/comapi': ''
         }
        },
+<<<<<<< HEAD
        '/file': {
         target:'http://192.168.0.113:3002',
         changeOrigin: true
@@ -47,6 +55,10 @@ module.exports = {
        },
        '/user': {
         target:'http://192.168.0.113:80',
+=======
+       '/user': {
+        target:'http://192.168.0.110:80',
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
         changeOrigin: true
        },
        '/dept': {
@@ -61,18 +73,24 @@ module.exports = {
         target:'http://192.168.0.120:80',
         changeOrigin: true
        },
+<<<<<<< HEAD
        '/manage': {
         target:'http://192.168.0.120:80',
         changeOrigin: true
        },
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
        '/Applicant': {
         target:'http://192.168.0.120:80',
         changeOrigin: true
        },
+<<<<<<< HEAD
        '/bind': {
         target:'http://192.168.0.120:80',
         changeOrigin: true
        },
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
        '/api': {
         target:'http://192.168.0.116:83',
         changeOrigin: true,
@@ -84,7 +102,7 @@ module.exports = {
     // Various Dev Server settings
     // host: '192.168.0.111', // can be overwritten by process.env.HOST
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 80, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 83, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,

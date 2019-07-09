@@ -1,9 +1,12 @@
+<<<<<<< HEAD
 <!--
  * @Date: 2019-07-01 16:59:48
  * @LastEditTime: 2019-07-04 10:10:36
  * @Author: yuhenglong
  * @Description: 文件说明: 自主创建公司
  -->
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
 <template>
   <div>
     <el-card shadow="never" :body-style="{ padding: '0px' }">

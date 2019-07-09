@@ -1,15 +1,19 @@
+<<<<<<< HEAD
 <!--
  * @Date: 2019-07-01 16:59:48
  * @LastEditTime: 2019-07-04 10:00:24
  * @Author: yuhenglong
  * @Description: 文件说明: 产品管理
  -->
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
 <template>
   <div class="processManage">
     <template>
       <el-col style="padding-bottom:0px;width:100%;">
         <el-form :inline="true" :model="filters" @submit.native.prevent class="fl">
           <el-form-item>
+<<<<<<< HEAD
             <el-select v-model="value" placeholder="产品类型">
               <el-option
                 v-for="(item,index) in options"
@@ -22,11 +26,17 @@
             <el-select v-model="statusValue" placeholder="请选择">
               <el-option
                 v-for="item in status"
+=======
+            <el-select v-model="value" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
               ></el-option>
             </el-select>
+<<<<<<< HEAD
             <!-- 日期 -->
             <el-date-picker
               v-model="value1"
@@ -36,6 +46,9 @@
               end-placeholder="结束日期"
             ></el-date-picker>
             <el-input placeholder="请输入名称" v-model.trim="filters.name" style="width:500px;"></el-input>
+=======
+            <!-- <el-input placeholder="请输入名称" v-model.trim="filters.name"></el-input> -->
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
           </el-form-item>
           <el-form-item>
             <el-button type="primary" v-on:click="inquire">查询</el-button>
@@ -68,9 +81,15 @@
       <template v-for="(item,index) in newObjArr">
         <el-table-column :prop="item.prop" :label="item.label" width="160" :key="index"></el-table-column>
       </template>
+<<<<<<< HEAD
       <el-table-column align="left" label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="query(scope.row)">详细</el-button>
+=======
+      <el-table-column align="right" width="550" label="操作">
+        <template slot-scope="scope">
+          <el-button size="mini" @click="query(scope.row)">查询</el-button>
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
           <el-button size="mini" @click="openEdit(scope.row)">编辑</el-button>
           <el-button size="mini" type="danger" @click="open(scope.$index, scope.row)">删除</el-button>
         </template>
@@ -84,6 +103,7 @@
         <el-form-item label="产品名称:">
           <el-input v-model="sizeForm.name" class="addInput"></el-input>
         </el-form-item>
+<<<<<<< HEAD
         <el-form-item label="产品类别:">
           <!-- <el-input v-model="sizeForm.material" class="addInput"></el-input> -->
           <el-select v-model="subValue" placeholder="产品类型">
@@ -131,6 +151,16 @@
             <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </el-upload>
+=======
+        <el-form-item label="材料用料:">
+          <el-input v-model="sizeForm.material" class="addInput"></el-input>
+        </el-form-item>
+        <el-form-item label="产品尺寸:">
+          <el-input v-model="sizeForm.size" class="addInput"></el-input>
+        </el-form-item>
+        <el-form-item label="产品尺寸:">
+          <el-input v-model="sizeForm.size" class="addInput"></el-input>
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -145,6 +175,7 @@
         <el-form-item label="产品名称:">
           <el-input v-model="editForm.name" class="addInput"></el-input>
         </el-form-item>
+<<<<<<< HEAD
         <el-form-item label="研发公司地址:">
           <el-input v-model="editForm.address" class="addInput"></el-input>
         </el-form-item>
@@ -160,12 +191,49 @@
         <el-form-item label="产品类别:">
           <el-input v-model="editForm.productCategory" class="addInput"></el-input>
         </el-form-item>
+=======
+        <el-form-item label="材料用料:">
+          <el-input v-model="editForm.material" class="addInput"></el-input>
+        </el-form-item>
+        <el-form-item label="产品尺寸:">
+          <el-input v-model="editForm.size" class="addInput"></el-input>
+        </el-form-item>
+        <div></div>
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogCompile = false">取 消</el-button>
         <el-button type="primary" @click="handleEdit">确 定</el-button>
       </div>
     </el-dialog>
+<<<<<<< HEAD
+=======
+    <!-- 查询弹窗 -->
+    <el-dialog title="查询详情" :visible.sync="dialogQuire">
+      <!-- table -->
+      <el-row :gutter="20">
+        <el-col :span="3">
+          <div class="grid-content bg-purple btn">
+            <el-button
+              type="text"
+              v-for="(item,index) in tableData"
+              :key="index"
+              @click="changeIndex(index)"
+            >{{ item.templateName }}</el-button>
+          </div>
+        </el-col>
+        <el-col :span="17">
+          <div class="grid-content bg-purple">
+            <query-details v-bind:listDetails="tableData" v-bind:index="index"></query-details>
+          </div>
+        </el-col>
+      </el-row>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogQuire = false">取 消</el-button>
+        <el-button type="primary" @click="handleEdit">确 定</el-button>
+      </div>
+    </el-dialog>
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
 
     <!-- 分页功能 -->
     <div class="block">
@@ -185,11 +253,19 @@
 <script>
 import { mapState } from "vuex";
 import qs from "qs";
+<<<<<<< HEAD
 // import queryDetails from "@/components/dashboard/queryDetails.vue";
 
 export default {
   components: {
     // "query-details": queryDetails
+=======
+import queryDetails from "@/components/dashboard/queryDetails.vue";
+
+export default {
+  components: {
+    "query-details": queryDetails
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
   },
   data() {
     return {
@@ -197,6 +273,7 @@ export default {
       filters: {
         name: ""
       },
+<<<<<<< HEAD
       options: [],
       subOptions: [],
       routerParams: "",
@@ -227,6 +304,23 @@ export default {
         { label: "负责人", prop: "responsiblePerson" },
         { label: "负责人电话", prop: "personPhone" },
         { label: "创建时间", prop: "createTime" }
+=======
+      index: 0,
+      checkList: ["产品编号", "产品名称", "公司编号", "材料用料", "产品尺寸"],
+      newObjArr: [
+        { label: "产品编号", prop: "tId" },
+        { label: "产品名称", prop: "name" },
+        { label: "公司编号", prop: "companyId" },
+        { label: "材料用料", prop: "material" },
+        { label: "产品尺寸", prop: "size" }
+      ],
+      newObjArrSub: [
+        { label: "产品编号", prop: "tId" },
+        { label: "产品名称", prop: "name" },
+        { label: "公司编号", prop: "companyId" },
+        { label: "材料用料", prop: "material" },
+        { label: "产品尺寸", prop: "size" }
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
       ],
       page: 1,
       ym_val: 1,
@@ -235,6 +329,7 @@ export default {
       dialogCompile: false,
       dialogQuire: false,
       sizeForm: {
+<<<<<<< HEAD
         companyId: "",
         name: "",
         categoryId: "",
@@ -257,6 +352,20 @@ export default {
       value: "",
       subValue: "",
       queryId: "",
+=======
+        name: "",
+        companyId: "",
+        material: "",
+        size: ""
+      },
+      editForm: {
+        name: "",
+        companyId: "",
+        material: "",
+        size: "",
+        productTemplates: []
+      },
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
       pager: {
         current: 1,
         pages: 2,
@@ -266,6 +375,7 @@ export default {
         records: []
       },
       editEid: null,
+<<<<<<< HEAD
       tableData: [],
       status: [
         {
@@ -314,11 +424,15 @@ export default {
         ]
       },
       value1: ""
+=======
+      tableData: []
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
     };
   },
   methods: {
     // 加载列表
     getUsers() {
+<<<<<<< HEAD
       let _companyId = localStorage.getItem("companyId");
       let params = {
         // 项目上线公司ID要向缓存请求不能写死，测试阶段先用1代替
@@ -336,16 +450,27 @@ export default {
             this.pager.size = res.data.result.size;
             this.pager.total = res.data.result.total;
           }
+=======
+      this.axios
+        .post("/api/product/selectPage")
+        .then(res => {
+          console.log("这是产品请求", res);
+          this.$store.state.productManageData = res.data.result;
+          this.pager = this.$store.state.productManageData;
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
         })
         .catch(err => {
           console.log(err);
         });
+<<<<<<< HEAD
       this.axios
         .post("/api/productType/list", qs.stringify(params))
         .then(res => {
           this.options = res.data.result;
           this.subOptions = res.data.result;
         });
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
     },
     changeIndex(index) {
       // 改变序号
@@ -358,6 +483,7 @@ export default {
         return val.indexOf(item.label) > -1;
       });
       this.newObjArr = arr;
+<<<<<<< HEAD
       console.log(this.newObjArr);
     },
     query(row) {
@@ -368,6 +494,17 @@ export default {
           id: row.id
         }
       });
+=======
+    },
+    query(row) {
+      this.dialogQuire = true;
+      this.axios
+        .post("/api/productTemplate/findTemplateByproductId", row.id)
+        .then(res => {
+          console.log(res);
+          this.tableData = res.data.result;
+        });
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
     },
     addUsers() {
       console.log("新增数据");
@@ -378,11 +515,16 @@ export default {
       this.dialogCompile = true;
       this.editEid = row.eid;
       this.editForm.name = row.name;
+<<<<<<< HEAD
       this.editForm.address = row.companyAddress;
       this.editForm.status = row.status;
       this.editForm.principal = row.responsiblePerson;
       this.editForm.creationTime = row.createTime;
       this.editForm.productCategory = row.categoryId;
+=======
+      this.editForm.material = row.material;
+      this.editForm.size = row.size;
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
     },
     handleEdit() {
       // 编辑产品
@@ -414,7 +556,11 @@ export default {
     handleDelete(index, row) {
       console.log(index, row);
       let that = this;
+<<<<<<< HEAD
       let params = { productId: row.id };
+=======
+      let params = { tId: row.id };
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
       this.axios.post("/api/product/del", qs.stringify(params)).then(res => {
         if (res.data.status == 1) {
           this.$message({
@@ -430,25 +576,42 @@ export default {
         }
       });
     },
+<<<<<<< HEAD
     insertProductType() {},
     handleSizeChange(val) {
       console.log(val);
+=======
+    insertProductType(){
+      
+    },
+    handleSizeChange(val) {
+      console.log(val);
+      console.log(`每页 ${val} 条`);
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
     },
     handleCurrentChange(val) {
       this.ym_val = val;
       console.log("这是当前页", this.ym_val);
       const action = {
         pageNum: parseInt(this.ym_val),
+<<<<<<< HEAD
         size: this.pager.size,
         companyId: 1
+=======
+        size: this.pager.size
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
       };
       let that = this;
       this.axios
         .post("/api/product/selectPage", qs.stringify(action))
         .then(res => {
+<<<<<<< HEAD
           if (res.data.status == 1) {
             that.pager = res.data.result;
           }
+=======
+          that.pager = res.data.result;
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
         });
     },
     open(index, row) {
@@ -471,6 +634,7 @@ export default {
     // 点击新增
     handleCommit() {
       let that = this;
+<<<<<<< HEAD
       this.sizeForm.companyId = localStorage.getItem("companyId");
       this.sizeForm.categoryId = this.subValue;
       this.axios
@@ -478,6 +642,17 @@ export default {
         .then(res => {
           console.log(res);
           this.handleCurrentChange(that.ym_val);
+=======
+      this.sizeForm.companyId = this.comId;
+      this.axios
+        .post("/api/product/add", qs.stringify(this.sizeForm))
+        .then(res => {
+          console.log(res);
+          this.handleCurrentChange(that.ym_val);
+        })
+        .catch(err => {
+          console.log(err);
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
         });
       this.dialogFormVisible = false;
     },
@@ -535,13 +710,21 @@ export default {
   float: right;
 }
 .processManage .el-form--inline {
+<<<<<<< HEAD
+=======
+  width: 800px;
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
   clear: both;
 }
 .lab_div {
   width: 150px;
+<<<<<<< HEAD
   text-align: left;
   box-sizing: border-box;
   padding-left: 25px;
+=======
+  text-align: center;
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
   margin: 10px 0;
 }
 .el-row {

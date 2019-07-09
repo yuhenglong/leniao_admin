@@ -1,11 +1,16 @@
 <!--
  * @Date: 2019-06-25 10:51:41
+<<<<<<< HEAD
  * @LastEditTime: 2019-07-09 16:03:21
+=======
+ * @LastEditTime: 2019-06-27 11:15:55
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
  * @Author: guobinggui
  * @Description: 文件说明: 創建公司
  -->
 <template>
   <div class="createCompany">
+<<<<<<< HEAD
     <el-form ref="companyForm" :model="companyForm" label-width="100px">
       <div class="left">
         <el-form-item label="公司名称" prop="name">
@@ -21,6 +26,23 @@
           <el-input v-model="companyForm.taxNum"></el-input>
         </el-form-item>
         <el-form-item label="公司行业" prop="industry">
+=======
+    <el-form ref="ruleForm" :model="companyForm" label-width="100px">
+      <div class="left">
+        <el-form-item label="公司名称">
+          <el-input v-model="companyForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="公司法人">
+          <el-input v-model="companyForm.legalPerson"></el-input>
+        </el-form-item>
+        <el-form-item label="法人身份证">
+          <el-input v-model="companyForm.idCard"></el-input>
+        </el-form-item>
+        <el-form-item label="公司税号">
+          <el-input v-model="companyForm.taxNum"></el-input>
+        </el-form-item>
+        <el-form-item label="公司行业">
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
           <template>
             <el-select v-model="companyForm.industry" placeholder="请选择">
               <el-option
@@ -38,6 +60,7 @@
         </el-form-item>
         <el-form-item label="法人身份">
           <div class="box_father">
+<<<<<<< HEAD
             <el-upload
               name="dropFile"
               class="avatar-uploader"
@@ -89,6 +112,76 @@
       </div>
     </el-form>
     <el-button type="primary" @click="submitForm()">立即创建</el-button>
+=======
+          <el-upload
+            class="avatar-uploader"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+            style="border: 1px dashed #d9d9d9;border-radius: 6px;cursor: pointer;position: relative;overflow: hidden;width:178px;">
+            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+          <div class="zhengmian">身份证正面</div>
+          </div>
+          <div class="box_father" style="margin-left:15px;">
+          <el-upload
+            class="avatar-uploader"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccessTwo"
+            :before-upload="beforeAvatarUploadTwo"
+            style="border: 1px dashed #d9d9d9;border-radius: 6px;cursor: pointer;position: relative;overflow: hidden;width:178px;">
+            <img v-if="imageUrlTwo" :src="imageUrlTwo" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+          <div class="zhengmian">身份证反面</div>
+          </div>
+        </el-form-item>
+        <!-- 这是框架的样式start -->
+        <!-- <el-form-item label="法人身份">
+          <el-upload
+            :action="actImgUrlOne"
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+            :on-progress="handleRemove"
+            :before-upload ="beforeAvatarUpload"
+            :on-change="changeUrlOne"
+            name="dropFile"
+            ref="uploadOne"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt>
+          </el-dialog>
+        </el-form-item>-->
+        <!-- 这是框架的样式end -->
+
+          <el-form-item label="法人身份">
+          <div class="box_father" style="margin-left:15px;">
+          <el-upload
+            class="avatar-uploader"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccessThr"
+            :before-upload="beforeAvatarUploadThr"
+            style="border: 1px dashed #d9d9d9;border-radius: 6px;cursor: pointer;position: relative;overflow: hidden;width:178px;">
+            <img v-if="imageUrlThr" :src="imageUrlThr" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+          <div class="zhengmian">公司营业执照</div>
+          </div>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+          <el-button @click="resetForm('ruleForm')" id="chongzhi">重置</el-button>
+        </el-form-item>
+      </div>
+    </el-form>
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
   </div>
 </template>
 
@@ -113,9 +206,12 @@ export default {
       imageUrl: "",
       imageUrlTwo: "",
       imageUrlThr: "",
+<<<<<<< HEAD
       _imageUrl: "",
       _imageUrlTwo: "",
       _imageUrlThr: "",
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
       dialogImageUrl: "",
       dialogVisible: false,
       // 动态图片地址
@@ -147,6 +243,7 @@ export default {
     };
   },
   methods: {
+<<<<<<< HEAD
     gaibian(e) {
       console.log(e);
       // this.imageUrlTwo = e.target.value;
@@ -154,11 +251,17 @@ export default {
     setAddress(address) {
       this.companyForm.detAdress = address;
       console.log("这是地址", this.companyForm.detAdress);
+=======
+    setAddress(address) {
+      this.companyForm.detAdress = address;
+      console.log(this.companyForm.detAdress);
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
     },
     onSubmit() {
       console.log("submit!");
     },
     handleAvatarSuccess(res, file) {
+<<<<<<< HEAD
       console.log(res);
       this.imageUrl = URL.createObjectURL(file.raw);
       this._imageUrl = res.fileName;
@@ -179,6 +282,20 @@ export default {
       let imgType = name.split(".");
       const isBoolean =
         imgType[1] === "png" || imgType[1] == "jpg" || imgType[1] == "jpeg";
+=======
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    handleAvatarSuccessTwo(res, file) {
+      this.imageUrlTwo = URL.createObjectURL(file.raw);
+    },
+    handleAvatarSuccessThr(res, file){
+      this.imageUrlThr = URL.createObjectURL(file.raw);
+    },
+    beforeAvatarUpload(file) {
+      let name = file.name;
+      let imgType = name.split('.');
+      const isBoolean = imgType[1] === 'png' ||imgType[1] == 'jpg' ||imgType[1] == 'jpeg';
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isBoolean) {
@@ -191,9 +308,14 @@ export default {
     },
     beforeAvatarUploadTwo(file) {
       let name = file.name;
+<<<<<<< HEAD
       let imgType = name.split(".");
       const isBoolean =
         imgType[1] === "png" || imgType[1] == "jpg" || imgType[1] == "jpeg";
+=======
+      let imgType = name.split('.');
+      const isBoolean = imgType[1] === 'png' ||imgType[1] == 'jpg' ||imgType[1] == 'jpeg';
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isBoolean) {
@@ -206,9 +328,14 @@ export default {
     },
     beforeAvatarUploadThr(file) {
       let name = file.name;
+<<<<<<< HEAD
       let imgType = name.split(".");
       const isBoolean =
         imgType[1] === "png" || imgType[1] == "jpg" || imgType[1] == "jpeg";
+=======
+      let imgType = name.split('.');
+      const isBoolean = imgType[1] === 'png' ||imgType[1] == 'jpg' ||imgType[1] == 'jpeg';
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isBoolean) {
@@ -236,8 +363,13 @@ export default {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
+<<<<<<< HEAD
     submitForm() {
       this.$refs["companyForm"].validate(valid => {
+=======
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
         if (valid) {
           console.log(this.companyForm);
           const params = {
@@ -246,6 +378,7 @@ export default {
               legalPerson: this.companyForm.legalPerson,
               businessLicence: this.actImgUrlOne,
               enrollId: this.companyForm.taxNum
+<<<<<<< HEAD
             },
             params: {
               url1: this._imageUrl,
@@ -280,11 +413,28 @@ export default {
             }).then(json =>{
               console.log('这是解析后的json',json)
             })
+=======
+            }
+          };
+          this.axios
+            .post("/company/register", JSON.stringify(params))
+            .then(res => {
+              console.log(res);
+            })
+            .catch(err => {
+              console.log(err);
+            });
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
         } else {
           console.log("error submit!!");
           return false;
         }
       });
+<<<<<<< HEAD
+=======
+      // this.$refs.uploadOne.submit();
+      // this.$refs.uploadTwo.submit();
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
@@ -296,10 +446,13 @@ export default {
 .createCompany {
   position: relative;
 }
+<<<<<<< HEAD
 .inputfile {
   position: absolute;
   clip: rect(0 0 0 0);
 }
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
 .createCompany .left {
   float: left;
   padding: 10px;
@@ -332,6 +485,7 @@ export default {
   height: 178px;
   display: block;
 }
+<<<<<<< HEAD
 div.zhengmian,
 div.fanmian {
   color: #999;
@@ -344,5 +498,18 @@ div.fanmian {
 }
 div.box_father {
   display: inline-block;
+=======
+div.zhengmian,div.fanmian{
+  color:#999;
+  font-size:14px;
+  text-align:center;
+  display:inline-block;
+  width:178px;
+  height:20px;
+  line-height:14px;
+}
+div.box_father{
+  display:inline-block;
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
 }
 </style>

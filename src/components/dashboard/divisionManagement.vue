@@ -1,9 +1,12 @@
+<<<<<<< HEAD
 <!--
  * @Date: 2019-07-01 16:59:48
  * @LastEditTime: 2019-07-06 11:36:20
  * @Author: yuhenglong
  * @Description: 文件说明: 部门管理
  -->
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
 <template>
   <div>
     <el-card shadow="never" :body-style="{ padding: '0px' }">
@@ -32,8 +35,12 @@
           </el-col>
           <el-col :span="6">
             <el-input v-model="input" placeholder="请输入内容" class="btn_input"></el-input>
+<<<<<<< HEAD
             <el-button type="primary" icon="el-icon-search" @click="addDept">添加</el-button>
             <el-button type="success" icon="el-icon-search">查询</el-button>
+=======
+            <el-button type="primary" icon="el-icon-search">查询</el-button>
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
           </el-col>
         </el-row>
       </div>
@@ -47,7 +54,11 @@
         :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
       >
         <el-table-column type="selection" width="55"></el-table-column>
+<<<<<<< HEAD
         <el-table-column prop="deptName" label="部门名称" width="180"></el-table-column>
+=======
+        <el-table-column prop="name" label="公司名称" sortable width="180"></el-table-column>
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
         <el-table-column prop="sort" label="排序" sortable width="180"></el-table-column>
         <el-table-column prop="delFlag" label="状态" width="180"></el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
@@ -81,6 +92,7 @@
       </div>
     </el-dialog>
 
+<<<<<<< HEAD
     <el-dialog title="新增部门" :visible.sync="dialogAdd">
       <el-form :label-position="'right'" label-width="80px">
         <el-form-item label="部门名字">
@@ -98,6 +110,8 @@
       </div>
     </el-dialog>
 
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
     <el-dialog title="编辑" :visible.sync="dialogEdit">
       <el-form :label-position="'right'" label-width="80px">
         <el-form-item label="名称">
@@ -135,7 +149,10 @@ export default {
       input: "",
       industry: "",
       dialogVisible: false,
+<<<<<<< HEAD
       dialogAdd: false,
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
       dialogEdit: false,
       editName: "",
       editIndex: "",
@@ -158,6 +175,7 @@ export default {
         createUser: "",
         topId: ""
       },
+<<<<<<< HEAD
       delRow:'',
       addDeptForm: {
         companyId: localStorage.getItem("companyId"),
@@ -166,6 +184,9 @@ export default {
         userId: localStorage.getItem("userId"),
         sort: 1
       }
+=======
+      delRow:''
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
     };
   },
   created() {
@@ -178,6 +199,7 @@ export default {
       this.delRow = row;
       console.log('这是isshow的值',this.isShow)
     },
+<<<<<<< HEAD
     /**
      * @author: guobinggui
      * @description: 函数说明: 新增部门
@@ -200,15 +222,24 @@ export default {
           console.log(err)
         })
     },
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
     getList() {
       let obj = {
         // companyId:localStorage.getItem('companyId')
         // 这是王景的写死的公司ID
+<<<<<<< HEAD
         companyId: localStorage.getItem("companyId"),
         delFlag: 0
       };
       this.axios.post("/dept/selectDept", qs.stringify(obj)).then(res => {
         console.log("res",res)
+=======
+        companyId: "302364aauyhf401ats7c1113f55b2e49",
+        delFlag: 0
+      };
+      this.axios.post("/dept/selectDept", qs.stringify(obj)).then(res => {
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
         if(res.data.status ==1){
           let subData = res.data.result;
           for(let i = 0;i<subData.length;i++){
@@ -235,7 +266,11 @@ export default {
       });
     },
     addSubmit() {
+<<<<<<< HEAD
       this.Department.deptName = this.DepartmentName;
+=======
+      this.Department.name = this.DepartmentName;
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
       console.log(this.Department);
       this.axios
         .post("/dept/insertDept", qs.stringify(this.Department))

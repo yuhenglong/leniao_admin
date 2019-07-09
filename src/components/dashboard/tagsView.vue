@@ -1,10 +1,3 @@
-<!--
- * @Date: 2019-07-01 16:59:48
- * @LastEditTime: 2019-07-08 10:56:23
- * @Author: yuhenglong
- * @Description: 文件说明: tab组件
- -->
-
 <template id="">
   <div class="tags-view-container">
     <div class="tags-view-wrap">
@@ -24,7 +17,7 @@
 <script>
 export default {
   methods: {
-    isActive(route){
+    isActive(route) {
       return route.path == this.$route.path;
     },
     addViewTags() {
@@ -65,40 +58,10 @@ export default {
 <style lang="">
 .tags-view-wrap {
   width: 100%;
-  height: 36px;
+  height: 50px;
   color: #333;
-  background: #fff;
-  border-bottom: 1px solid #d8dce5;
-  -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12),
-    0 0 3px 0 rgba(0, 0, 0, 0.04);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
 }
-.tags-view-wrap .active {
-  color: #fff;
-  background-color: #42b983;
-}
-.tags-view-item {
-  top:6px;
-  margin-left: 10px;
-  padding: 5px 8px 5px 15px;
-  background-color: #fff;
-  font-size: 16px;
-  line-height: 26px;
-  color: #999;
-  border-radius: 5px;
-  border: 1px solid #d8dce5;
-  position: relative;
-}
-.tags-view-item::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  display: block;
-  left: 6px;
-  border-radius: 50%;
-  margin-top: -3px;
-  width: 6px;
-  height: 6px;
-  background-color: #fff;
+.active{
+  color:red;
 }
 </style>

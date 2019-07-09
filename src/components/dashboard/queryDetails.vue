@@ -1,9 +1,12 @@
+<<<<<<< HEAD
 <!--
  * @Date: 2019-07-01 16:59:48
  * @LastEditTime: 2019-07-04 10:09:22
  * @Author: yuhenglong
  * @Description: 文件说明: 查询细节页面
  -->
+=======
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
 <template>
   <div class="queryDetails">
     <div>{{ newList.templateName }}</div>
@@ -36,7 +39,12 @@
     </template>
   </div>
 </template>
+<<<<<<< HEAD
 
+=======
+  </div>
+</template>
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
 <script>
 export default {
   props: ["listDetails", "index"],

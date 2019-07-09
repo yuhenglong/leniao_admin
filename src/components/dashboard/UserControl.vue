@@ -6,6 +6,7 @@
  -->
 <template>
   <div>
+<<<<<<< HEAD
     <el-container>
       <el-aside width="200px">
         <el-tree
@@ -46,6 +47,78 @@
             <el-button size="medium" icon="el-icon-download" type="primary">导出</el-button>
             <el-button size="medium" icon="el-icon-delete" type="danger">删除</el-button>
           </div>
+=======
+    <el-card shadow="never" :body-style="{ padding: '0px' }">
+      <div slot="header">
+        <el-row :gutter="10">
+          <el-col :span="3">
+            <el-input placeholder="用户名"></el-input>
+          </el-col>
+          <el-col :span="3">
+            <el-input placeholder="手机号码"></el-input>
+          </el-col>
+          <el-col :span="3">
+            <el-select v-model="state" placeholder="用户状态">
+              <el-option :label="'启用'" :value="1"></el-option>
+              <el-option :label="'禁用'" :value="2"></el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="6">
+            <el-date-picker type="daterange" v-model="dateRange" align="right" unlink-panels range-separator="至" start-placeholder="注册开始日期" end-placeholder="注册结束日期">
+            </el-date-picker>
+          </el-col>
+          <el-col :span="6">
+            <el-button type="primary" icon="el-icon-search">查询</el-button>
+          </el-col>
+        </el-row>
+        <br>
+        <el-button size="medium" type="primary" icon="el-icon-plus" @click="dialogVisible = true">新增</el-button>
+        <el-button size="medium" icon="el-icon-upload2">导入</el-button>
+        <el-button size="medium" icon="el-icon-download">导出</el-button>
+        <el-button size="medium" icon="el-icon-delete">删除</el-button>
+      </div>
+      <el-table :data="pager.records" style="width: 100%" stripe highlight-current-row v-loading="" @selection-change="onSelectionChange">
+        <el-table-column type="selection" width="55" align="center">
+        </el-table-column>
+        <el-table-column prop="userName" label="用户名"></el-table-column>
+        <el-table-column label="手机号码" width="150">
+          <template slot-scope="scope">
+            {{ '+' + scope.row.nation + ' ' + scope.row.phone }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="email" label="电子邮件" width="200"></el-table-column>
+        <el-table-column prop="gender" label="性别" width="100"></el-table-column>
+        <el-table-column label="出生日期" width="140">
+          <template slot-scope="scope">
+            {{ scope.row.birthday | moment('YYYY-MM-DD hh:mm') }}
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" width="120">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.enabled" :type="'success'">已启用</el-tag>
+            <el-tag v-if="!scope.row.enabled" :type="'danger'">已禁用</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="创建日期" width="140">
+          <template slot-scope="scope">
+            {{ scope.row.createDate | moment('YYYY-MM-DD hh:mm') }}
+          </template>
+        </el-table-column>
+        <el-table-column label="最后登陆日期" width="140">
+          <template slot-scope="scope">
+            {{ scope.row.signInDate | moment('YYYY-MM-DD hh:mm') }}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="200">
+          <template>
+            <el-button type="text" size="small" @click="edit()">编辑</el-button>
+            <el-button type="text" size="small" @click="remove()">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination :current-page="pager.current" :page-size="pager.size" :total="pager.total" class="pagination text-right"></el-pagination>
+    </el-card>
+>>>>>>> 8a4a2500173a2a2b1c8d818ac966b625a866cdd3
 
           <el-table
             ref="table"
