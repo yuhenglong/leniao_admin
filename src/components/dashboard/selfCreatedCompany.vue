@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-07-01 16:59:48
+ * @LastEditTime: 2019-07-04 10:10:36
+ * @Author: yuhenglong
+ * @Description: 文件说明: 自主创建公司
+ -->
 <template>
   <div>
     <el-card shadow="never" :body-style="{ padding: '0px' }">

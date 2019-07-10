@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-07-01 16:59:48
+ * @LastEditTime: 2019-07-06 11:36:20
+ * @Author: yuhenglong
+ * @Description: 文件说明: 部门管理
+ -->
 <template>
   <div>
     <el-card shadow="never" :body-style="{ padding: '0px' }">
@@ -26,7 +32,8 @@
           </el-col>
           <el-col :span="6">
             <el-input v-model="input" placeholder="请输入内容" class="btn_input"></el-input>
-            <el-button type="primary" icon="el-icon-search">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="addDept">添加</el-button>
+            <el-button type="success" icon="el-icon-search">查询</el-button>
           </el-col>
         </el-row>
       </div>
@@ -40,7 +47,7 @@
         :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
       >
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="name" label="公司名称" sortable width="180"></el-table-column>
+        <el-table-column prop="deptName" label="部门名称" width="180"></el-table-column>
         <el-table-column prop="sort" label="排序" sortable width="180"></el-table-column>
         <el-table-column prop="delFlag" label="状态" width="180"></el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
@@ -71,6 +78,23 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="addSubmit">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="新增部门" :visible.sync="dialogAdd">
+      <el-form :label-position="'right'" label-width="80px">
+        <el-form-item label="部门名字">
+          <!-- <el-input placeholder="请输入新增名字" v-model="DepartmentName"></el-input> -->
+          <el-input v-model="addDeptForm.deptName" placeholder="请输入内容"></el-input>
+        </el-form-item>
+        <el-form-item label="排序">
+          <!-- <el-input placeholder="请输入新增名字" v-model="DepartmentName"></el-input> -->
+          <el-input v-model="addDeptForm.sort" placeholder="请输入内容"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogAdd = false">取 消</el-button>
+        <el-button type="primary" @click="submitAddDept">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -111,6 +135,7 @@ export default {
       input: "",
       industry: "",
       dialogVisible: false,
+      dialogAdd: false,
       dialogEdit: false,
       editName: "",
       editIndex: "",
@@ -133,7 +158,14 @@ export default {
         createUser: "",
         topId: ""
       },
-      delRow:''
+      delRow:'',
+      addDeptForm: {
+        companyId: localStorage.getItem("companyId"),
+        deptName: '',
+        topId: 0,
+        userId: localStorage.getItem("userId"),
+        sort: 1
+      }
     };
   },
   created() {
@@ -146,14 +178,37 @@ export default {
       this.delRow = row;
       console.log('这是isshow的值',this.isShow)
     },
+    /**
+     * @author: guobinggui
+     * @description: 函数说明: 新增部门
+     * @param {type} 
+     * @return: 
+     */
+    addDept() {
+      this.dialogAdd = true
+    },
+    submitAddDept() {
+      this.axios
+        .post('/dept/insertDept', qs.stringify(this.addDeptForm))
+        .then(res => {
+          console.log(res)
+          this.dialogAdd = false
+          this.addDeptForm.deptName = ''
+          this.getList()
+        }) 
+        .catch(err => {
+          console.log(err)
+        })
+    },
     getList() {
       let obj = {
         // companyId:localStorage.getItem('companyId')
         // 这是王景的写死的公司ID
-        companyId: "302364aauyhf401ats7c1113f55b2e49",
+        companyId: localStorage.getItem("companyId"),
         delFlag: 0
       };
       this.axios.post("/dept/selectDept", qs.stringify(obj)).then(res => {
+        console.log("res",res)
         if(res.data.status ==1){
           let subData = res.data.result;
           for(let i = 0;i<subData.length;i++){
@@ -180,7 +235,7 @@ export default {
       });
     },
     addSubmit() {
-      this.Department.name = this.DepartmentName;
+      this.Department.deptName = this.DepartmentName;
       console.log(this.Department);
       this.axios
         .post("/dept/insertDept", qs.stringify(this.Department))

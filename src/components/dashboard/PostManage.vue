@@ -1,6 +1,6 @@
 <!--
  * @Date: 2019-06-25 11:02:12
- * @LastEditTime: 2019-06-26 17:43:40
+ * @LastEditTime: 2019-07-05 19:07:48
  * @Author: guobinggui
  * @Description: 文件说明: 部门管理
  -->
@@ -215,13 +215,13 @@ export default {
 			},
 			PostObj: {
         postCode: "",
-        companyId: "302364aauyhf401ats7c1113f55b2e49",   // 死数据，后面改成localStorage.getItem('companyId')
+        companyId: localStorage.getItem('companyId'),   // 死数据，后面改成localStorage.getItem('companyId')
         postName: "",
         postSort: "",
         remark: ""
 			},
 			EditPost: {
-				companyId: '302364aauyhf401ats7c1113f55b2e49',     // 死数据，后面改成localStorage.getItem('companyId')
+				companyId: localStorage.getItem('companyId'),     // 死数据，后面改成localStorage.getItem('companyId')
 				postId: '',
 				postName: '',
 				postCode: '',
@@ -249,7 +249,7 @@ export default {
       let obj = {
         // companyId:localStorage.getItem('companyId')
         // 这是王景的写死的公司ID
-				companyId: "302364aauyhf401ats7c1113f55b2e49",
+				companyId: localStorage.getItem('companyId'),
 				name: this.filter.postName,
 				status: this.filter.status,
 				postCode: this.filter.postCode
@@ -299,11 +299,13 @@ export default {
           console.log(res);
           this.getPostList();
           this.PostObj = "";
+          this.dialogVisible = false;3
+          
         })
         .catch(err => {
           console.log(err);
         });
-      this.dialogVisible = false;
+      
 		},
 		
     edit() {

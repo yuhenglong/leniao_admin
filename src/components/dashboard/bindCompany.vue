@@ -1,7 +1,7 @@
 <template>
 <!--
  * @Date: 2019-06-26 09:29:48
- * @LastEditTime: 2019-06-26 17:36:17
+ * @LastEditTime: 2019-06-28 11:35:17
  * @Author: guobinggui
  * @Description: 文件说明: 绑定公司页面
  -->
@@ -114,9 +114,8 @@ export default {
 		// 获取岗位列表
     getApplicantList() {
       let obj = {
-        // companyId:localStorage.getItem('companyId')
+        companyId:localStorage.getItem('companyId'),
         // 这是王景的写死的公司ID
-				companyId: "302364aauyhf401ats7c1113f55b2e49",
 				status: this.filter.status || 0
       };
 
@@ -163,8 +162,11 @@ export default {
       //   userId: row.userId,
       //   userName: row.userName
       // }
+      console.log("row")
+      console.log(row)
       localStorage.setItem('userId', row.userId)
       localStorage.setItem('userName', row.userName)
+      localStorage.setItem('phoneNumeber', row.phone)
     },
 
     // 审核不通过

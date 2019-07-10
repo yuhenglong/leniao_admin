@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-07-01 16:59:48
+ * @LastEditTime: 2019-07-04 10:13:10
+ * @Author: yuhenglong
+ * @Description: 文件说明: 登录页面（暂时弃用）
+ -->
 <template>
   <div class="login">
     <detailLogin/>

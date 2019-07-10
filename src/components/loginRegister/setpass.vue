@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-07-01 16:59:48
+ * @LastEditTime: 2019-07-04 10:13:33
+ * @Author: yuhenglong
+ * @Description: 文件说明: 设置密码
+ -->
 <template>
   <div class="setpass">
     <el-form

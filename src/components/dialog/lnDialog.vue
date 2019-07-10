@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-07-01 16:59:48
+ * @LastEditTime: 2019-07-04 10:12:13
+ * @Author: yuhenglong
+ * @Description: 文件说明: 删除弹窗
+ -->
 <template>
   <div class="lnDialog" v-show="isShowDialog">
     <div class="dia_header"></div>

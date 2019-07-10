@@ -60,6 +60,9 @@ const mutations = {
     setRoleManage(state, newRoleData) {
         state.roleManageData = newRoleData;
     },
+    setDeptsData(state, newDeptsData) {
+        state.deptsData = newDeptsData
+    },
     ADD_VISITED_VIEWS: (state, view) => {//打开新页签--添加路由数据的方法      if(state.visitedviews.some(v=>v.path==view.path))return;
         // 数组在存放在vuex之前进行验证去重
         if(state.visitedviews.some(v => v.path === view.path)) return
@@ -77,6 +80,9 @@ const mutations = {
                 break
             }
         }
+    },
+    setIndexHtml:(state) =>{
+        state.visitedviews = []
     }
 }
 
@@ -119,6 +125,10 @@ const actions = {
             commit('DEL_VISITED_VIEWS', view);
             resolve([...state.visitedviews]);
         })
+    },
+    // tab设置为空
+    setIndexHtml({commit,state}){
+        commit('setIndexHtml',state)
     }
 }
 

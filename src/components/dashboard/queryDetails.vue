@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-07-01 16:59:48
+ * @LastEditTime: 2019-07-04 10:09:22
+ * @Author: yuhenglong
+ * @Description: 文件说明: 查询细节页面
+ -->
 <template>
   <div class="queryDetails">
     <div>{{ newList.templateName }}</div>
@@ -30,8 +36,7 @@
     </template>
   </div>
 </template>
-  </div>
-</template>
+
 <script>
 export default {
   props: ["listDetails", "index"],

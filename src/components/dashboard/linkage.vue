@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-07-01 16:59:48
+ * @LastEditTime: 2019-07-04 09:58:42
+ * @Author: yuhenglong
+ * @Description: 文件说明: 省市区三级联动
+ -->
 <template>
   <div class="linkage">
     <el-select
@@ -125,15 +131,11 @@ export default {
       // 选区
       choseBlock:function(e) {
         this.E=e;
-        // console.log(this.E)
       },
       emitToFather(){
         let shengfen = document.getElementById('shengfen');
         let address = shengfen.value + this.shi + this.qu + this.detailStreet;
         this.$emit('postAddress',address);
-      },
-      changeSheng(val){
-        
       }
     },
     created:function(){

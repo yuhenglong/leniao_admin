@@ -1,6 +1,6 @@
 <!--
  * @Date: 2019-06-25 10:51:41
- * @LastEditTime: 2019-07-09 16:03:21
+ * @LastEditTime: 2019-07-05 14:59:43
  * @Author: guobinggui
  * @Description: 文件说明: 創建公司
  -->
@@ -16,6 +16,9 @@
         </el-form-item>
         <el-form-item label="法人身份证" prop="idCard">
           <el-input v-model="companyForm.idCard"></el-input>
+        </el-form-item>
+        <el-form-item label="社会信用代码" prop="taxNum">
+          <el-input v-model="companyForm.enrollId"></el-input>
         </el-form-item>
         <el-form-item label="公司税号" prop="taxNum">
           <el-input v-model="companyForm.taxNum"></el-input>
@@ -42,44 +45,47 @@
               name="dropFile"
               class="avatar-uploader"
               action="/file/fileupload"
-              :on-success="handleAvatarSuccess"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccessIDCP"
               :before-upload="beforeAvatarUpload"
               style="border: 1px dashed #d9d9d9;border-radius: 6px;cursor: pointer;position: relative;overflow: hidden;width:178px;"
             >
-              <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+              <img v-if="idCardPositiveImageUrl" :src="idCardPositiveImageUrl" class="avatar" />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
             <div class="zhengmian">身份证正面</div>
           </div>
-          <div class="box_father" style="margin-left:15px;">
+          <div class="box_father">
             <el-upload
               name="dropFile"
               class="avatar-uploader"
               action="/file/fileupload"
-              :on-success="handleAvatarSuccessTwo"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccessIDCN"
               :before-upload="beforeAvatarUpload"
               style="border: 1px dashed #d9d9d9;border-radius: 6px;cursor: pointer;position: relative;overflow: hidden;width:178px;"
             >
-              <img v-if="imageUrlTwo" :src="imageUrlTwo" class="avatar" />
+              <img v-if="idCardNegativeImageUrl" :src="idCardNegativeImageUrl" class="avatar" />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
-            <div class="zhengmian">身份证反面</div>
+            <div class="fanmian">身份证反面</div>
           </div>
         </el-form-item>
-        <el-form-item label="法人身份">
-          <div class="box_father" style="margin-left:15px;">
+        <el-form-item label="营业执照">
+          <div class="box_father">
             <el-upload
               name="dropFile"
               class="avatar-uploader"
               action="/file/fileupload"
-              :on-success="handleAvatarSuccessThr"
-              :before-upload="beforeAvatarUploadThr"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccessBL"
+              :before-upload="beforeAvatarUpload"
               style="border: 1px dashed #d9d9d9;border-radius: 6px;cursor: pointer;position: relative;overflow: hidden;width:178px;"
             >
-              <img v-if="imageUrlThr" :src="imageUrlThr" class="avatar" />
+              <img v-if="businessLicenseimageUrl" :src="businessLicenseimageUrl" class="avatar" />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
-            <div class="zhengmian">公司营业执照</div>
+            <div class="fanmian">营业执照照片</div>
           </div>
         </el-form-item>
         <el-form-item>
@@ -88,7 +94,7 @@
         </el-form-item>
       </div>
     </el-form>
-    <el-button type="primary" @click="submitForm()">立即创建</el-button>
+    <el-button type="primary" @click="submitForm">立即创建</el-button>
   </div>
 </template>
 
@@ -108,20 +114,21 @@ export default {
         idCard: "",
         taxNum: "",
         industry: "",
-        detAdress: ""
+        detAdress: "",
+        enrollId: ""
       },
-      imageUrl: "",
-      imageUrlTwo: "",
-      imageUrlThr: "",
-      _imageUrl: "",
-      _imageUrlTwo: "",
-      _imageUrlThr: "",
+      idCardPositiveImageUrl: "", // 身份证正面照片url
+      idCardNegativeImageUrl: "", // 身份证背面照片url
+      businessLicenseimageUrl: "", // 营业执照照片url
+      // _imageUrl: "",
+      // _imageUrlTwo: "",
+      // _imageUrlThr: "",
       dialogImageUrl: "",
       dialogVisible: false,
       // 动态图片地址
-      actImgUrlOne: "https://jsonplaceholder.typicode.com/posts/",
-      actImgUrlTwo: "",
-      actImgUrlThr: "",
+      // actImgUrlOne: "",
+      // actImgUrlTwo: "",
+      // actImgUrlThr: "",
       options: [
         {
           value: "电子",
@@ -147,169 +154,124 @@ export default {
     };
   },
   methods: {
-    gaibian(e) {
-      console.log(e);
-      // this.imageUrlTwo = e.target.value;
+    // gaibian(e) {
+    //   console.log(e);
+    //   // this.imageUrlTwo = e.target.value;
+    // },
+    /**
+     * @author: guobinggui
+     * @description: 函数说明: 身份证正面照片上传成功回调  (下面两个函数同此)
+     * @param {type}
+     * @return:
+     */
+    handleAvatarSuccessIDCP(res, file) {
+      // IDCP:idCardPositive
+      console.log(res);
+      console.log(file);
+      this.idCardPositiveImageUrl = res.fileName;
+      console.log(this.idCardPositiveImageUrl);
     },
+    handleAvatarSuccessIDCN(res, file) {
+      // IDCP:idCardNegative
+      console.log(res);
+      console.log(file);
+      this.idCardNegativeImageUrl = res.fileName;
+      console.log(this.idCardNegativeImageUrl);
+    },
+    handleAvatarSuccessBL(res, file) {
+      // BL:businessLicense
+      console.log(res);
+      console.log(file);
+      this.businessLicenseimageUrl = res.fileName;
+      console.log(this.businessLicenseimageUrl);
+    },
+    /**
+     * @author: guobinggui
+     * @description: 函数说明:  上传文件之前的钩子，参数为上传的文件，若返回 false 或者返回 Promise 且被 reject，则停止上传。
+     * @param {type}
+     * @return:
+     */
+    beforeAvatarUpload(file) {
+      const isType =
+        file.type === "image/jpeg" ||
+        file.type === "image/png" ||
+        file.type === "image/jpg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isType) {
+        this.$message.error("上传图片只能是 JPG/PNG/JPEG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传图片大小不能超过 2MB!");
+      }
+      return isType && isLt2M;
+    },
+    /**
+     * @author: guobinggui
+     * @description: 函数说明:  设置地址
+     * @param {type}
+     * @return:
+     */
     setAddress(address) {
       this.companyForm.detAdress = address;
       console.log("这是地址", this.companyForm.detAdress);
     },
-    onSubmit() {
-      console.log("submit!");
+    // onSubmit() {
+    //   console.log("submit!");
+    // },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
     },
-    handleAvatarSuccess(res, file) {
-      console.log(res);
-      this.imageUrl = URL.createObjectURL(file.raw);
-      this._imageUrl = res.fileName;
-    },
-    handleAvatarSuccessTwo(res, file) {
-      console.log(res);
-      this.imageUrlTwo = URL.createObjectURL(file.raw);
-      this._imageUrlTwo = res.fileName;
-    },
-    handleAvatarSuccessThr(res, file) {
-      console.log(res);
-      this.imageUrlThr = URL.createObjectURL(file.raw);
-      this._imageUrlThr = res.fileName;
-    },
-    beforeAvatarUpload(file) {
-      console.log(file);
-      let name = file.name;
-      let imgType = name.split(".");
-      const isBoolean =
-        imgType[1] === "png" || imgType[1] == "jpg" || imgType[1] == "jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isBoolean) {
-        this.$message.error("上传头像图片只能是 JPG/PNG/JPEG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isBoolean && isLt2M;
-    },
-    beforeAvatarUploadTwo(file) {
-      let name = file.name;
-      let imgType = name.split(".");
-      const isBoolean =
-        imgType[1] === "png" || imgType[1] == "jpg" || imgType[1] == "jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isBoolean) {
-        this.$message.error("上传头像图片只能是 JPG/PNG/JPEG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isBoolean && isLt2M;
-    },
-    beforeAvatarUploadThr(file) {
-      let name = file.name;
-      let imgType = name.split(".");
-      const isBoolean =
-        imgType[1] === "png" || imgType[1] == "jpg" || imgType[1] == "jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isBoolean) {
-        this.$message.error("上传头像图片只能是 JPG/PNG/JPEG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isBoolean && isLt2M;
-    },
-
-    handleRemove(file, fileList) {
-      // 从服务器上删除图片
-      console.log(file, fileList);
-    },
-    changeUrlOne(file, fileList) {
-      console.log(file, fileList);
-      this.actImgUrlOne = file.url;
-    },
-    changeUrlTwo() {
-      console.log(file, fileList);
-      this.actImgUrlTwo = file.url;
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
+    /**
+     * @author: guobinggui
+     * @description: 函数说明: 提交表单
+     * @param {type}
+     * @return:
+     */
     submitForm() {
       this.$refs["companyForm"].validate(valid => {
         if (valid) {
           console.log(this.companyForm);
-          const params = {
+          let formObj = {
             body: {
               name: this.companyForm.name,
               legalPerson: this.companyForm.legalPerson,
-              businessLicence: this.actImgUrlOne,
-              enrollId: this.companyForm.taxNum
+              businessLicense: this.businessLicenseimageUrl,
+              enrollId: this.companyForm.enrollId
             },
             params: {
-              url1: this._imageUrl,
-              url2: this._imageUrlTwo,
-              url3: this._imageUrlThr,
-              templateId: "91a3b439528a4cc2b072d63dea22ecae"
+              templateId: "91a3b439528a4cc2b072d63dea22ecae",
+              idCardPositiveImageUrl: this.idCardPositiveImageUrl,
+              idCardNegativeImageUrl: this.idCardNegativeImageUrl
             }
           };
-          // axios的请求
           this.axios
-            .post("/comapi/company/register", JSON.stringify(params))
+            .post("/comapi/company/register", JSON.stringify(formObj), {
+              headers: {
+                "Content-Type": "application/json"
+              }
+            })
             .then(res => {
               console.log(res);
-              this.$message({
-                type: "info",
-                message: "上传数据成功,3s后跳转到首页"
-              });
-              setTimeout(() => {
-                // window.location.reload();
-              }, 3000);
-            })
-            // fetch的请求
-            let newToken = "Bearer " + localStorage.getItem("token");
-            fetch('/comapi/company/register',{
-              method:'POST',
-              mode:'cors',
-              headers:{
-                Authorization: newToken,
+              if (res.data.status == 1) {
+                this.$message({
+                  message: "您的申请已经发送，等待工作人员审核！",
+                  type: "success"
+								});
+								this.$router.replace('/dashboard')
               }
-            }).then(res =>{
-              return res.json()
-            }).then(json =>{
-              console.log('这是解析后的json',json)
             })
-        } else {
-          console.log("error submit!!");
-          return false;
+            .catch(err => {
+              console.log(err);
+            });
         }
       });
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
     }
   }
 };
 </script>
 <style scoped>
-.createCompany {
-  position: relative;
-}
-.inputfile {
-  position: absolute;
-  clip: rect(0 0 0 0);
-}
-.createCompany .left {
-  float: left;
-  padding: 10px;
-}
-.createCompany .right img {
-  float: left;
-  padding: 10px;
-}
-
-.createCompany .avatar-uploader .el-upload {
+.avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
   cursor: pointer;

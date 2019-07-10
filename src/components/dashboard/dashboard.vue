@@ -1,6 +1,18 @@
 <!--
  * @Date: 2019-05-24 17:37:27
- * @LastEditTime: 2019-06-29 16:46:00
+<<<<<<< HEAD
+<<<<<<< HEAD
+ * @LastEditTime: 2019-07-01 14:14:04
+=======
+<<<<<<< HEAD
+ * @LastEditTime: 2019-07-01 14:14:04
+=======
+ * @LastEditTime: 2019-07-01 16:43:40
+>>>>>>> 88e2d510b396e4f6863b5795cca1632353e11849
+>>>>>>> 64ea60215bdf52e390ae71a2608503a06087a2e7
+=======
+ * @LastEditTime: 2019-07-10 17:27:09
+>>>>>>> 合并代码
  * @Author: yuhenglong
  * @Description: 文件说明: 首页
  -->
@@ -8,9 +20,9 @@
 <template>
   <div class="dashboard">
     <el-container style="height: 500px; border: 1px solid #eee">
-      <el-aside width="200px" style="background-color:#4a86e8">
+      <el-aside width="200px" style="background-color:#e6e6e6">
         <el-header class="logo">
-          <img src="@/assets/logo.png" class="logo_img">
+          <img src="@/assets/logo.png" class="logo_img" />
           <h1 class="title_logo">乐鸟</h1>
         </el-header>
         <!-- 这是切换数组的文字 -->
@@ -73,8 +85,10 @@
                 <i class="el-icon-orange"></i>修改密码
               </el-dropdown-item>
               <el-dropdown-item command="signOut()">
-                <i class="el-icon-refresh-left"></i>
-                <span @click="signOut()">退出登录</span>
+                <div @click="signOut()" style="width:100%;height:40px;">
+                  <i class="el-icon-refresh-left"></i>
+                  <span>退出登录</span>
+                </div>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -83,8 +97,9 @@
         <el-main>
           <!-- 标签页 -->
           <tags-view></tags-view>
-
-          <router-view></router-view>
+          <div style="padding:5px 15px 15px">
+            <router-view></router-view>
+          </div>
         </el-main>
       </el-container>
     </el-container>
@@ -117,13 +132,14 @@ export default {
       if ($event) {
         that.defaultValue = $event;
       }
-      console.log("切换公司名", that.defaultValue);
+      localStorage.setItem("companyId", that.defaultValue);
       const url = "/comapi/company/switch/" + that.defaultValue;
       this.axios.get(url).then(res => {
-        console.log("这是切换接口后的数据", res);
-        // 暂时注释
+        console.log("这是menu", res);
         this.loadingData();
       });
+      this.$router.replace("/dashboard/");
+      this.$store.dispatch("setIndexHtml");
     },
     tree() {
       let tree = this.newMenusArr.filter(father => {
@@ -138,14 +154,12 @@ export default {
         }
         return father.parentId == 0;
       });
-      console.log(tree);
+
       this.firMenus = tree;
-      // this.$store.dispatch("setFirData", tree);
     },
     loadingData() {
       // 封装后的请求
       this.axios.get("/comapi/menu/myMenu").then(res => {
-        console.log("这是切换公司ID后的menu数据,函数3", res.data.result);
         // 将menus存储在vuex中
         if (res.data.status == 1) {
           // 切换为actions的更改方式
@@ -161,7 +175,6 @@ export default {
           // this.menusTitle = this.menusArr[0].name;
           if (res.data.result == null) {
             this.firMenus = [];
-            console.log("menu为空");
           } else {
             this.newMenusArr = res.data.result;
             // 转树形结构函数
@@ -172,10 +185,8 @@ export default {
     },
     // 逻辑：先去获取公司的数据并渲染到选择器，同时设置value为公司ID，获取menu并渲染左侧；
     // 当切换公司时，切换公司ID，并且发送请求到后端更改MENU，然后再刷新MENU
-
     signOut() {
       this.$store.dispatch("signOut").then(() => {
-        // localStorage.removeItem(this.store.state.token)
         // 重新加载
         location.reload();
       });
@@ -193,6 +204,12 @@ export default {
       };
       this.$store.dispatch("addVisitedViews", obj);
     },
+    _promise(){
+      return new Promise((resolve,rejest) =>{
+        resolve();
+        rejest();
+      })
+    },
     getCompanyList() {
       // fetch的跨域请求
       let newToken = "Bearer " + localStorage.getItem("token");
@@ -207,19 +224,18 @@ export default {
           return res.json();
         })
         .then(json => {
-          if (json.status == 1) {
+          console.log("这是companyId", json);
+          if (json.status == 1 && json.result != null) {
             this.selectList = json.result;
             this.firstSelect = this.selectList[0]["companyName"];
             this.defaultValue = this.selectList[0]["companyId"];
-            // 暂时注释
-            this.changeSelect();
+            localStorage.setItem("userId", this.selectList[0]["userId"]);
           }
         });
     }
   },
   created() {
-    // 暂时注释
-    this.getCompanyList();
+    this._promise(this.getCompanyList()).then(this.changeSelect(),this.changeSelect());
   }
 };
 </script>
@@ -243,6 +259,7 @@ ul .el-dropdown-menu__item {
 }
 .el-main {
   cursor: default;
+  padding: 0;
 }
 .dashboard .admin,
 .dashboard .icon {
@@ -259,6 +276,7 @@ ul .el-dropdown-menu__item {
   background-color: rgb(49, 180, 141);
   color: #333;
   line-height: 60px;
+  cursor: default;
 }
 
 .el-aside {

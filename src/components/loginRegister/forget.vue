@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-07-01 16:59:48
+ * @LastEditTime: 2019-07-04 10:12:55
+ * @Author: yuhenglong
+ * @Description: 文件说明: 忘记密码
+ -->
 <template>
   <div class="forget">
     <el-form

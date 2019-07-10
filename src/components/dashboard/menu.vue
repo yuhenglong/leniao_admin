@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-07-01 16:59:48
+ * @LastEditTime: 2019-07-04 09:59:07
+ * @Author: yuhenglong
+ * @Description: 文件说明: menu列表页面
+ -->
 <template>
   <div>
     <!-- 搜索栏 -->

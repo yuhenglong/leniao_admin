@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-07-01 16:59:48
+ * @LastEditTime: 2019-07-04 10:13:21
+ * @Author: yuhenglong
+ * @Description: 文件说明: 注册
+ -->
 <template>
   <div class="register">
     <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" class="demo-ruleForm">
@@ -34,7 +40,8 @@
           placeholder="请输入验证码"
           class="auth_code"
         ></el-input>
-        <el-button type="primary" @click="getCode('ruleForm')" class="get_code">获取验证码</el-button>
+        <span v-show="sendAuthCode" type="primary" @click="getCode('ruleForm')" class="get_code">获取验证码</span>
+        <span v-show="!sendAuthCode" type="primary" @click="getCode('ruleForm')" class="get_code">{{ auth_time + "秒后重新获取"}}</span>
       </el-form-item>
       <el-form-item>
         <el-button class="el-button el-button--primary next" @click="submitForm('ruleForm')">下一步</el-button>
@@ -82,8 +89,10 @@ export default {
         code: "",
         checkPass: ""
       },
+      sendAuthCode: true /*布尔值，通过v-show控制显示‘获取按钮’还是‘倒计时’ */,
+      auth_time: 0, /*倒计时 计数器*/
       rules: {
-        phoneNumber: [{ validator: validatePhoneNumber, trigger: "blur" }],
+        phonenumber: [{ validator: validatePhoneNumber, trigger: "blur" }],
         checkPass: [{ validator: validatePass2, trigger: "blur" }],
         password: [
           { validator: validatePass, trigger: "blur" },
@@ -121,8 +130,17 @@ export default {
       });
     },
     getCode(phoneNum) {
+      this.sendAuthCode = false;
+      this.auth_time = 60;
+      let auth_timetimer = setInterval(() => {
+        this.auth_time--;
+        if (this.auth_time <= 0) {
+          this.sendAuthCode = true;
+          clearInterval(auth_timetimer);
+        }
+      }, 1000);
       let url = "/user/code/" + this.ruleForm.phonenumber;
-      console.log(url)
+      console.log(url);
       this.axios
         .get(url, this.ruleForm)
         .then(res => {
@@ -139,7 +157,7 @@ export default {
 };
 </script>
 <style lang="" scoped>
-  .register {
+.register {
   width: 100%;
   height: 100%;
   background: url(../../../static/images/bg.jpg) no-repeat center center;

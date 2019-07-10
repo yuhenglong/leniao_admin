@@ -1,13 +1,13 @@
 <!--
  * @Date: 2019-06-26 14:48:46
- * @LastEditTime: 2019-07-08 10:02:13
+ * @LastEditTime: 2019-07-08 16:34:02
  * @Author: guobinggui
  * @Description: 文件说明: 修改用户页面
  -->
 <template>
   <div>
     <h4>基本信息</h4>
-    <hr />
+    <hr>
     <el-form :model="appForm" :rules="rules" ref="appForm" label-width="80px" class="demo-ruleForm">
       <el-form-item label="用户姓名" prop="name">
         <span>{{ appForm.name }}</span>
@@ -17,7 +17,7 @@
       </el-form-item>
       <!-- 岗位要调接口读数据 -->
       <el-form-item label="岗位" prop="posts">
-        <el-select v-model="appForm.posts" multiple placeholder="请选择岗位" value-key="postId">
+        <el-select v-model="appForm.posts" multiple placeholder="请选择岗位" value-key="postId"> 
           <el-option
             v-for="item in postsList"
             :key="item.postId"
@@ -31,22 +31,21 @@
         <el-checkbox-group v-model="appForm.roles">
           <el-checkbox
             v-for="item in rolesList"
-            :key="item.value"
-            :label="item"
-            :value="item"
+            :key="item.roleId"
+            :value="item.roleId"
+            :label="item.roleName"
           >{{ item.roleName }}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item label="归属部门" prop="deptId">
-        <!-- <el-select v-model="appForm.deptId" placeholder="请选择部门">
+        <el-select v-model="appForm.deptId" placeholder="请选择部门">
           <el-option
-            v-for="item in deptTree"
+            v-for="item in deptsList"
             :key="item.value"
             :label="item.deptName"
             :value="item.deptId"
           >{{ item.deptName }}</el-option>
-        </el-select> -->
-        <el-cascader v-model="selDeptId" :options="deptTree" :props="defaultOptions"></el-cascader>
+        </el-select>
       </el-form-item>
       <!-- 技能要调接口读数据 -->
       <el-form-item label="技能" prop="skills">
@@ -56,7 +55,6 @@
             :key="item.skillId"
             :value="item.skillId"
             :label="item"
-            @change="consoleJson"
           >{{ item.skillName }}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
@@ -64,7 +62,7 @@
         <el-input type="textarea" v-model="appForm.desc"></el-input>
       </el-form-item>-->
       <el-form-item>
-        <el-button type="primary" @click="consoleInfo">立即创建</el-button>
+        <el-button type="primary" @click="consoleInfo">保存修改</el-button>
         <el-button @click="resetForm('appForm')" type="warning">取消</el-button>
       </el-form-item>
     </el-form>
@@ -77,14 +75,18 @@ export default {
   data() {
     return {
       appForm: {
+        // companyId: localStorage.getItem("companyId"),
+        // name: JSON.parse(localStorage.getItem("userInfo")).name,
+        // userId: JSON.parse(localStorage.getItem("userInfo")).userId,
+        // phoneNumber: JSON.parse(localStorage.getItem("userInfo")).phoneNumber,
         companyId: localStorage.getItem("companyId"),
-        userId: localStorage.getItem("userId"),
-        name: localStorage.getItem("userName"),
-        phoneNumber: localStorage.getItem("phoneNumeber"),
+        name: '',
+        userId: '',
+        phoneNumber: '',
         posts: [],
+        skills: [],
+        deptId: [],
         roles: [],
-        deptId: "",
-        skills: []
         // desc: ""
       },
       rules: {
@@ -125,60 +127,37 @@ export default {
       deptsList: [],
       skillsList: [],
       rolesList: [],
-      deptTree: [],
-      selDeptId: [],
-      defaultOptions: {
-        expandTrigger: "hover",
-        value: "deptId",
-        label: "deptName",
-        children: "children"
-      },
+      findUserId: localStorage.getItem("findUserId")
     };
   },
   methods: {
-    consoleJson() {
-      console.log(this.appForm.skills);
+    con(item) {
+      console.log(item)
+    },
+    refresh() {
+      this.$router.go(0);
+    },
+    consoleSkill() {
+      console.log(this.appForm.skills)
     },
     consoleInfo() {
-      this.appForm.deptId = this.selDeptId.pop()
       console.log(JSON.stringify(this.appForm));
       let that = this;
       this.axios
-        .post("/manage/bind", JSON.stringify(that.appForm), {
+        .post("/manage/updateUser", JSON.stringify(that.appForm),{
           headers: {
             "Content-Type": "application/json"
           }
         })
         .then(res => {
           console.log(res);
-          this.$router.replace("/dashboard/bind");
+          this.$router.replace('/dashboard/userControl')
         })
         .catch(err => {
           console.log(err);
         });
     },
-    /**
-     * @author: guobinggui
-     * @description: 函数说明: 转树形结构
-     * @param {type}
-     * @return:
-     */
-    tree(data, pid) {
-      const result = [];
-      let temp = [];
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].topId == pid) {
-          const obj = data[i];
-          temp = this.tree(data, data[i].deptId);
-          if (temp.length > 0) {
-            obj.children = temp;
-          }
-          result.push(obj);
-        }
-      }
-      console.log("result", result);
-      return result;
-    },
+
     // 获取公司岗位列表
     getCompanyPostsList() {
       let that = this;
@@ -188,16 +167,16 @@ export default {
           qs.stringify({ companyId: that.appForm.companyId })
         )
         .then(res => {
-          let postList = res.data.result;
-          for (let i = 0; i < postList.length; i++) {
+          let postList = res.data.result
+          for(let i = 0; i < postList.length; i++) {
             let postObj = {
               postId: postList[i].postId,
               postName: postList[i].postName
-            };
-            that.postsList.push(postObj);
+            }
+            that.postsList.push(postObj)
           }
-          console.log("岗位:");
-          console.log(that.postsList);
+          // console.log("岗位:");
+          // console.log(that.postsList);
         })
         .catch(err => {
           console.log(err);
@@ -207,21 +186,20 @@ export default {
     /**
      * @author: guobinggui
      * @description: 函数说明:获取公司部门列表
-     * @param {type}
-     * @return:
+     * @param {type} 
+     * @return: 
      */
     getCompanyDeptsList() {
       let that = this;
       this.axios
         .post(
           "/dept/selectDept",
-          qs.stringify({ companyId: that.appForm.companyId, delFlag: 0 })
+          qs.stringify({ companyId: that.appForm.companyId })
         )
         .then(res => {
-          console.log("部门");
+          // console.log("部门");
+          // console.log(res);
           that.deptsList = res.data.result;
-          this.deptTree = this.tree(this.deptsList, 0);
-          console.log(this.deptTree);
         })
         .catch(err => {
           console.log(err);
@@ -253,15 +231,15 @@ export default {
         )
         .then(res => {
           let skillList = res.data.result;
-          for (let i = 0; i < skillList.length; i++) {
-            let skillObj = {
+          for(let i = 0; i < skillList.length; i++) {
+            let skillObj = { 
               skillId: skillList[i].id,
               skillName: skillList[i].name
-            };
-            that.skillsList.push(skillObj);
+            }
+            that.skillsList.push(skillObj)
           }
-          console.log("技能");
-          console.log(that.skillsList);
+          // console.log("技能");
+          // console.log(that.skillsList);
         })
         .catch(err => {
           console.log(err);
@@ -278,35 +256,45 @@ export default {
         )
         .then(res => {
           let roleList = res.data.result;
-          for (let i = 0; i < roleList.length; i++) {
-            let roleObj = {
+          for(let i = 0; i < roleList.length; i++) {
+            let roleObj = { 
               roleId: roleList[i].id,
               roleName: roleList[i].name
-            };
-            that.rolesList.push(roleObj);
+            }
+            that.rolesList.push(roleObj)
           }
-          console.log("角色");
-          console.log(res);
+          // console.log("角色");
+          // console.log(res);
         })
         .catch(err => {
           console.log(err);
         });
     },
-
+    
     resetForm(formName) {
       this.$refs[formName].resetFields();
     }
   },
-  // created() {
-  //   this.getCompanyPostsList()
+  // beforeCreate() {
+  //   this.$router.replace('/dashboard/updateUserInfo')
   // },
-  mounted() {
+  created() {
     // 页面渲染完成获取数据
     this.getCompanyPostsList();
     this.getCompanyDeptsList();
     this.getUserInfo();
     this.getSkillList();
     this.getRoleList();
+    this.appForm.name = JSON.parse(localStorage.getItem("userInfo")).name,
+    this.appForm.userId = JSON.parse(localStorage.getItem("userInfo")).userId,
+    this.appForm.phoneNumber = JSON.parse(localStorage.getItem("userInfo")).phoneNumber
+  },
+  computed: {
+    newAppForm: {
+      get: function() {
+        return this.appForm;
+      }
+    }
   }
 };
 </script>

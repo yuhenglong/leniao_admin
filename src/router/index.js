@@ -28,9 +28,16 @@ const menu = () => import('@/components/dashboard/menu')
 const postManage = () => import('@/components/dashboard/postManage')
 const bindCompany = () => import('@/components/dashboard/bindCompany')
 const updateUser = () => import('@/components/dashboard/updateUser')
+const updateUserInfo = () => import('@/components/dashboard/updateUserInfo')
+const companyList = () => import('@/components/dashboard/companyList')
+const themeManage = () => import('@/components/dashboard/themeManage')
+const recordCompany = () => import('@/components/dashboard/recordCompany')
+const detailPro = () => import('@/components/dashboard/detailPro')
+const findCompany = () => import('@/components/dashboard/findCompany')
+const createCom = () => import('@/components/dashboard/createCom')
+const skillManage = () => import('@/components/dashboard/skillManage')
+const mainyu = () => import('@/components/dialog/mainyu')
 
-// 引入 vuex中store
-import store from '@/store/store'
 
 Vue.use(Router)
 
@@ -135,6 +142,33 @@ const router = new Router({
         }, {
           path: '/dashboard/updateUser',
           component: updateUser
+        }, {
+          path: '/dashboard/updateUserInfo',
+          component: updateUserInfo
+        }, {
+          path: '/dashboard/companyList',
+          component: companyList
+        },{
+          path: '/dashboard/detailPro',
+          component: detailPro
+        },{
+          path: '/dashboard/findCompany',
+          component: findCompany
+        },{
+          path: '/dashboard/themeManage',
+          component: themeManage
+        },{
+          path: '/dashboard/recordCompany', 
+          component: recordCompany
+        },{
+          path: '/dashboard/createCom',
+          component: createCom
+        },{
+          path: '/dashboard/skillManage',
+          component: skillManage
+        },{
+          path: '/dialog/mainyu',
+          component: mainyu
         }]
     }
   ]

@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-07-01 16:59:48
+ * @LastEditTime: 2019-07-04 10:12:47
+ * @Author: yuhenglong
+ * @Description: 文件说明: 登录页面
+ -->
 <template>
   <div class="detaillogin">
     <el-form
