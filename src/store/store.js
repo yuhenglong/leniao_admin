@@ -26,7 +26,9 @@ const state = {
     companyId: null,
     // tab 
     visitedviews: [],
-    firData:[]
+    firData:[],
+    // 角色管理的menu
+    firMenus:[]
 }
 
 const getters = {
@@ -62,6 +64,10 @@ const mutations = {
     },
     setDeptsData(state, newDeptsData) {
         state.deptsData = newDeptsData
+    },
+    setFilterMenu(state,newFilterMenu){
+        state.firMenus = newFilterMenu;
+        console.log('menu的vuex',state.firMenus)
     },
     ADD_VISITED_VIEWS: (state, view) => {//打开新页签--添加路由数据的方法      if(state.visitedviews.some(v=>v.path==view.path))return;
         // 数组在存放在vuex之前进行验证去重
@@ -113,6 +119,9 @@ const actions = {
     },
     setRoleList({ commit, state }) {
         commit('setRoleManage', state)
+    },
+    setFilterMenu({commit,state}){
+        commit('setFilterMenu',state)
     },
     addVisitedViews({ commit }, view) {//通过解构赋值得到commit方法
         commit('ADD_VISITED_VIEWS', view)//去触发ADD_VISITED_VIEWS，并传入参数

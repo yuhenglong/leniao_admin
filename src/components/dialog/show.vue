@@ -11,6 +11,9 @@ export default {
   },
   methods: {
     getList() {
+      return new Promise((resolve,reject) =>{
+  
+      })
       const url =
         "/comapi/company/switch/" + "302364aauyhf401ats7c1113f55b2e41";
       this.axios.get(url).then(res => {
@@ -25,17 +28,15 @@ export default {
     },
     promis: async function() {
       let text = await this.getList();
+      // let text = await this.getPro(this.getList());
       console.log("这是text", this.resa);
     }
   },
   created() {
-    Bus.$on("getTarget", target => {
-      console.log(target);
-    });
-    this.getPro(this.getList()).then(() => {
-      const a = this.resa +10;
-      console.log('我是大水货啊',a)
-    });
+    // Bus.$on("getTarget", target => {
+    //   console.log(target);
+    // });
+    this.promis();
   }
 };
 </script>

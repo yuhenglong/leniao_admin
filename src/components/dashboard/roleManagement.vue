@@ -1,6 +1,6 @@
 <!--
  * @Date: 2019-07-01 16:59:48
- * @LastEditTime: 2019-07-10 19:39:06
+ * @LastEditTime: 2019-07-11 20:10:58
  * @Author: yuhenglong
  * @Description: 文件说明: 角色管理
  -->
@@ -127,7 +127,7 @@
           <el-input placeholder="请输入" v-model="row.status"></el-input>
         </el-form-item>
         <el-form-item label="菜单权限">
-          <el-tree :data="data2" show-checkbox node-key="id" :props="defaultProps"></el-tree>
+          <el-tree :data="firMenus" show-checkbox node-key="menu_id" :props="defaultProps" @getCurrentNode="getCurrentNode" ref="tree"></el-tree>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -144,15 +144,18 @@
 </style>
 <script>
 import qs from "qs";
+import { log } from 'util';
 export default {
   name: "userControl",
   data() {
     return {
+      ls_companyId: "",
       dialogVisible: false,
       state: null,
       dateRange: null,
       user: "",
       region: "",
+      userId: "",
       test: null,
       test1: null,
       selectedRows: [],
@@ -228,6 +231,7 @@ export default {
         { label: "创建时间", prop: "createTime" }
       ],
       isCheckAll: true,
+      firMenus: "",
       tableData: [],
       multipleSelection: [],
       data2: [
@@ -304,7 +308,8 @@ export default {
                   label: "三级 1-1-1"
                 }
               ]
-            },{
+            },
+            {
               id: 4,
               label: "通知公告",
               children: [
@@ -313,7 +318,8 @@ export default {
                   label: "三级 1-1-1"
                 }
               ]
-            },{
+            },
+            {
               id: 4,
               label: "日志管理",
               children: [
@@ -368,7 +374,7 @@ export default {
       ],
       defaultProps: {
         children: "children",
-        label: "label"
+        label: "name"
       }
     };
   },
@@ -376,6 +382,12 @@ export default {
     this.getList();
   },
   methods: {
+    getCurrentNode(a,b,c){
+      console.log(a,b,c)
+    },
+    con() {
+      console.log("这是vuex的menu", this.setFilterMenu);
+    },
     getList() {
       this.axios.get("/comapi/role/myCompanyRole").then(res => {
         console.log("这是返回的数据", res);
@@ -387,6 +399,7 @@ export default {
         }
       });
     },
+    getMenu() {},
     confirm() {
       let newToken = "Bearer " + localStorage.getItem("token");
       fetch("/comapi/role", {
@@ -396,12 +409,26 @@ export default {
           Authorization: newToken,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          body: this.row
-        })
+        body: JSON.stringify({body:this.row})
       }).then(res => {
         console.log(res);
       });
+      // 获取树形组件的选中项
+      console.log('这是选中的tree',this.$refs.tree.getCheckedNodes(false,true));
+      let menuIdArr = this.$refs.tree.getCheckedNodes(false,true);
+      let menuDetailArr = [];
+      for(let i = 0;i<menuIdArr.length;i++){
+        menuDetailArr.push(menuIdArr[i].menu_id);
+      }
+      // console.log('这是menu的数组',menuDetailArr)
+      const params = {
+        "roleId":this.row.id,
+        "setParam":menuDetailArr
+      }
+      console.log('这是params',params);
+      this.axios.post('bind/roleBindMenu',JSON.stringify(params)).then(res =>{
+        console.log('这是返回给后端的树',res)
+      })
     },
     del(row) {
       let that = this;
@@ -414,6 +441,46 @@ export default {
     query() {},
     onSearch() {},
     reset() {},
+    _promise() {
+      return new Promise(resolve => {
+        resolve();
+      });
+    },
+    getMenuTree() {
+      const params = {
+        access_token: localStorage.getItem("token"),
+        companyId: this.ls_companyId,
+        userId: this.userId
+      };
+      this.axios
+        .get("/comapi/menu/myCompanyMenu", qs.stringify(params))
+        .then(res => {
+          console.log("这是树", res);
+          this.tree(res.data.result.records);
+        });
+    },
+    tree(_array) {
+      let tree = _array.filter(father => {
+        let children = _array.filter(child => {
+          return father.menu_id === child.parent_id;
+        });
+        father.children = children;
+        if (children.length === 0) {
+          father.isChildren = false;
+        } else {
+          father.isChildren = true;
+        }
+        return father.parent_id == 0;
+      });
+      this.firMenus = tree;
+      console.log("这是过滤树", typeof(this.firMenus));
+    },
+    getUserId() {
+      this.axios.get("/comUser/user/myInfo").then(res => {
+        console.log("这是数据", res);
+        this.userId = res.data.result.userId;
+      });
+    },
     onEdit(row) {
       this.dialogVisible = true;
       console.log(row);
@@ -422,6 +489,8 @@ export default {
       this.row.roleKey = row.roleKey;
       this.row.roleSort = row.roleSort;
       this.row.status = row.status;
+      this.ls_companyId = row.companyId;
+      this._promise(this.getUserId()).then(this.getMenuTree());
     },
     onSelectionChange(rows) {
       this.selectedRows = rows.map(item => item.userId);
@@ -467,7 +536,14 @@ export default {
       this.newObjArr = arr;
     }
   },
-  computed: {}
+  computed: {
+    setFilterMenu() {
+      return localStorage.getItem("tree");
+    }
+  },
+  created() {
+    this.con();
+  }
 };
 </script>
 <style lang="scss" scoped>

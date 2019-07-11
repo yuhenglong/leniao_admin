@@ -11,7 +11,7 @@
 >>>>>>> 88e2d510b396e4f6863b5795cca1632353e11849
 >>>>>>> 64ea60215bdf52e390ae71a2608503a06087a2e7
 =======
- * @LastEditTime: 2019-07-10 17:27:09
+ * @LastEditTime: 2019-07-11 10:39:20
 >>>>>>> 合并代码
  * @Author: yuhenglong
  * @Description: 文件说明: 首页
@@ -154,8 +154,10 @@ export default {
         }
         return father.parentId == 0;
       });
-
       this.firMenus = tree;
+      console.log('这是树',tree)
+      localStorage.setItem('tree',tree)
+      // this.$store.dispatch('setFilterMenu',tree);
     },
     loadingData() {
       // 封装后的请求
