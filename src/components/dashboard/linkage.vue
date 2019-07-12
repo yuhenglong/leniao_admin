@@ -1,6 +1,6 @@
 <!--
  * @Date: 2019-07-01 16:59:48
- * @LastEditTime: 2019-07-04 09:58:42
+ * @LastEditTime: 2019-07-12 17:05:28
  * @Author: yuhenglong
  * @Description: 文件说明: 省市区三级联动
  -->
@@ -67,8 +67,8 @@ export default {
   methods:{
     // 加载china地点数据，三级
       getCityData:function(){
-        var that = this
-        axios.get(this.mapJson).then(function(response){
+        var that = this;
+        this.axios.get(this.mapJson).then(function(response){
           if (response.status==200) {
             var data = response.data
             that.province = []

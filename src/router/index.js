@@ -37,6 +37,7 @@ const findCompany = () => import('@/components/dashboard/findCompany')
 const createCom = () => import('@/components/dashboard/createCom')
 const skillManage = () => import('@/components/dashboard/skillManage')
 const mainyu = () => import('@/components/dialog/mainyu')
+const orderListMana = () => import('@/components/dashboard/orderListMana')
 
 
 Vue.use(Router)
@@ -166,6 +167,9 @@ const router = new Router({
         },{
           path: '/dashboard/skillManage',
           component: skillManage
+        },{
+          path: '/dashboard/orderListMana',
+          component: orderListMana  
         },{
           path: '/dialog/mainyu',
           component: mainyu

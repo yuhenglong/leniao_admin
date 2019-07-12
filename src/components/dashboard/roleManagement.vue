@@ -1,6 +1,6 @@
 <!--
  * @Date: 2019-07-01 16:59:48
- * @LastEditTime: 2019-07-11 20:10:58
+ * @LastEditTime: 2019-07-12 19:16:17
  * @Author: yuhenglong
  * @Description: 文件说明: 角色管理
  -->
@@ -127,7 +127,14 @@
           <el-input placeholder="请输入" v-model="row.status"></el-input>
         </el-form-item>
         <el-form-item label="菜单权限">
-          <el-tree :data="firMenus" show-checkbox node-key="menu_id" :props="defaultProps" @getCurrentNode="getCurrentNode" ref="tree"></el-tree>
+          <el-tree
+            :data="firMenus"
+            show-checkbox
+            node-key="menu_id"
+            :props="defaultProps"
+            @getCurrentNode="getCurrentNode"
+            ref="tree"
+          ></el-tree>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -144,7 +151,7 @@
 </style>
 <script>
 import qs from "qs";
-import { log } from 'util';
+import { log } from "util";
 export default {
   name: "userControl",
   data() {
@@ -203,6 +210,7 @@ export default {
         roleSort: "",
         status: ""
       },
+      params_two:'',
       value1: "",
       value2: "",
       currentPage4: 1,
@@ -233,145 +241,8 @@ export default {
       isCheckAll: true,
       firMenus: "",
       tableData: [],
+      treeArray:'',
       multipleSelection: [],
-      data2: [
-        {
-          id: 1,
-          label: "系统管理",
-          children: [
-            {
-              id: 4,
-              label: "用户管理",
-              children: [
-                {
-                  id: 9,
-                  label: "三级 1-1-1"
-                }
-              ]
-            },
-            {
-              id: 4,
-              label: "角色管理",
-              children: [
-                {
-                  id: 9,
-                  label: "三级 1-1-1"
-                }
-              ]
-            },
-            {
-              id: 4,
-              label: "菜单管理",
-              children: [
-                {
-                  id: 9,
-                  label: "三级 1-1-1"
-                }
-              ]
-            },
-            {
-              id: 4,
-              label: "部门管理",
-              children: [
-                {
-                  id: 9,
-                  label: "三级 1-1-1"
-                }
-              ]
-            },
-            {
-              id: 4,
-              label: "岗位管理",
-              children: [
-                {
-                  id: 9,
-                  label: "三级 1-1-1"
-                }
-              ]
-            },
-            {
-              id: 4,
-              label: "字典管理",
-              children: [
-                {
-                  id: 9,
-                  label: "三级 1-1-1"
-                }
-              ]
-            },
-            {
-              id: 4,
-              label: "参数设置",
-              children: [
-                {
-                  id: 9,
-                  label: "三级 1-1-1"
-                }
-              ]
-            },
-            {
-              id: 4,
-              label: "通知公告",
-              children: [
-                {
-                  id: 9,
-                  label: "三级 1-1-1"
-                }
-              ]
-            },
-            {
-              id: 4,
-              label: "日志管理",
-              children: [
-                {
-                  id: 9,
-                  label: "三级 1-1-1"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          id: 2,
-          label: "系统监控",
-          children: [
-            {
-              id: 5,
-              label: "在线用户"
-            },
-            {
-              id: 6,
-              label: "定时任务"
-            },
-            {
-              id: 6,
-              label: "数据监控"
-            },
-            {
-              id: 6,
-              label: "服务监控"
-            }
-          ]
-        },
-        {
-          id: 3,
-          label: "系统工具",
-          children: [
-            {
-              id: 7,
-              label: "表单构建"
-            },
-            {
-              id: 8,
-              label: "代码生成"
-            },
-            {
-              id: 8,
-              label: "系统接口"
-            }
-          ]
-        }
-      ],
       defaultProps: {
         children: "children",
         label: "name"
@@ -382,11 +253,8 @@ export default {
     this.getList();
   },
   methods: {
-    getCurrentNode(a,b,c){
-      console.log(a,b,c)
-    },
-    con() {
-      console.log("这是vuex的menu", this.setFilterMenu);
+    getCurrentNode(a, b, c) {
+      console.log(a, b, c);
     },
     getList() {
       this.axios.get("/comapi/role/myCompanyRole").then(res => {
@@ -409,26 +277,28 @@ export default {
           Authorization: newToken,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({body:this.row})
+        body: JSON.stringify({ body: this.row })
       }).then(res => {
         console.log(res);
       });
       // 获取树形组件的选中项
-      console.log('这是选中的tree',this.$refs.tree.getCheckedNodes(false,true));
-      let menuIdArr = this.$refs.tree.getCheckedNodes(false,true);
+      console.log(
+        "这是选中的tree",
+        this.$refs.tree.getCheckedNodes(false, true)
+      );
+      let menuIdArr = this.$refs.tree.getCheckedNodes(false, true);
       let menuDetailArr = [];
-      for(let i = 0;i<menuIdArr.length;i++){
-        menuDetailArr.push(menuIdArr[i].menu_id);
+      for (let i = 0; i < menuIdArr.length; i++) {
+        menuDetailArr.push(menuIdArr[i].menuId);
       }
-      // console.log('这是menu的数组',menuDetailArr)
       const params = {
-        "roleId":this.row.id,
-        "setParam":menuDetailArr
-      }
-      console.log('这是params',params);
-      this.axios.post('bind/roleBindMenu',JSON.stringify(params)).then(res =>{
-        console.log('这是返回给后端的树',res)
-      })
+        params:{roleId: this.row.id},
+        setParam: menuDetailArr
+      };
+      console.log("这是params", params);
+      this.axios.post("bind/roleBindMenu", JSON.stringify(params)).then(res => {
+        console.log("这是返回给后端的树", res);
+      });
     },
     del(row) {
       let that = this;
@@ -441,11 +311,6 @@ export default {
     query() {},
     onSearch() {},
     reset() {},
-    _promise() {
-      return new Promise(resolve => {
-        resolve();
-      });
-    },
     getMenuTree() {
       const params = {
         access_token: localStorage.getItem("token"),
@@ -453,16 +318,17 @@ export default {
         userId: this.userId
       };
       this.axios
-        .get("/comapi/menu/myCompanyMenu", qs.stringify(params))
+        .post("/comapi/menu/myCompanyMenu", qs.stringify(params))
         .then(res => {
-          console.log("这是树", res);
-          this.tree(res.data.result.records);
+          if (res.data.status == 1) {
+            this.tree(res.data.result);
+          }
         });
     },
-    tree(_array) {
-      let tree = _array.filter(father => {
-        let children = _array.filter(child => {
-          return father.menu_id === child.parent_id;
+    tree(arr) {
+      let tree = arr.filter(father => {
+        let children = arr.filter(child => {
+          return father.menuId === child.parentId;
         });
         father.children = children;
         if (children.length === 0) {
@@ -470,15 +336,16 @@ export default {
         } else {
           father.isChildren = true;
         }
-        return father.parent_id == 0;
+        return father.parentId == 0;
       });
       this.firMenus = tree;
-      console.log("这是过滤树", typeof(this.firMenus));
+      console.log("这是过滤树",tree);
     },
     getUserId() {
       this.axios.get("/comUser/user/myInfo").then(res => {
-        console.log("这是数据", res);
+        console.log("这是UserId数据", res);
         this.userId = res.data.result.userId;
+        this.getMenuTree(this.userId);
       });
     },
     onEdit(row) {
@@ -490,7 +357,8 @@ export default {
       this.row.roleSort = row.roleSort;
       this.row.status = row.status;
       this.ls_companyId = row.companyId;
-      this._promise(this.getUserId()).then(this.getMenuTree());
+      const promiseObj = new Promise(this.getUserId);
+      promiseObj.then(this.getMenuTree)
     },
     onSelectionChange(rows) {
       this.selectedRows = rows.map(item => item.userId);
@@ -535,14 +403,6 @@ export default {
       });
       this.newObjArr = arr;
     }
-  },
-  computed: {
-    setFilterMenu() {
-      return localStorage.getItem("tree");
-    }
-  },
-  created() {
-    this.con();
   }
 };
 </script>
