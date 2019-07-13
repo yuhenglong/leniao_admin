@@ -1,6 +1,6 @@
 <!--
  * @Date: 2019-07-01 16:59:48
- * @LastEditTime: 2019-07-12 19:16:17
+ * @LastEditTime: 2019-07-13 16:18:34
  * @Author: yuhenglong
  * @Description: 文件说明: 角色管理
  -->
@@ -130,11 +130,14 @@
           <el-tree
             :data="firMenus"
             show-checkbox
-            node-key="menu_id"
+            node-key="menuId"
             :props="defaultProps"
+            :default-expanded-keys="[]"
+            :default-checked-keys="checkedList"
             @getCurrentNode="getCurrentNode"
             ref="tree"
           ></el-tree>
+                      <!-- @check-change="getCheckedNodes(true)" -->
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -171,6 +174,7 @@ export default {
         user: "",
         region: ""
       },
+      checkedList:[],
       pager: { current: 1, size: 10, total: 0, records: [] },
       pickerOptions: {
         shortcuts: [
@@ -210,7 +214,7 @@ export default {
         roleSort: "",
         status: ""
       },
-      params_two:'',
+      params_two: "",
       value1: "",
       value2: "",
       currentPage4: 1,
@@ -241,7 +245,7 @@ export default {
       isCheckAll: true,
       firMenus: "",
       tableData: [],
-      treeArray:'',
+      treeArray: "",
       multipleSelection: [],
       defaultProps: {
         children: "children",
@@ -253,6 +257,18 @@ export default {
     this.getList();
   },
   methods: {
+    setCheckedKeys(keys, leafOnly) {
+      console.log(keys, leafOnly);
+    },
+    handleCheckChange(data, checked, indeterminate) {
+      console.log(data, checked, indeterminate);
+    },
+    getCheckedNodes(boole){
+      console.log(this.$ref.tree)
+    },
+    handleNodeClick(data) {
+      console.log(data);
+    },
     getCurrentNode(a, b, c) {
       console.log(a, b, c);
     },
@@ -292,13 +308,25 @@ export default {
         menuDetailArr.push(menuIdArr[i].menuId);
       }
       const params = {
-        params:{roleId: this.row.id},
-        setParam: menuDetailArr
+        params:{
+            roleId: this.row.id,
+        },
+        setParam: menuDetailArr,
+        companyId:this.ls_companyId
       };
       console.log("这是params", params);
-      this.axios.post("bind/roleBindMenu", JSON.stringify(params)).then(res => {
+      this.axios.post("/comapi/bind/roleBindMenu", JSON.stringify(params),{
+        headers:{
+            "Content-Type":"application/json;charset=UTF-8"
+          }
+      }).then(res => {
         console.log("这是返回给后端的树", res);
+        if(res.data.status ==1){
+          this.dialogVisible = false;
+          this.$message('权限设置已经成功！！');
+        }
       });
+
     },
     del(row) {
       let that = this;
@@ -313,15 +341,35 @@ export default {
     reset() {},
     getMenuTree() {
       const params = {
-        access_token: localStorage.getItem("token"),
+        // access_token: localStorage.getItem("token"),
         companyId: this.ls_companyId,
-        userId: this.userId
+        userId: this.userId,
+        params:{
+          roleId:this.row.id
+        }
       };
+      // 这是旧的menu树形结构
+      // this.axios
+      //   .post("/comapi/menu/myCompanyMenu", qs.stringify(params))
+      //   .then(res => {
+      //     console.log('这是check的信息',res)
+      //     if (res.data.status == 1) {
+      //       this.tree(res.data.result);
+      //     }
+      //   });
+      // 这是最新的menu结构
+
       this.axios
-        .post("/comapi/menu/myCompanyMenu", qs.stringify(params))
+        .post("/comapi/menu/comMenuAndRoleMenus",JSON.stringify(params),{
+          headers:{
+            "Content-Type":"application/json;charset=UTF-8"
+          }
+        })
         .then(res => {
+          console.log('这是最新的check的信息',res)
           if (res.data.status == 1) {
-            this.tree(res.data.result);
+            this.checkedList = res.data.result.rMenuIds;
+            this.tree(res.data.result.menuAll);
           }
         });
     },
@@ -339,7 +387,7 @@ export default {
         return father.parentId == 0;
       });
       this.firMenus = tree;
-      console.log("这是过滤树",tree);
+      console.log("这是过滤树", tree);
     },
     getUserId() {
       this.axios.get("/comUser/user/myInfo").then(res => {
@@ -358,7 +406,7 @@ export default {
       this.row.status = row.status;
       this.ls_companyId = row.companyId;
       const promiseObj = new Promise(this.getUserId);
-      promiseObj.then(this.getMenuTree)
+      promiseObj.then(this.getMenuTree);
     },
     onSelectionChange(rows) {
       this.selectedRows = rows.map(item => item.userId);

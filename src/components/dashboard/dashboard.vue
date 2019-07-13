@@ -11,7 +11,7 @@
 >>>>>>> 88e2d510b396e4f6863b5795cca1632353e11849
 >>>>>>> 64ea60215bdf52e390ae71a2608503a06087a2e7
 =======
- * @LastEditTime: 2019-07-11 10:39:20
+ * @LastEditTime: 2019-07-13 15:06:09
 >>>>>>> 合并代码
  * @Author: yuhenglong
  * @Description: 文件说明: 首页
@@ -127,7 +127,9 @@ export default {
     };
   },
   methods: {
-    changeSelect($event) {
+    async changeSelect($event) {
+      // 先等待getCompanyList函数的执行后再执行
+      await this.getCompanyList
       let that = this;
       if ($event) {
         that.defaultValue = $event;
@@ -135,7 +137,6 @@ export default {
       localStorage.setItem("companyId", that.defaultValue);
       const url = "/comapi/company/switch/" + that.defaultValue;
       this.axios.get(url).then(res => {
-        console.log("这是menu", res);
         this.loadingData();
       });
       this.$router.replace("/dashboard/");
@@ -155,7 +156,6 @@ export default {
         return father.parentId == 0;
       });
       this.firMenus = tree;
-      console.log('这是树',tree)
       localStorage.setItem('tree',tree)
       // this.$store.dispatch('setFilterMenu',tree);
     },
@@ -206,12 +206,6 @@ export default {
       };
       this.$store.dispatch("addVisitedViews", obj);
     },
-    _promise(){
-      return new Promise((resolve,rejest) =>{
-        resolve();
-        rejest();
-      })
-    },
     getCompanyList() {
       // fetch的跨域请求
       let newToken = "Bearer " + localStorage.getItem("token");
@@ -237,7 +231,7 @@ export default {
     }
   },
   created() {
-    this._promise(this.getCompanyList()).then(this.changeSelect(),this.changeSelect());
+    this.changeSelect();
   }
 };
 </script>

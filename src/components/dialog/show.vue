@@ -14,8 +14,7 @@ export default {
       return new Promise((resolve,reject) =>{
   
       })
-      const url =
-        "/comapi/company/switch/" + "302364aauyhf401ats7c1113f55b2e41";
+      const url ="/comapi/company/switch/" + "302364aauyhf401ats7c1113f55b2e41";
       this.axios.get(url).then(res => {
         console.log("这是XX", res);
         this.resa = res.data.status;
