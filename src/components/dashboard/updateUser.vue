@@ -1,6 +1,6 @@
 <!--
  * @Date: 2019-06-26 14:48:46
- * @LastEditTime: 2019-07-08 10:02:13
+ * @LastEditTime: 2019-07-09 11:49:13
  * @Author: guobinggui
  * @Description: 文件说明: 修改用户页面
  -->
@@ -45,7 +45,7 @@
             :label="item.deptName"
             :value="item.deptId"
           >{{ item.deptName }}</el-option>
-        </el-select> -->
+        </el-select>-->
         <el-cascader v-model="selDeptId" :options="deptTree" :props="defaultOptions"></el-cascader>
       </el-form-item>
       <!-- 技能要调接口读数据 -->
@@ -56,7 +56,6 @@
             :key="item.skillId"
             :value="item.skillId"
             :label="item"
-            @change="consoleJson"
           >{{ item.skillName }}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
@@ -78,9 +77,9 @@ export default {
     return {
       appForm: {
         companyId: localStorage.getItem("companyId"),
-        userId: localStorage.getItem("userId"),
-        name: localStorage.getItem("userName"),
-        phoneNumber: localStorage.getItem("phoneNumeber"),
+        userId: JSON.parse(localStorage.getItem("addUser")).userId,
+        name: JSON.parse(localStorage.getItem("addUser")).userName,
+        phoneNumber: JSON.parse(localStorage.getItem("addUser")).phone,
         posts: [],
         roles: [],
         deptId: "",
@@ -132,15 +131,12 @@ export default {
         value: "deptId",
         label: "deptName",
         children: "children"
-      },
+      }
     };
   },
   methods: {
-    consoleJson() {
-      console.log(this.appForm.skills);
-    },
     consoleInfo() {
-      this.appForm.deptId = this.selDeptId.pop()
+      this.appForm.deptId = this.selDeptId.pop();
       console.log(JSON.stringify(this.appForm));
       let that = this;
       this.axios
@@ -150,8 +146,14 @@ export default {
           }
         })
         .then(res => {
-          console.log(res);
-          this.$router.replace("/dashboard/bind");
+          if (res.data.status == 1) {
+            this.$router.replace("/dashboard/bind");
+          } else if (res.data.status == 301) {
+            this.$message({
+              message: res.data.message,
+              type: "warning"
+            });
+          }
         })
         .catch(err => {
           console.log(err);
@@ -176,7 +178,6 @@ export default {
           result.push(obj);
         }
       }
-      console.log("result", result);
       return result;
     },
     // 获取公司岗位列表
@@ -196,8 +197,9 @@ export default {
             };
             that.postsList.push(postObj);
           }
-          console.log("岗位:");
-          console.log(that.postsList);
+          // this.postsList = [...new Set(this.postsList)]
+          // console.log("岗位:");
+          // console.log(that.postsList);
         })
         .catch(err => {
           console.log(err);
@@ -218,10 +220,10 @@ export default {
           qs.stringify({ companyId: that.appForm.companyId, delFlag: 0 })
         )
         .then(res => {
-          console.log("部门");
+          // console.log("部门");
           that.deptsList = res.data.result;
           this.deptTree = this.tree(this.deptsList, 0);
-          console.log(this.deptTree);
+          // console.log(this.deptTree);
         })
         .catch(err => {
           console.log(err);
@@ -260,8 +262,9 @@ export default {
             };
             that.skillsList.push(skillObj);
           }
-          console.log("技能");
-          console.log(that.skillsList);
+          this.skillsList = [...new Set(this.skillsList)];
+          // console.log("技能");
+          // console.log(that.skillsList);
         })
         .catch(err => {
           console.log(err);
@@ -285,8 +288,9 @@ export default {
             };
             that.rolesList.push(roleObj);
           }
-          console.log("角色");
-          console.log(res);
+          // this.rolesList = [...new Set(this.rolesList)]
+          // console.log("角色");
+          // console.log(res);
         })
         .catch(err => {
           console.log(err);

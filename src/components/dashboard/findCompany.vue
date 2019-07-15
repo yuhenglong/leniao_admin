@@ -1,6 +1,6 @@
 <!--
  * @Date: 2019-07-04 09:57:48
- * @LastEditTime: 2019-07-06 10:37:32
+ * @LastEditTime: 2019-07-09 10:30:36
  * @Author: guobinggui
  * @Description: 文件说明: 查找公司进行绑定
  -->
@@ -188,6 +188,7 @@ export default {
           console.log('用户', res);
           let user = res.data.result
           this.applyForm.userName = user.name
+          this.applyForm.userId = user.userId
           this.applyForm.phone = user.phonenumber
           this.applyForm.sex = user.sex
         })

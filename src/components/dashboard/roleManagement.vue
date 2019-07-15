@@ -1,6 +1,6 @@
 <!--
  * @Date: 2019-07-01 16:59:48
- * @LastEditTime: 2019-07-13 16:18:34
+ * @LastEditTime: 2019-07-15 11:17:35
  * @Author: yuhenglong
  * @Description: 文件说明: 角色管理
  -->
@@ -243,7 +243,7 @@ export default {
         { label: "创建时间", prop: "createTime" }
       ],
       isCheckAll: true,
-      firMenus: "",
+      firMenus: [],
       tableData: [],
       treeArray: "",
       multipleSelection: [],
@@ -263,7 +263,7 @@ export default {
     handleCheckChange(data, checked, indeterminate) {
       console.log(data, checked, indeterminate);
     },
-    getCheckedNodes(boole){
+    getCheckedNodes(){
       console.log(this.$ref.tree)
     },
     handleNodeClick(data) {
@@ -284,6 +284,12 @@ export default {
       });
     },
     getMenu() {},
+    /**
+     * @author: guobinggui
+     * @description: 函数说明: 提交修改请求
+     * @param {type} 
+     * @return: 
+     */
     confirm() {
       let newToken = "Bearer " + localStorage.getItem("token");
       fetch("/comapi/role", {
@@ -300,9 +306,11 @@ export default {
       // 获取树形组件的选中项
       console.log(
         "这是选中的tree",
-        this.$refs.tree.getCheckedNodes(false, true)
+        // this.$refs.tree.getCheckedNodes(false, true)
+        this.$refs.tree.getCheckedNodes()
       );
-      let menuIdArr = this.$refs.tree.getCheckedNodes(false, true);
+      // let menuIdArr = this.$refs.tree.getCheckedNodes(false, true);
+      let menuIdArr = this.$refs.tree.getCheckedNodes();
       let menuDetailArr = [];
       for (let i = 0; i < menuIdArr.length; i++) {
         menuDetailArr.push(menuIdArr[i].menuId);

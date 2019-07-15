@@ -11,7 +11,7 @@
 >>>>>>> 88e2d510b396e4f6863b5795cca1632353e11849
 >>>>>>> 64ea60215bdf52e390ae71a2608503a06087a2e7
 =======
- * @LastEditTime: 2019-07-13 15:06:09
+ * @LastEditTime: 2019-07-15 11:54:52
 >>>>>>> 合并代码
  * @Author: yuhenglong
  * @Description: 文件说明: 首页
@@ -129,7 +129,7 @@ export default {
   methods: {
     async changeSelect($event) {
       // 先等待getCompanyList函数的执行后再执行
-      await this.getCompanyList
+      await this.getCompanyList()
       let that = this;
       if ($event) {
         that.defaultValue = $event;

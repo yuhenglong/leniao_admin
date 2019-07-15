@@ -1,7 +1,7 @@
 <template>
 <!--
  * @Date: 2019-06-26 09:29:48
- * @LastEditTime: 2019-06-28 11:35:17
+ * @LastEditTime: 2019-07-09 10:25:35
  * @Author: guobinggui
  * @Description: 文件说明: 绑定公司页面
  -->
@@ -156,22 +156,17 @@ export default {
     
     // 审核通过
     agreeApp(row) {
-      console.log(row)
-      // let appDatas = {
-      //   companyId: row.companyId,
-      //   userId: row.userId,
-      //   userName: row.userName
-      // }
       console.log("row")
       console.log(row)
-      localStorage.setItem('userId', row.userId)
-      localStorage.setItem('userName', row.userName)
-      localStorage.setItem('phoneNumeber', row.phone)
+      // localStorage.setItem('handleUserId', row.userId)
+      // localStorage.setItem('userName', row.userName)
+      // localStorage.setItem('phoneNumeber', row.phone)
+      localStorage.setItem('addUser', JSON.stringify(row))
     },
 
     // 审核不通过
 		rejectApp(row) {
-      console.log(row);
+      // console.log(row);
       let rejApp = {
         companyId: row.companyId,
         id: row.id

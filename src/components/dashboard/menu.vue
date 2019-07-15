@@ -1,6 +1,6 @@
 <!--
  * @Date: 2019-07-01 16:59:48
- * @LastEditTime: 2019-07-04 09:59:07
+ * @LastEditTime: 2019-07-11 11:20:26
  * @Author: yuhenglong
  * @Description: 文件说明: menu列表页面
  -->
@@ -13,8 +13,8 @@
           <el-form-item prop="name">
             <el-input placeholder="请输入菜单名称" v-model.trim="filter.name"></el-input>
           </el-form-item>
-          <el-form-item prop="menuId">
-            <el-input placeholder="请输入菜单Id" v-model.trim="filter.menuId"></el-input>
+          <el-form-item prop="menu_id">
+            <el-input placeholder="请输入菜单Id" v-model.trim="filter.menu_id"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="success" icon="el-icon-search" @click="queryMenus()">查询</el-button>
@@ -48,7 +48,7 @@
       <el-table
         :data="menuDatas"
         style="width: 100%;margin-bottom: 20px;"
-        row-key="menuId"
+        row-key="menu_id"
         default-expand-all
         :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
       >
@@ -56,12 +56,12 @@
         <el-table-column prop="name" label="菜单名称" width="180"></el-table-column>
         <el-table-column prop="orderNum" label="排序" width="180"></el-table-column>
         <el-table-column prop="url" label="跳转地址"></el-table-column>
-        <el-table-column prop="menuType" label="菜单类型"></el-table-column>
+        <el-table-column prop="menu_type" label="菜单类型"></el-table-column>
         <el-table-column prop="ename" label="菜单标识"></el-table-column>
-        <el-table-column prop="delFlag" label="状态"></el-table-column>
+        <el-table-column prop="del_flag" label="状态"></el-table-column>
         <el-table-column prop="createBy" label="创建人"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间" value-format="yyyy-MM-dd"></el-table-column>
-        <el-table-column prop="updateTime" label="更新时间" value-format="yyyy-MM-dd"></el-table-column>
+        <el-table-column prop="create_time" label="创建时间" value-format="yyyy-MM-dd"></el-table-column>
+        <el-table-column prop="update_time" label="更新时间" value-format="yyyy-MM-dd"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)" circle></el-button>
@@ -90,8 +90,8 @@
         <el-form-item label="跳转URL:" prop="url">
           <el-input v-model="menuForm.url" class="addInput"></el-input>
         </el-form-item>
-        <el-form-item label="菜单类型:" prop="menuType">
-          <el-input v-model="menuForm.menuType" class="addInput"></el-input>
+        <el-form-item label="菜单类型:" prop="menu_type">
+          <el-input v-model="menuForm.menu_type" class="addInput"></el-input>
         </el-form-item>
         <el-form-item label="图标:" prop="icon">
           <el-input v-model="menuForm.icon" class="addInput"></el-input>
@@ -123,7 +123,7 @@
           <el-input v-model="editMenuForm.url" class="addInput"></el-input>
         </el-form-item>
         <el-form-item label="菜单类型:">
-          <el-input v-model="editMenuForm.menuType" class="addInput"></el-input>
+          <el-input v-model="editMenuForm.menu_type" class="addInput"></el-input>
         </el-form-item>
         <el-form-item label="图标:">
           <el-input v-model="editMenuForm.icon" class="addInput"></el-input>
@@ -146,8 +146,8 @@ export default {
       value: "",
       filter: {
         name: "",
-        menuType: "",
-        menuId: ""
+        menu_type: "",
+        menu_id: ""
       },
       // 添加menu表单数据
       menuForm: {
@@ -156,7 +156,7 @@ export default {
         parentId: "", // 父级菜单ID
         orderNum: "", //
         url: "", // 菜单名称
-        menuType: "", // 菜单名称
+        menu_type: "", // 菜单名称
         icon: "" // 菜单名称
       },
       checkList: [
@@ -196,13 +196,13 @@ export default {
       result: "",
       dialogEditForm: false,
       editMenuForm: {
-        menuId: "",
+        menu_id: "",
         name: "",
         ename: "",
         parentId: "",
         orderNum: "",
         url: "",
-        menuType: "",
+        menu_type: "",
         icon: ""
       },
       newMenusArr: [],
@@ -213,13 +213,13 @@ export default {
     // 获取菜单
     getMenus() {
       let params = new URLSearchParams();
-      console.log(localStorage.getItem('token'))
       this.axios
-        .get("/comapi/companyUser/myCompanyMenu")
+        .get("/comapi/menu/myCompanyMenu", qs.stringify({companyId: localStorage.getItem('companyId')}))
         .then(res => {
-          this.menuDatas = res.data.result;
-          this.result = res.data.result;
-          this.$store.state.MenusList = res.data.result;
+          console.log("菜单", res)
+          this.menuDatas = res.data.result.records;
+          this.result = res.data.result.records;
+          this.$store.state.MenusList = res.data.result.records;
           this.pager = this.$store.state.MenusList;
         })
         .catch(err => {
@@ -267,13 +267,13 @@ export default {
     handleEdit(row) {
       this.dialogEditForm = true;
       console.log(row);
-      (this.editMenuForm.menuId = row.menuId),
+      (this.editMenuForm.menu_id = row.menu_id),
         (this.editMenuForm.name = row.name),
         (this.editMenuForm.ename = row.ename),
         (this.editMenuForm.parentId = row.parentId),
         (this.editMenuForm.orderNum = row.orderNum),
         (this.editMenuForm.url = row.url),
-        (this.editMenuForm.menuType = row.menuType),
+        (this.editMenuForm.menu_type = row.menu_type),
         (this.editMenuForm.icon = row.ico);
     },
 
@@ -306,14 +306,14 @@ export default {
       console.log(index, row);
       let that = this;
       // let delMenus = []
-      // delMenus.append(row.menuId)
-      // let params = { setParam: [row.menuId] };
+      // delMenus.append(row.menu_id)
+      // let params = { setParam: [row.menu_id] };
       this.axios
         .delete("/comapi/menu", {
           headers: {
             Authorization: "Bearer " + localStorage.token
           },
-          data: { setParam: [row.menuId] }
+          data: { setParam: [row.menu_id] }
         })
         .then(res => {
           if (res.data.status == 1) {
@@ -356,14 +356,10 @@ export default {
     // 查询菜单
     queryMenus() {
       let that = this;
-      let query = { name: this.filter.name, menuId: this.filter.menuId}
+      let query = { name: this.filter.name, menu_id: this.filter.menu_id}
       console.log(query)
       this.axios
-        .get("/comapi/menu/myCompanyMenu/",{
-          headers: {
-            Authorization: "Bearer" + localStorage.token
-          }
-        },JSON.stringify({"body": query}))
+        .get("/comapi/menu/myCompanyMenu/",JSON.stringify({"body": query}))
         .then(res => {
           console.log(res);
           this.menuDatas = res.data.result;
@@ -383,7 +379,7 @@ export default {
     tree(index) {
       let tree = this.newMenusArr[index].menus.filter(father => {
         let children = this.newMenusArr[index].menus.filter(child => {
-          return father.menuId === child.parentId;
+          return father.menu_id === child.parentId;
         });
         father.children = children;
         if (children.length === 0) {

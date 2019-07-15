@@ -49,7 +49,15 @@ module.exports = {
         changeOrigin: true
        },
        '/dept': {
-        target:'http://192.168.0.120:80',
+        target:'http://192.168.0.120:80', 
+        changeOrigin: true
+       },
+       '/order': {
+        target:'http://192.168.0.116:83', 
+        changeOrigin: true
+       },
+       '/customer': {
+        target:'http://192.168.0.116:83', 
         changeOrigin: true
        },
        '/role': {

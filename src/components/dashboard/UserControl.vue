@@ -1,6 +1,6 @@
 <!--
  * @Date: 2019-07-01 16:59:48
- * @LastEditTime: 2019-07-08 16:34:01
+ * @LastEditTime: 2019-07-09 19:35:51
  * @Author: yuhenglong
  * @Description: 文件说明: 用户控制
  -->
@@ -60,10 +60,7 @@
             <el-table-column label="部门" prop="deptName"></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <router-link to="/dashboard/updateUserInfo">
                 <el-button @click="updateUser(scope.row)" type="text">编辑</el-button>
-                </router-link>
-                <router-view></router-view>
                 <el-button type="text" @click="remove(scope.row)">删除</el-button>
                 <el-button type="text" @click="toogleExpand(scope.row)">详情</el-button>
               </template>
@@ -215,8 +212,8 @@ export default {
           }
           this.newDeptsArr = res.data.result;
           this.deptTree = this.tree(this.newDeptsArr, 0);
-          console.log("樹");
-          console.log(this.newDeptsArr);
+          // console.log("樹");
+          // console.log(this.newDeptsArr);
           // console.log("部门");
           // console.log(res);
         })
@@ -258,9 +255,15 @@ export default {
           result.push(obj)
         }
       }
-      console.log("result", result)
+      // console.log("result", result)
       return result
     },
+    /**
+     * @author: guobinggui
+     * @description: 函数说明: 根据部门查找用户
+     * @param {type} 
+     * @return: 
+     */
     handleNodeClick(data) {
       let that = this;
       this.axios
@@ -273,7 +276,7 @@ export default {
         )
         .then(res => {
           this.users = res.data.result;
-          console.log(res);
+          // console.log(res);
         })
         .catch(err => {
           console.log(err);
@@ -327,16 +330,17 @@ export default {
         .post(
           "/manage/detail",
           qs.stringify({
+            companyId: localStorage.getItem('companyId'),
             userId: row.userId
           })
         )
         .then(res => {
-          row.posts = res.data.result.post;
-          row.roles = res.data.result.role;
-          row.skills = res.data.result.skill;
-        })
-        .then(resp => {
-          localStorage.setItem("userInfo", JSON.stringify(resp))
+          // console.log('********', res)
+          row.posts = [...new Set(res.data.result.post)];
+          row.roles = [...new Set(res.data.result.role)];
+          row.skills = [...new Set(res.data.result.skill)];
+          localStorage.setItem("userInfo", JSON.stringify(row))
+          // console.log('********', row)
         })
         .catch(err => {
           console.log(err);
@@ -370,8 +374,9 @@ export default {
       $table.toggleRowExpansion(row);
     },
     async updateUser(row) {
-         await this.detail(row)
-      
+      await this.detail(row).then(() => {
+        this.$router.replace('/dashboard/updateUserInfo')
+      })
       // setTimeout(this.$router.replace('/dashboard/updateUserInfo'),2000)
     }
   },

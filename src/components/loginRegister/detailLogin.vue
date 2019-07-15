@@ -1,6 +1,6 @@
 <!--
  * @Date: 2019-07-01 16:59:48
- * @LastEditTime: 2019-07-04 10:12:47
+ * @LastEditTime: 2019-07-11 10:07:07
  * @Author: yuhenglong
  * @Description: 文件说明: 登录页面
  -->
@@ -37,10 +37,14 @@
         <div class="clear"></div>
       </el-form-item>
     </el-form>
+    <div id="holder">
+      <!-- <canvas width="1920" height="969" style="width: 1920px; height: 969px;"></canvas> -->
+    </div>
   </div>
 </template>
 <script>
 import qs from "qs";
+import { Script } from "vm";
 export default {
   name: "detailLogin",
   data() {
@@ -76,6 +80,20 @@ export default {
     };
   },
   methods: {
+    loadJs(src) {
+      return new Promise((resolve, reject) => {
+        let script = document.createElement("script");
+        script.type = "text/javascript";
+        script.onload = () => {
+          resolve();
+        };
+        script.onerror = () => {
+          reject();
+        };
+        script.src = src;
+        document.getElementsByTagName("body")[0].appendChild(script);
+      });
+    },
     login: function(formName) {
       this.$refs[formName].validate(valid => {
         // 请求后端并跳转页面
@@ -92,25 +110,28 @@ export default {
             mode: "cors",
             headers: {
               Authorization:
-              "Basic VGVzdFN5c3RlbTpjZThlMzgyYS04YzI1LTRmYmQtOWUzMy1hMGQ3M2UxMTEyMjI=",
+                "Basic VGVzdFN5c3RlbTpjZThlMzgyYS04YzI1LTRmYmQtOWUzMy1hMGQ3M2UxMTEyMjI=",
               "Content-Type": "application/x-www-form-urlencoded"
             }
-          }).then(res => {
-            return res.json();
-          }).then(json =>{
-            console.log('这是fetch的请求',json);
-            if (json) {
+          })
+            .then(res => {
+              return res.json();
+            })
+            .then(json => {
+              console.log("这是fetch的请求", json);
+              if (json) {
                 // 将token储存到本地存储
                 localStorage.setItem("token", json.access_token);
                 // 将token存储到vuex
                 // this.$store.commit('setToken',res.data.access_token);
-                this.$store.dispatch("signIn",json.access_token);
+                this.$store.dispatch("signIn", json.access_token);
                 // 跳转页面到首页
                 this.$router.push("/dashboard");
               }
-          }).catch(err => {
-            console.log("请求错误",err)
-          })
+            })
+            .catch(err => {
+              console.log("请求错误", err);
+            });
 
           // 备份
           // const params = {
@@ -147,6 +168,9 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     }
+  },
+  mounted() {
+    this.loadJs("../../../static/js/loginCanvas.js");
   }
 };
 </script>
@@ -155,7 +179,7 @@ export default {
   width: 100%;
   height: 100%;
   /* background-color:blue; */
-  background: url(../../../static/images/bg.jpg) no-repeat center center;
+  /* background: url(../../../static/images/bg.jpg) no-repeat center center; */
   display: flex;
   -webkit-justify-content: center;
   justify-content: center;
@@ -186,5 +210,25 @@ export default {
 .detaillogin .div_reg a,
 .detaillogin .div_for a {
   color: blue;
+}
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #000;
+  overflow: hidden;
+} */
+
+#holder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
 }
 </style>

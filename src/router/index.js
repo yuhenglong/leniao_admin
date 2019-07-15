@@ -38,6 +38,9 @@ const createCom = () => import('@/components/dashboard/createCom')
 const skillManage = () => import('@/components/dashboard/skillManage')
 const mainyu = () => import('@/components/dialog/mainyu')
 const orderListMana = () => import('@/components/dashboard/orderListMana')
+const firmwareUpgrade = () => import('@/components/dashboard/firmwareUpgrade')
+const orderManage = () => import('@/components/dashboard/orderManage')
+const customerManage = () => import('@/components/dashboard/customerManage')
 
 
 Vue.use(Router)
@@ -172,7 +175,15 @@ const router = new Router({
           component: orderListMana  
         },{
           path: '/dialog/mainyu',
-          component: mainyu
+          component: mainyu,
+          path: '/dashboard/firmwareUpgrade',
+          component: firmwareUpgrade
+        },{
+          path: '/dashboard/orderManage',
+          component: orderManage
+        },{
+          path: '/dashboard/customerManage',
+          component: customerManage
         }]
     }
   ]

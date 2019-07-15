@@ -1,6 +1,6 @@
 <!--
  * @Date: 2019-07-01 16:59:48
- * @LastEditTime: 2019-07-04 10:13:21
+ * @LastEditTime: 2019-07-10 16:02:00
  * @Author: yuhenglong
  * @Description: 文件说明: 注册
  -->
@@ -40,14 +40,25 @@
           placeholder="请输入验证码"
           class="auth_code"
         ></el-input>
-        <span v-show="sendAuthCode" type="primary" @click="getCode('ruleForm')" class="get_code">获取验证码</span>
-        <span v-show="!sendAuthCode" type="primary" @click="getCode('ruleForm')" class="get_code">{{ auth_time + "秒后重新获取"}}</span>
+        <el-button
+          v-show="sendAuthCode"
+          type="primary"
+          @click="getCode('ruleForm')"
+          class="get_code"
+        >获取验证码</el-button>
+        <span
+          v-show="!sendAuthCode"
+          type="primary"
+          @click="getCode('ruleForm')"
+          class="get_code"
+        >{{ auth_time + "秒后重新获取"}}</span>
       </el-form-item>
       <el-form-item>
         <el-button class="el-button el-button--primary next" @click="submitForm('ruleForm')">下一步</el-button>
         <!-- <router-link to="/setpass" class="el-button el-button--primary next">下一步</router-link> -->
       </el-form-item>
     </el-form>
+    <div id="holder"></div>
   </div>
 </template>
 <script>
@@ -90,7 +101,7 @@ export default {
         checkPass: ""
       },
       sendAuthCode: true /*布尔值，通过v-show控制显示‘获取按钮’还是‘倒计时’ */,
-      auth_time: 0, /*倒计时 计数器*/
+      auth_time: 0 /*倒计时 计数器*/,
       rules: {
         phonenumber: [{ validator: validatePhoneNumber, trigger: "blur" }],
         checkPass: [{ validator: validatePass2, trigger: "blur" }],
@@ -103,6 +114,20 @@ export default {
     };
   },
   methods: {
+    loadJs(src) {
+      return new Promise((resolve, reject) => {
+        let script = document.createElement("script");
+        script.type = "text/javascript";
+        script.onload = () => {
+          resolve();
+        };
+        script.onerror = () => {
+          reject();
+        };
+        script.src = src;
+        document.getElementsByTagName("body")[0].appendChild(script);
+      });
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -153,6 +178,9 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     }
+  },
+  mounted() {
+    this.loadJs("../../../static/js/loginCanvas.js");
   }
 };
 </script>
@@ -160,7 +188,7 @@ export default {
 .register {
   width: 100%;
   height: 100%;
-  background: url(../../../static/images/bg.jpg) no-repeat center center;
+  /* background: url(../../../static/images/bg.jpg) no-repeat center center; */
   display: flex;
   -webkit-justify-content: center;
   justify-content: center;
@@ -204,5 +232,25 @@ export default {
 }
 .register .get_code {
   float: right;
+}
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #000;
+  overflow: hidden;
+} */
+
+#holder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
 }
 </style>
